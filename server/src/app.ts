@@ -4,38 +4,16 @@ if (process.env.ENV_FILE) {
   dotenv.config({ path: process.env.ENV_FILE });
 }
 dotenv.config({ path: '.env' });
+
 import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 
-import { authLimiter } from './config/rateLimiters';
 import { corsConfig } from './config/security';
 import { mcpMiddleware } from './mcp/mcpServer';
-import { activityPingMiddleware } from './middlewares/activityPingMiddleware';
-import { authMiddleware } from './middlewares/authMiddleware';
 import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware';
 import { notFoundMiddleware } from './middlewares/notFoundMiddleware';
 import { requestIdMiddleware } from './middlewares/requestIdMiddleware';
-import { workspaceContextMiddleware } from './middlewares/workspaceContextMiddleware';
-import accountRoutes from './routes/accountRoutes';
-import adminRoutes from './routes/adminRoutes';
-import analyticsRoutes from './routes/analyticsRoutes';
-import authedInvitationRoutes from './routes/authedInvitationRoutes';
-import authRoutes from './routes/authRoutes';
-import budgetRoutes from './routes/budgetRoutes';
-import categoryRoutes from './routes/categoryRoutes';
-import chatRoutes from './routes/chatRoutes';
-import cronRoutes from './routes/cronRoutes';
-import feedbackRoutes from './routes/feedbackRoutes';
-import monthlyReportRoutes from './routes/monthlyReportRoutes';
-import goalRoutes from './routes/goalRoutes';
-import importRoutes from './routes/importRoutes';
-import paymentMethodRoutes from './routes/paymentMethodsRoutes';
-import publicInvitationRoutes from './routes/publicInvitationRoutes';
-import recurringTemplateRoutes from './routes/recurringTemplateRoutes';
-import sharedWorkspaceRoutes from './routes/sharedWorkspaceRoutes';
-import shortcutRoutes from './routes/shortcutRoutes';
-import transactionRoutes from './routes/transactionRoutes';
-import userRoutes from './routes/userRoutes';
+import apiRouter from './routes';
 
 const app = express();
 app.set('trust proxy', 1);
@@ -56,30 +34,7 @@ app.get('/health', (_req, res) => {
   res.status(200).json({ ok: true });
 });
 
-app.use('/api/auth', authLimiter);
-app.use('/api/auth', authRoutes);
-app.use('/api/cron', cronRoutes);
-app.use('/api/invitations', publicInvitationRoutes);
-app.use('/api/shortcut', shortcutRoutes);
-app.use('/api', authMiddleware);
-app.use('/api', workspaceContextMiddleware);
-app.use('/api', activityPingMiddleware);
-app.use('/api/workspaces', sharedWorkspaceRoutes);
-app.use('/api/invitations', authedInvitationRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/accounts', accountRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/budgets', budgetRoutes);
-app.use('/api/goals', goalRoutes);
-app.use('/api/recurring-templates', recurringTemplateRoutes);
-app.use('/api/payment-methods', paymentMethodRoutes);
-app.use('/api/feedback', feedbackRoutes);
-app.use('/api/monthly-report', monthlyReportRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/analytics', analyticsRoutes);
-app.use('/api/chat', chatRoutes);
-app.use('/api/import', importRoutes);
+app.use('/api', apiRouter);
 
 app.post('/mcp', mcpMiddleware);
 
