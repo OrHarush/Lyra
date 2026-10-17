@@ -4,6 +4,7 @@ node_modules/
 dist/
 .env*
 .vscode
+.claude/settings.local.json
 
 # transient / debug
 *.log
