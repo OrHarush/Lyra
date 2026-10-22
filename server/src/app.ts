@@ -7,6 +7,7 @@ dotenv.config({ path: '.env' });
 
 import express, { Request, Response } from 'express';
 import helmet from 'helmet';
+import os from 'os';
 
 import { corsConfig } from './config/security';
 import { mcpMiddleware } from './mcp/mcpServer';
@@ -30,8 +31,14 @@ app.use(express.json({ limit: '200kb' }));
 
 app.use(requestIdMiddleware);
 
-app.get('/health', (_req, res) => {
-  res.status(200).json({ ok: true });
+app.get('/health', (req, res) => {
+  console.log('[health]', {
+    host: os.hostname(),
+    reqIp: req.ip,
+    xForwardedFor: req.headers['x-forwarded-for'],
+    hostHeader: req.headers.host,
+  });
+  res.status(200).json({ ok: true, host: os.hostname() });
 });
 
 app.use('/api', apiRouter);
