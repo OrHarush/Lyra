@@ -34,6 +34,9 @@ const tx = (overrides: Partial<ITransactionPopulated>): ITransactionPopulated =>
     ...overrides,
   }) as ITransactionPopulated;
 
+const eventDays = (days: ReturnType<typeof buildCalendarDays>) =>
+  days.filter(day => day.events.length > 0);
+
 describe('buildCalendarDays', () => {
   it('puts a card purchase made before the billing day on this month’s bill', () => {
     const card = creditCard(10);
@@ -47,9 +50,9 @@ describe('buildCalendarDays', () => {
       ACCOUNT_ID
     );
 
-    expect(days).toHaveLength(1);
-    expect(days[0].date).toBe('2026-10-10');
-    expect(days[0].events[0]).toMatchObject({
+    expect(eventDays(days)).toHaveLength(1);
+    expect(eventDays(days)[0].date).toBe('2026-10-10');
+    expect(eventDays(days)[0].events[0]).toMatchObject({
       kind: 'cardBill',
       amount: 75,
       transactionCount: 2,
@@ -65,7 +68,7 @@ describe('buildCalendarDays', () => {
       ACCOUNT_ID
     );
 
-    expect(days).toEqual([]);
+    expect(eventDays(days)).toEqual([]);
   });
 
   it('clamps a billing day of 31 to the last day of a 30-day month', () => {
@@ -76,7 +79,7 @@ describe('buildCalendarDays', () => {
       ACCOUNT_ID
     );
 
-    expect(days[0].date).toBe('2026-11-30');
+    expect(eventDays(days)[0].date).toBe('2026-11-30');
   });
 
   it('subtracts card refunds from the bill', () => {
@@ -91,7 +94,7 @@ describe('buildCalendarDays', () => {
       ACCOUNT_ID
     );
 
-    expect(days[0].events[0].amount).toBe(70);
+    expect(eventDays(days)[0].events[0].amount).toBe(70);
   });
 
   it('includes a virtual recurring salary on its own date', () => {
@@ -110,7 +113,7 @@ describe('buildCalendarDays', () => {
       ACCOUNT_ID
     );
 
-    expect(days[0]).toMatchObject({
+    expect(eventDays(days)[0]).toMatchObject({
       date: '2026-10-10',
       events: [{ kind: 'income', name: 'Salary', amount: 14200, isVirtual: true }],
     });
@@ -124,7 +127,7 @@ describe('buildCalendarDays', () => {
       ACCOUNT_ID
     );
 
-    expect(days).toEqual([]);
+    expect(eventDays(days)).toEqual([]);
   });
 
   it('orders income before bills before expenses within a day', () => {
@@ -140,6 +143,84 @@ describe('buildCalendarDays', () => {
       ACCOUNT_ID
     );
 
-    expect(days[0].events.map(event => event.kind)).toEqual(['income', 'cardBill', 'expense']);
+    expect(eventDays(days)[0].events.map(event => event.kind)).toEqual(['income', 'cardBill', 'expense']);
+  });
+
+  it('returns every day of the month', () => {
+    expect(buildCalendarDays([], 2026, OCTOBER, ACCOUNT_ID)).toHaveLength(31);
+  });
+
+  describe('daily balances', () => {
+    const now = new Date('2026-10-15T12:00:00Z');
+    const context = { currentBalance: 100000, now };
+    const balanceOn = (days: ReturnType<typeof buildCalendarDays>, date: string) =>
+      days.find(day => day.date === date);
+
+    it('walks back over real transactions for past days', () => {
+      const days = buildCalendarDays(
+        [tx({ type: 'Income', amount: 20000, date: new Date('2026-10-12T00:00:00Z') })],
+        2026,
+        OCTOBER,
+        ACCOUNT_ID,
+        context
+      );
+
+      expect(balanceOn(days, '2026-10-11')).toMatchObject({ balance: 800, isProjected: false });
+      expect(balanceOn(days, '2026-10-12')?.balance).toBe(1000);
+    });
+
+    it('projects future days including virtual recurring items and card bills', () => {
+      const days = buildCalendarDays(
+        [
+          tx({ amount: 30000, date: new Date('2026-10-20T00:00:00Z'), isVirtual: true }),
+          tx({ paymentMethod: creditCard(25), amount: 5000, date: new Date('2026-10-14T00:00:00Z') }),
+        ],
+        2026,
+        OCTOBER,
+        ACCOUNT_ID,
+        context
+      );
+
+      expect(balanceOn(days, '2026-10-19')).toMatchObject({ balance: 1000, isProjected: true });
+      expect(balanceOn(days, '2026-10-20')?.balance).toBe(700);
+      expect(balanceOn(days, '2026-10-25')?.balance).toBe(650);
+    });
+
+    it('ignores virtual items when walking back', () => {
+      const days = buildCalendarDays(
+        [tx({ amount: 30000, date: new Date('2026-10-12T00:00:00Z'), isVirtual: true })],
+        2026,
+        OCTOBER,
+        ACCOUNT_ID,
+        context
+      );
+
+      expect(balanceOn(days, '2026-10-11')?.balance).toBe(1000);
+    });
+
+    it('counts transfers into the balance even though they are not events', () => {
+      const days = buildCalendarDays(
+        [
+          tx({
+            type: 'Transfer',
+            account: undefined,
+            fromAccount: account(ACCOUNT_ID),
+            toAccount: account(OTHER_ACCOUNT_ID),
+            amount: 10000,
+            date: new Date('2026-10-18T00:00:00Z'),
+          }),
+        ],
+        2026,
+        OCTOBER,
+        ACCOUNT_ID,
+        context
+      );
+
+      expect(balanceOn(days, '2026-10-18')).toMatchObject({ balance: 900, events: [] });
+    });
+
+    it('leaves balance empty without a balance context', () => {
+      expect(buildCalendarDays([], 2026, OCTOBER, ACCOUNT_ID)[0].balance).toBeNull();
+    });
   });
 });

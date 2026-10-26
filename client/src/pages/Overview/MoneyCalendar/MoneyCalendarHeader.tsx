@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import Row from '@/components/shared/layout/containers/Row';
 import CurrencyText from '@/components/shared/ui/CurrencyText';
+import { CALENDAR_HEADER_HEIGHT } from '@/pages/Overview/MoneyCalendar/styles';
 
 interface MoneyCalendarHeaderProps {
   month: Dayjs;
@@ -14,8 +15,14 @@ const MoneyCalendarHeader = ({ month, remainingTotal }: MoneyCalendarHeaderProps
   const { t } = useTranslation('overview');
 
   return (
-    <Row justifyContent="space-between" alignItems="baseline" spacing={1} flexWrap="wrap">
-      <Typography variant="subtitle1" fontWeight={600}>
+    <Row
+      justifyContent="space-between"
+      alignItems="center"
+      spacing={1}
+      flexWrap="wrap"
+      minHeight={CALENDAR_HEADER_HEIGHT}
+    >
+      <Typography variant="subtitle1" fontWeight={600} lineHeight={`${CALENDAR_HEADER_HEIGHT}px`}>
         {month.format('MMMM')}
       </Typography>
       {remainingTotal !== null && (

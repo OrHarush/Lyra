@@ -135,6 +135,8 @@
     "nothingScheduled": "אין תנועות ביום הזה",
     "nothingLeft": "אין עוד תנועות החודש",
     "empty": "הוסיפו הוראות קבע או יום חיוב לכרטיס כדי לראות אותם כאן",
+    "endOfDayBalance": "יתרה",
+    "projectedBalance": "יתרה צפויה",
     "demo": {
       "rent": "שכר דירה",
       "visa": "ויזה",

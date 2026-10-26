@@ -1,5 +1,20 @@
 import { alpha, SxProps, Theme } from '@mui/material';
 
+export const MAX_WEEK_COUNT = 6;
+export const CALENDAR_HEADER_HEIGHT = 24;
+export const WEEKDAY_ROW_HEIGHT = 18;
+export const MIN_DAY_CELL_HEIGHT = 28;
+
+export const getCalendarGridStyle = (weekCount: number) => ({
+  flex: 1,
+  display: 'grid',
+  gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+  gridTemplateRows: `${WEEKDAY_ROW_HEIGHT}px repeat(${weekCount}, minmax(${MIN_DAY_CELL_HEIGHT}px, 1fr))`,
+  rowGap: 0.5,
+  columnGap: 0.25,
+  textAlign: 'center',
+});
+
 interface DayCellStyleParams {
   isToday: boolean;
   isPast: boolean;
@@ -13,12 +28,13 @@ export const getDayCellStyle = ({
   isSelected,
   isClickable,
 }: DayCellStyleParams): SxProps<Theme> => ({
-  height: { xs: 34, lg: 40 },
+  height: '100%',
   borderRadius: 1.5,
   alignItems: 'center',
   justifyContent: 'center',
   cursor: isClickable ? 'pointer' : 'default',
-  fontSize: { xs: '0.8rem', lg: '0.875rem' },
+  fontSize: '0.8rem',
+  lineHeight: 1.2,
   fontWeight: isToday ? 600 : 400,
   color: isToday ? 'primary.main' : isPast ? 'text.disabled' : 'text.primary',
   bgcolor: (theme: Theme) => (isToday ? alpha(theme.palette.primary.main, 0.12) : 'transparent'),

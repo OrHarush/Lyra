@@ -3,8 +3,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import CalendarDayCell from '@/pages/Overview/MoneyCalendar/CalendarDayCell';
+import {
+  getCalendarGridStyle,
+  WEEKDAY_ROW_HEIGHT,
+} from '@/pages/Overview/MoneyCalendar/styles';
 import { CalendarDayDto } from '@/types/TransactionCalendar';
-import { findDay } from '@/utils/entities/calendar';
+import { countCalendarWeeks, findDay } from '@/utils/entities/calendar';
 
 interface MoneyCalendarGridProps {
   month: Dayjs;
@@ -40,17 +44,9 @@ const MoneyCalendarGrid = ({
   );
 
   return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
-        rowGap: 0.5,
-        columnGap: 0.25,
-        textAlign: 'center',
-      }}
-    >
+    <Box sx={getCalendarGridStyle(countCalendarWeeks(month))}>
       {buildWeekdayLabels(i18n.language).map((label, index) => (
-        <Typography key={index} variant="caption" color="text.secondary" sx={{ pb: 0.25 }}>
+        <Typography key={index} variant="caption" color="text.secondary" lineHeight={`${WEEKDAY_ROW_HEIGHT}px`}>
           {label}
         </Typography>
       ))}
@@ -62,7 +58,7 @@ const MoneyCalendarGrid = ({
           <CalendarDayCell
             key={date}
             day={day}
-            events={findDay(days, date)}
+            details={findDay(days, date)}
             isToday={day.isSame(today, 'day')}
             isPast={day.isBefore(today, 'day')}
             isSelected={date === selectedDate}

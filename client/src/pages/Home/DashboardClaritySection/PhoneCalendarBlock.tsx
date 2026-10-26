@@ -7,6 +7,7 @@ import { buildDemoCalendarDays, DEMO_SELECTED_DAY } from '@/pages/Home/Dashboard
 import CalendarDayDetails from '@/pages/Overview/MoneyCalendar/CalendarDayDetails';
 import MoneyCalendarGrid from '@/pages/Overview/MoneyCalendar/MoneyCalendarGrid';
 import MoneyCalendarHeader from '@/pages/Overview/MoneyCalendar/MoneyCalendarHeader';
+import { findDay } from '@/utils/entities/calendar';
 
 const PhoneCalendarBlock = () => {
   const { t } = useTranslation('overview');
@@ -14,7 +15,6 @@ const PhoneCalendarBlock = () => {
   const days = buildDemoCalendarDays(month, t);
   const demoToday = month.date(DEMO_SELECTED_DAY);
   const selectedDate = demoToday.format('YYYY-MM-DD');
-  const selectedEvents = days.find(day => day.date === selectedDate)?.events ?? [];
 
   return (
     <Card sx={{ p: 2 }}>
@@ -22,7 +22,7 @@ const PhoneCalendarBlock = () => {
         <MoneyCalendarHeader month={month} remainingTotal={null} />
         <MoneyCalendarGrid month={month} days={days} today={demoToday} selectedDate={selectedDate} />
         <Divider />
-        <CalendarDayDetails date={selectedDate} events={selectedEvents} />
+        <CalendarDayDetails day={findDay(days, selectedDate)} />
       </Column>
     </Card>
   );

@@ -1,4 +1,9 @@
+import { Dayjs } from 'dayjs';
+
 import { CalendarDayDto, CalendarEventDto, DatedCalendarEvent } from '@/types/TransactionCalendar';
+
+export const countCalendarWeeks = (month: Dayjs) =>
+  Math.ceil((month.startOf('month').day() + month.daysInMonth()) / 7);
 
 export const toSignedAmount = (event: CalendarEventDto) =>
   event.kind === 'income' ? event.amount : -event.amount;
@@ -19,5 +24,5 @@ export const selectLargestEvents = (days: CalendarDayDto[], limit: number) =>
 export const sumSignedAmounts = (events: DatedCalendarEvent[]) =>
   events.reduce((total, { event }) => total + toSignedAmount(event), 0);
 
-export const findDay = (days: CalendarDayDto[], date: string) =>
-  days.find(day => day.date === date)?.events ?? [];
+export const findDay = (days: CalendarDayDto[], date: string): CalendarDayDto =>
+  days.find(day => day.date === date) ?? { date, balance: null, isProjected: false, events: [] };

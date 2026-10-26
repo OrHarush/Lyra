@@ -13,6 +13,8 @@ export interface CalendarEventDto {
 
 export interface CalendarDayDto {
   date: string;
+  balance: number | null;
+  isProjected: boolean;
   events: CalendarEventDto[];
 }
 

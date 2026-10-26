@@ -4,11 +4,11 @@ import { Dayjs } from 'dayjs';
 import CalendarDayDetails from '@/pages/Overview/MoneyCalendar/CalendarDayDetails';
 import CalendarEventDots from '@/pages/Overview/MoneyCalendar/CalendarEventDots';
 import { getDayCellStyle } from '@/pages/Overview/MoneyCalendar/styles';
-import { CalendarEventDto } from '@/types/TransactionCalendar';
+import { CalendarDayDto } from '@/types/TransactionCalendar';
 
 interface CalendarDayCellProps {
   day: Dayjs;
-  events: CalendarEventDto[];
+  details: CalendarDayDto;
   isToday: boolean;
   isPast: boolean;
   isSelected: boolean;
@@ -18,7 +18,7 @@ interface CalendarDayCellProps {
 
 const CalendarDayCell = ({
   day,
-  events,
+  details,
   isToday,
   isPast,
   isSelected,
@@ -26,7 +26,7 @@ const CalendarDayCell = ({
   selectDay,
 }: CalendarDayCellProps) => {
   const date = day.format('YYYY-MM-DD');
-  const hasEvents = events.length > 0;
+  const hasDetails = details.events.length > 0 || details.balance !== null;
 
   // Stack instead of Column: Tooltip needs a child that forwards its ref.
   const cell = (
@@ -37,20 +37,20 @@ const CalendarDayCell = ({
         isToday,
         isPast,
         isSelected,
-        isClickable: !!selectDay || (hasTooltip && hasEvents),
+        isClickable: !!selectDay || (hasTooltip && hasDetails),
       })}
     >
       {day.date()}
-      <CalendarEventDots events={events} />
+      <CalendarEventDots events={details.events} />
     </Stack>
   );
 
-  if (!hasTooltip || !hasEvents) {
+  if (!hasTooltip || !hasDetails) {
     return cell;
   }
 
   return (
-    <Tooltip arrow placement="top" title={<CalendarDayDetails date={date} events={events} />}>
+    <Tooltip arrow placement="top" title={<CalendarDayDetails day={details} />}>
       {cell}
     </Tooltip>
   );

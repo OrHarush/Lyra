@@ -129,6 +129,8 @@
     "nothingScheduled": "Nothing scheduled",
     "nothingLeft": "Nothing else this month",
     "empty": "Add recurring items or a card billing day to see them here",
+    "endOfDayBalance": "Balance",
+    "projectedBalance": "Projected balance",
     "demo": {
       "rent": "Rent",
       "visa": "Visa",

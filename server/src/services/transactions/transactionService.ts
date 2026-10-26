@@ -28,7 +28,7 @@ import {
 } from '../../utils/transaction';
 import * as accountService from '../accountService';
 import * as analyticsService from '../analyticsService';
-import { syncAccountBalance } from '../balanceService';
+import { computeAccountBalance, syncAccountBalance } from '../balanceService';
 import { buildCalendarDays } from './buildCalendarDays';
 import { buildVirtualTransactions } from './buildVirtualTransactions';
 import { invalidateQuickChipsCache } from './quickChipsService';
@@ -199,9 +199,13 @@ export const getTransactionCalendar = async (
   workspaceId: string,
   { year, month, accountId }: GetTransactionCalendarQuery
 ) => {
-  // Credit-card purchases from the previous month are charged on this month's billing day.
-  const fromDate = dayjs.utc(Date.UTC(year, month, 1)).subtract(1, 'month').toDate();
-  const endDate = new Date(Date.UTC(year, month + 1, 1));
+  const now = dayjs.utc().add(3, 'hours');
+  const monthStart = dayjs.utc(Date.UTC(year, month, 1));
+  const monthEnd = monthStart.add(1, 'month');
+  // Starts a month early because card purchases are charged on the next billing day; spans
+  // up to now so balances can be walked between today and any viewed month.
+  const fromDate = (now.isBefore(monthStart) ? now : monthStart).subtract(1, 'month').toDate();
+  const endDate = (now.isAfter(monthEnd) ? now : monthEnd).toDate();
 
   const transactions = await transactionRepository.findMany(workspaceId, {
     accountId,
@@ -217,7 +221,14 @@ export const getTransactionCalendar = async (
 
   transactions.push(...buildVirtualTransactions(templates, transactions, fromDate, endDate));
 
-  return buildCalendarDays(transactions, year, month, accountId);
+  const balanceContext = accountId
+    ? {
+        currentBalance: (await computeAccountBalance(workspaceId, accountId)).finalBalance,
+        now: now.toDate(),
+      }
+    : undefined;
+
+  return buildCalendarDays(transactions, year, month, accountId, balanceContext);
 };
 
 export const countAll = async (

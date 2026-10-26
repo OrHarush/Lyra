@@ -40,9 +40,19 @@ const DEMO_EVENTS: { day: number; key: string; kind: CalendarEventKind; amount: 
   { day: 28, key: 'insurance', kind: 'expense', amount: 320 },
 ];
 
+const DEMO_START_BALANCE = 11400;
+
+const demoBalanceAfter = (day: number) =>
+  DEMO_EVENTS.filter(event => event.day <= day).reduce(
+    (balance, event) => balance + (event.kind === 'income' ? event.amount : -event.amount),
+    DEMO_START_BALANCE
+  );
+
 export const buildDemoCalendarDays = (month: Dayjs, t: TFunction<'overview'>): CalendarDayDto[] =>
   DEMO_EVENTS.map(({ day, key, kind, amount, count = 1 }) => ({
     date: month.date(day).format('YYYY-MM-DD'),
+    balance: demoBalanceAfter(day),
+    isProjected: day > DEMO_SELECTED_DAY,
     events: [
       {
         id: key,

@@ -13,5 +13,12 @@ export interface CalendarEvent {
 
 export interface CalendarDay {
   date: string;
+  balance: number | null;
+  isProjected: boolean;
   events: CalendarEvent[];
+}
+
+export interface CalendarBalanceContext {
+  currentBalance: number;
+  now: Date;
 }

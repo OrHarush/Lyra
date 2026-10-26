@@ -21,7 +21,7 @@ import {
   sumSignedAmounts,
 } from '@/utils/entities/calendar';
 
-const SIDE_LIST_LIMIT = 4;
+const SIDE_LIST_LIMIT = 3;
 
 const MoneyCalendar = () => {
   const { t } = useTranslation('overview');
@@ -32,7 +32,7 @@ const MoneyCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
 
   if (isLoading) {
-    return <MoneyCalendarSkeleton />;
+    return <MoneyCalendarSkeleton month={date} />;
   }
 
   const isPastMonth = date.isBefore(today, 'month');
@@ -43,6 +43,7 @@ const MoneyCalendar = () => {
   const sideEvents = isPastMonth
     ? selectLargestEvents(days, SIDE_LIST_LIMIT)
     : remainingEvents.slice(0, SIDE_LIST_LIMIT);
+  const hasAnyEvents = days.some(day => day.events.length > 0);
   const remainingTotal = remainingEvents.length > 0 ? sumSignedAmounts(remainingEvents) : null;
   const visibleSelectedDate = date.isSame(selectedDate, 'month')
     ? selectedDate
@@ -50,7 +51,7 @@ const MoneyCalendar = () => {
 
   return (
     <MoneyCalendarCard>
-      <Column spacing={1.5} height="100%">
+      <Column spacing={1} height="100%">
         <MoneyCalendarHeader month={date} remainingTotal={remainingTotal} />
         {isSmallScreen ? (
           <Column spacing={1}>
@@ -62,19 +63,16 @@ const MoneyCalendar = () => {
               selectDay={setSelectedDate}
             />
             <Divider />
-            <CalendarDayDetails
-              date={visibleSelectedDate}
-              events={findDay(days, visibleSelectedDate)}
-            />
+            <CalendarDayDetails day={findDay(days, visibleSelectedDate)} />
           </Column>
         ) : (
-          <Row spacing={3}>
-            <Column sx={{ flex: '1 1 60%', minWidth: 260, maxWidth: 460 }}>
+          <Row spacing={3} sx={{ flex: 1 }}>
+            <Column sx={{ flex: '1 1 50%', minWidth: 240, maxWidth: 380 }}>
               <MoneyCalendarGrid month={date} days={days} today={today} hasTooltips />
             </Column>
             <MoneyCalendarUpcoming
               title={t(isPastMonth ? 'calendar.biggestMovements' : 'calendar.upcoming')}
-              emptyText={t(days.length === 0 ? 'calendar.empty' : 'calendar.nothingLeft')}
+              emptyText={t(hasAnyEvents ? 'calendar.nothingLeft' : 'calendar.empty')}
               events={sideEvents}
             />
           </Row>

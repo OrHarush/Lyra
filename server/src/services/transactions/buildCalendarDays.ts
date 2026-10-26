@@ -2,9 +2,10 @@ import { fromCents } from '@lyra/shared';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
-import { CalendarDay, CalendarEvent } from '../../types/TransactionCalendar';
+import { CalendarBalanceContext, CalendarDay, CalendarEvent } from '../../types/TransactionCalendar';
 import { ITransactionPopulated } from '../../types/Transaction';
 import { getEffectiveBalanceDate } from '../../utils/transaction';
+import { buildDailyBalances } from './buildDailyBalances';
 
 dayjs.extend(utc);
 
@@ -14,8 +15,44 @@ export const buildCalendarDays = (
   transactions: ITransactionPopulated[],
   year: number,
   month: number,
-  accountId?: string
+  accountId?: string,
+  balanceContext?: CalendarBalanceContext
 ): CalendarDay[] => {
+  const eventsByDate = groupEventsByDate(transactions, year, month, accountId);
+  const monthStart = dayjs.utc(Date.UTC(year, month, 1));
+  const monthDays = Array.from({ length: monthStart.daysInMonth() }, (_, index) =>
+    monthStart.add(index, 'day')
+  );
+  const balances =
+    accountId && balanceContext
+      ? buildDailyBalances(
+          transactions,
+          monthDays,
+          accountId,
+          balanceContext.currentBalance,
+          balanceContext.now
+        )
+      : new Map<string, number>();
+
+  return monthDays.map(day => {
+    const date = day.format('YYYY-MM-DD');
+    const balance = balances.get(date);
+
+    return {
+      date,
+      balance: balance === undefined ? null : fromCents(balance),
+      isProjected: !!balanceContext && day.startOf('day').toDate() > balanceContext.now,
+      events: toSortedEvents(eventsByDate.get(date) ?? new Map()),
+    };
+  });
+};
+
+const groupEventsByDate = (
+  transactions: ITransactionPopulated[],
+  year: number,
+  month: number,
+  accountId?: string
+) => {
   const eventsByDate = new Map<string, Map<string, CalendarEvent>>();
 
   for (const tx of transactions) {
@@ -36,9 +73,7 @@ export const buildCalendarDays = (
     eventsByDate.set(dateKey, dayEvents);
   }
 
-  return [...eventsByDate.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([date, events]) => ({ date, events: toSortedEvents(events) }));
+  return eventsByDate;
 };
 
 const isCalendarCandidate = (tx: ITransactionPopulated, accountId?: string) => {

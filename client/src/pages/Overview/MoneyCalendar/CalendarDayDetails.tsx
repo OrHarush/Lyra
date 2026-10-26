@@ -1,17 +1,19 @@
-import { Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import Column from '@/components/shared/layout/containers/Column';
+import Row from '@/components/shared/layout/containers/Row';
+import CurrencyText from '@/components/shared/ui/CurrencyText';
 import CalendarEventRow from '@/pages/Overview/MoneyCalendar/CalendarEventRow';
-import { CalendarEventDto } from '@/types/TransactionCalendar';
+import { CalendarDayDto } from '@/types/TransactionCalendar';
 
 interface CalendarDayDetailsProps {
-  date: string;
-  events: CalendarEventDto[];
+  day: CalendarDayDto;
 }
 
-const CalendarDayDetails = ({ date, events }: CalendarDayDetailsProps) => {
+const CalendarDayDetails = ({ day }: CalendarDayDetailsProps) => {
+  const { date, events, balance, isProjected } = day;
   const { t } = useTranslation('overview');
 
   return (
@@ -27,6 +29,17 @@ const CalendarDayDetails = ({ date, events }: CalendarDayDetailsProps) => {
       {events.map(event => (
         <CalendarEventRow key={event.id} event={event} />
       ))}
+      {balance !== null && (
+        <>
+          <Divider sx={{ my: 0.5 }} />
+          <Row justifyContent="space-between" alignItems="center" spacing={2} sx={{ py: 0.25 }}>
+            <Typography variant="caption" color="text.secondary">
+              {t(isProjected ? 'calendar.projectedBalance' : 'calendar.endOfDayBalance')}
+            </Typography>
+            <CurrencyText value={balance} variant="body2" fontWeight={600} />
+          </Row>
+        </>
+      )}
     </Column>
   );
 };
