@@ -1,12 +1,12 @@
-import { Box, Card, CardContent, Grid, Skeleton, Typography } from '@mui/material';
+import { Card, CardContent, Grid, Skeleton, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import { useIsMobile } from '@/hooks/common/useIsMobile';
 
-const BAR_WIDTHS = ['85%', '65%', '40%', '15%'];
-const AXIS_LABELS = ['₪0', '₪750', '₪1,500', '₪2,250', '₪3,000'];
+const BAR_WIDTHS = ['85%', '55%', '40%', '28%', '18%'];
+const ROW_HEIGHT = 44;
 
 const TopCategoriesChartSkeleton = () => {
   const { t } = useTranslation('overview');
@@ -42,48 +42,19 @@ const TopCategoriesChartSkeleton = () => {
             {t('topSpendingCategories.title')}
           </Typography>
 
-          <Box
-            sx={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', ml: 2 }}
-          >
-            <Column
-              spacing={5}
-              sx={{
-                flex: 1,
-                justifyContent: 'center',
-                pb: 1,
-              }}
-            >
-              {BAR_WIDTHS.map((width, i) => (
-                <Row key={i} spacing={2} alignItems="center" dir={'ltr'}>
-                  <Skeleton
-                    variant="rounded"
-                    height={24}
-                    sx={{
-                      width,
-                      borderRadius: '0 4px 4px 0',
-                      opacity: 0.6 - i * 0.1,
-                    }}
-                  />
-                </Row>
-              ))}
-            </Column>
-
-            <Row
-              justifyContent="space-between"
-              sx={{
-                pt: 1,
-                borderTop: '1px solid rgba(255, 255, 255, 0.12)',
-                width: '100%',
-                opacity: 0.5,
-              }}
-            >
-              {AXIS_LABELS.map(label => (
-                <Typography key={label} variant="caption" sx={{ fontSize: '0.65rem' }}>
-                  {label}
-                </Typography>
-              ))}
-            </Row>
-          </Box>
+          <Column sx={{ flex: 1, justifyContent: 'center' }}>
+            {BAR_WIDTHS.map((width, i) => (
+              <Row key={i} spacing={1.5} alignItems="center" dir="ltr" sx={{ height: ROW_HEIGHT }}>
+                <Skeleton variant="text" width={90} sx={{ flexShrink: 0 }} />
+                <Skeleton
+                  variant="rounded"
+                  height={ROW_HEIGHT * 0.7}
+                  sx={{ width, borderRadius: '0 6px 6px 0' }}
+                />
+                <Skeleton variant="text" width={48} sx={{ flexShrink: 0 }} />
+              </Row>
+            ))}
+          </Column>
         </CardContent>
       </Card>
     </Grid>

@@ -10,19 +10,12 @@ import {
   useTheme,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 import { useIsMobile } from '@/hooks/common/useIsMobile';
 import { useCategoryName } from '@/hooks/entities/useCategoryName';
+import BarValueLabel from '@/pages/Overview/TopSpendingCategories/BarValueLabel';
+import CategoryAxisTick from '@/pages/Overview/TopSpendingCategories/CategoryAxisTick';
 
 interface TopCategoriesContentProps {
   chartData: {
@@ -40,44 +33,7 @@ interface BarClickPayload {
   id: string;
 }
 
-interface TooltipPayloadEntry {
-  value: number;
-  payload: { name: string; amount: number; color: string };
-}
-
-interface CustomTooltipProps {
-  active?: boolean;
-  payload?: TooltipPayloadEntry[];
-}
-
-const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
-  const theme = useTheme();
-
-  if (!active || !payload?.length) {
-    return null;
-  }
-
-  const entry = payload[0];
-
-  return (
-    <Box
-      sx={{
-        bgcolor: theme.palette.background.paper,
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: 1,
-        px: 1.5,
-        py: 1,
-      }}
-    >
-      <Typography variant="caption" color="text.secondary" display="block">
-        {entry.payload.name}
-      </Typography>
-      <Typography variant="body2" color="text.primary" sx={{ fontVariantNumeric: 'tabular-nums' }}>
-        ₪{entry.value.toLocaleString()}
-      </Typography>
-    </Box>
-  );
-};
+const ROW_HEIGHT = 44;
 
 const TopCategoriesChart = ({ chartData, isLoading, onBarClick }: TopCategoriesContentProps) => {
   const theme = useTheme();
@@ -102,7 +58,7 @@ const TopCategoriesChart = ({ chartData, isLoading, onBarClick }: TopCategoriesC
       color: item.color ?? theme.palette.grey[500],
     }));
 
-  const chartHeight = dataset.length * 40 + 48;
+  const chartHeight = dataset.length * ROW_HEIGHT;
 
   return (
     <Grid size={{ xs: 12, lg: 6 }} sx={{ display: 'flex', minHeight: 0 }}>
@@ -148,36 +104,27 @@ const TopCategoriesChart = ({ chartData, isLoading, onBarClick }: TopCategoriesC
               <BarChart
                 layout="vertical"
                 data={dataset}
-                margin={{ top: 4, right: 20, bottom: 4, left: 8 }}
-                barSize={20}
+                margin={{ top: 0, right: 72, bottom: 0, left: 8 }}
+                barCategoryGap="30%"
               >
-                <CartesianGrid horizontal={false} stroke="rgba(255,255,255,0.06)" />
-                <XAxis
-                  type="number"
-                  tickFormatter={(value: number) => `₪${value.toLocaleString()}`}
-                  tick={{ fill: theme.palette.text.secondary, fontSize: 11 }}
-                  axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                  tickLine={false}
-                />
+                <XAxis type="number" hide />
                 <YAxis
                   type="category"
                   dataKey="name"
-                  width={90}
-                  tick={{ fill: theme.palette.text.secondary, fontSize: 12 }}
+                  width={110}
+                  tick={<CategoryAxisTick colors={dataset.map(entry => entry.color)} />}
                   axisLine={false}
                   tickLine={false}
                 />
-                <Tooltip content={<CustomTooltip />} cursor={false} />
                 <Bar
                   dataKey="amount"
-                  radius={[0, 4, 4, 0]}
+                  fill={theme.palette.primary.main}
+                  radius={[0, 6, 6, 0]}
                   activeBar={false}
                   onClick={onBarClick ? handleBarClick : undefined}
                   style={onBarClick ? { cursor: 'pointer' } : undefined}
                 >
-                  {dataset.map(entry => (
-                    <Cell key={entry.id} fill={entry.color} />
-                  ))}
+                  <LabelList dataKey="amount" content={<BarValueLabel />} />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>

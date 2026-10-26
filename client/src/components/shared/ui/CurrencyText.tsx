@@ -2,6 +2,7 @@ import { Typography, TypographyProps } from '@mui/material';
 import CountUp from 'react-countup';
 
 import { useAuth } from '@/providers/AuthProvider';
+import { formatCurrency } from '@/utils/currency';
 
 export interface CurrencyTextProps extends TypographyProps {
   value: number;
@@ -24,15 +25,7 @@ const CurrencyText = ({
   const { user } = useAuth();
   const resolvedCurrency = currency ?? user?.displayCurrency ?? 'ILS';
 
-  const formattedCurrency = value
-    .toLocaleString(locale, {
-      style: 'currency',
-      currency: resolvedCurrency,
-      currencyDisplay: 'symbol',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    })
-    .replace(/\s+/g, '');
+  const formattedCurrency = formatCurrency(value, resolvedCurrency, locale);
 
   const color = value >= 0 ? 'success.main' : 'error.main';
   const suffix = formattedCurrency.replace(/[\d,.\s\-\u200f\u200e\u202a-\u202e]/g, '').trim();
