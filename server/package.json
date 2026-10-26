@@ -22,7 +22,8 @@
     "seed:invitations": "ts-node scripts/seed-invitation-states.ts",
     "clean:invitations": "ts-node scripts/clean-invitations.ts",
     "backfill:personal-icon": "ts-node scripts/backfill-personal-workspace-icon.ts",
-    "mint:shortcut-token": "ts-node scripts/mintShortcutToken.ts"
+    "mint:shortcut-token": "ts-node scripts/mintShortcutToken.ts",
+    "stats:adoption": "ts-node scripts/adoption-stats.ts"
   },
   "keywords": [],
   "author": "",
