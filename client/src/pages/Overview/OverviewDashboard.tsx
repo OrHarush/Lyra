@@ -8,7 +8,7 @@ import ActionFab from '@/components/shared/ui/ActionFab';
 import { useIsSmallScreen } from '@/hooks/common/useIsSmallScreen';
 import { useOpen } from '@/hooks/common/useOpen';
 import BudgetsOverview from '@/pages/Overview/BudgetsOverview';
-import MonthlyFinancialHealth from '@/pages/Overview/MonthlyFinancialHealth';
+import MoneyCalendar from '@/pages/Overview/MoneyCalendar';
 import MonthlyFinancialOverview from '@/pages/Overview/MonthlyFinancialOverview';
 import { useOverviewFilters } from '@/pages/Overview/OverviewFiltersProvider';
 import OverviewHeader from '@/pages/Overview/OverviewHeader';
@@ -37,7 +37,7 @@ const OverviewDashboard = () => {
         <RecurringSetupBanner />
         <Grid container spacing={4} size={{ xs: 12 }}>
           <MonthlyFinancialOverview />
-          <MonthlyFinancialHealth />
+          <MoneyCalendar />
         </Grid>
         <Grid
           container

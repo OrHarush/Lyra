@@ -45,47 +45,11 @@
       "fuel": { "label": "Fuel", "amount": "280" }
     }
   },
-
-  "noData": {
-    "title": "No data yet",
-    "detail": "Add transactions for this month to unlock insights"
-  },
-  "buildingPattern": {
-    "title": "Spending Insights",
-    "value": "Analyzing your spending",
-    "description": "Lyra is learning your spending patterns as you add transactions. You'll see insights about your habits here soon."
-  },
   "recurringBanner": {
     "title": "Your numbers reflect what you've entered",
     "bodyLink": "Add recurring cash flow",
     "bodyRest": " like salary and rent so Lyra can show a more accurate balance and forecast.",
     "dismiss": "Dismiss"
-  },
-  "noIncome": {
-    "title": "No income this month",
-    "detail": "Add an income transaction to see how your budget is holding up this month."
-  },
-  "monthlyInsight": {
-    "excellent": {
-      "title": "Excellent month",
-      "message": "Efficient spending with a positive balance"
-    },
-    "good": {
-      "title": "Good month",
-      "message": "Expenses are well balanced relative to income"
-    },
-    "balanced": {
-      "title": "Tight but on track",
-      "message": "Very little budget left — you're close to your break-even point"
-    },
-    "atRisk": {
-      "title": "Spending too fast",
-      "message": "At this pace you'll exceed your remaining budget before month-end"
-    },
-    "overspent": {
-      "title": "Overspending",
-      "message": "Expenses exceed income this month"
-    }
   },
   "incomeUsageMeter": {
     "netThisMonth": "Net this month",
@@ -100,57 +64,6 @@
       "warning": "Fast Pace",
       "critical": "Overspending"
     }
-  },
-
-  "budgetRunwayCard": {
-    "title": "Budget Runway",
-    "daysLeft_one": "{{count}} day left",
-    "daysLeft_other": "{{count}} days left",
-    "runwayDetail": "Money runs out by {{date}} at current pace",
-    "onTrack": "You're on track",
-    "enoughForMonth": "On track to finish the month",
-    "enoughForMonthDesc": "Projected to stay within budget",
-    "atBurnRate": "At current burn rate",
-    "noRunway": "No runway left",
-    "noRunwayDetail": "Spending pace exceeds your income"
-  },
-
-  "dailySpendCard": {
-    "title": "Required Daily Spend",
-    "valuePerDay": "{{amount}} ₪ / day",
-    "toUseRemainingBudget": "To use remaining budget by month end",
-    "toStayWithinBudget": "To stay within budget this month",
-    "gap": "Reduce daily spending by {{gap}}₪ ({{current}}₪ → {{target}}₪)",
-    "capacity": {
-      "title": "Daily Spend Capacity",
-      "belowKeepsOnTrack": "Staying below this keeps you on track",
-      "exceedingOverspends": "Exceeding this will exceed monthly income"
-    }
-  },
-
-  "overBudgetCard": {
-    "title": "Over Budget",
-    "amount": "{{amount}} ₪ over",
-    "description": "Expenses have exceeded available budget"
-  },
-
-  "projectedOverspendCard": {
-    "title": "Projected Overspend",
-    "amount": "{{amount}} ₪ over by month-end",
-    "description": "At your current spending pace"
-  },
-
-  "retrospectiveCard": {
-    "title": "Monthly spending pace",
-    "perDayOnAverage": "per day on average",
-    "dailyAverageDescription_one": "Total expenses divided by 1 day",
-    "dailyAverageDescription_other": "Total expenses divided by {{count}} days",
-    "mostExpensiveDayLabel": "Most expensive day",
-    "mostExpensiveDayValue": "{{day}} · {{amount}} ₪",
-    "mostExpensiveDayEmpty": "No expenses",
-    "spendFreeDaysLabel": "Spend-free days",
-    "spendFreeDaysValue_one": "1 day",
-    "spendFreeDaysValue_other": "{{count}} days"
   },
 
   "retrospectiveOverview": {
@@ -203,5 +116,30 @@
     "title": "Budgets",
     "noBudgets": "No budgets set yet",
     "addBudgetCTA": "Add Budget"
+  },
+
+  "calendar": {
+    "stillToCome": "Still to come",
+    "upcoming": "Upcoming",
+    "biggestMovements": "Biggest this month",
+    "cardBill": "{{name}}{{lastFour}} bill",
+    "purchases_one": "{{count}} purchase",
+    "purchases_other": "{{count}} purchases",
+    "scheduled": "Scheduled",
+    "nothingScheduled": "Nothing scheduled",
+    "nothingLeft": "Nothing else this month",
+    "empty": "Add recurring items or a card billing day to see them here",
+    "demo": {
+      "rent": "Rent",
+      "visa": "Visa",
+      "salary": "Salary",
+      "max": "Max",
+      "insurance": "Car insurance"
+    },
+    "unnamed": {
+      "income": "Income",
+      "expense": "Expense",
+      "cardBill": "Card bill"
+    }
   }
 }

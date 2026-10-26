@@ -9,6 +9,7 @@ import {
   getReviewCount,
   getReviewList,
   getTransactionById,
+  getTransactionCalendar,
   getTransactionCount,
   getTransactions,
   getTransactionSummary,
@@ -18,6 +19,7 @@ import {
 import { validateBody, validateQuery } from '../middlewares/validate';
 import { ExportTransactionsSchema } from '../schemas/transactionExportSchemas';
 import {
+  GetTransactionCalendarSchema,
   GetTransactionsSchema,
   GetTransactionSummarySchema,
   ReviewTransactionsSchema,
@@ -31,6 +33,7 @@ router.get('/review-count', getReviewCount);
 router.get('/review', getReviewList);
 router.post('/review', validateBody(ReviewTransactionsSchema), reviewTransactions);
 router.get('/export', validateQuery(ExportTransactionsSchema), exportTransactions);
+router.get('/calendar', validateQuery(GetTransactionCalendarSchema), getTransactionCalendar);
 router.get('/summary', validateQuery(GetTransactionSummarySchema), getTransactionSummary);
 router.get('/', validateQuery(GetTransactionsSchema), getTransactions);
 router.get('/:id', getTransactionById);

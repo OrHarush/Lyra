@@ -50,6 +50,15 @@ export const API_ROUTES = {
   RECURRING_TEMPLATES_SPLIT: (id: string) => `/api/recurring-templates/${id}/split`,
   RECURRING_TEMPLATES_DEACTIVATE_FROM: (id: string) => `/api/recurring-templates/${id}/deactivate-from`,
   RECURRING_TEMPLATES_MATERIALIZE: (id: string) => `/api/recurring-templates/${id}/materialize`,
+  TRANSACTION_CALENDAR: (year: number, month: number, accountId?: string) => {
+    const params = new URLSearchParams({ year: String(year), month: String(month) });
+
+    if (accountId) {
+      params.append('accountId', accountId);
+    }
+
+    return `/api/transactions/calendar?${params.toString()}`;
+  },
   TRANSACTION_SUMMARY: (year: number, month?: number, accountId?: string, from?: string) => {
     const params = new URLSearchParams({ year: String(year) });
 

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import HealthIndicatorsGrid from '@/components/features/overview/HealthIndicatorsGrid';
 import Column from '@/components/shared/layout/containers/Column';
-import { HealthTile } from '@/hooks/business/useFinancialHealthIndicators';
+import { HealthTile } from '@/types/HealthTile';
 import RetrospectiveOverviewHero from '@/pages/Overview/MonthlyFinancialOverview/RetrospectiveOverview/RetrospectiveOverviewHero';
 
 interface RetrospectiveOverviewProps {

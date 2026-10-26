@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import Column from '@/components/shared/layout/containers/Column';
-import { HealthTile } from '@/hooks/business/useFinancialHealthIndicators';
+import { HealthTile } from '@/types/HealthTile';
 
 interface HealthIndicatorCellProps {
   tile: HealthTile;

@@ -14,7 +14,7 @@ import ProjectedBalanceBreakdown from '@/components/features/overview/ProjectedB
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import { CLARITY_FIGURES } from '@/pages/Home/DashboardClaritySection/constants';
-import PhoneHealthBlock from '@/pages/Home/DashboardClaritySection/PhoneHealthBlock';
+import PhoneCalendarBlock from '@/pages/Home/DashboardClaritySection/PhoneCalendarBlock';
 
 const DashboardCard = () => {
   const theme = useTheme();
@@ -103,7 +103,7 @@ const DashboardCard = () => {
         </Column>
       </Card>
 
-      <PhoneHealthBlock />
+      <PhoneCalendarBlock />
     </Column>
   );
 };

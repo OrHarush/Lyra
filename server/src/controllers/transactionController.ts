@@ -5,6 +5,7 @@ import { ApiResponse } from '../http/ApiResponse';
 import { asyncHandler } from '../middlewares/asyncHandler';
 import { ExportTransactionsQuery } from '../schemas/transactionExportSchemas';
 import {
+  GetTransactionCalendarQuery,
   GetTransactionsQuery,
   GetTransactionSummaryQuery,
   ReviewTransactionsDTO,
@@ -42,6 +43,15 @@ export const getTransactionSummary = asyncHandler(async (req: Request, res: Resp
   );
 
   return ApiResponse.ok(res, summary);
+});
+
+export const getTransactionCalendar = asyncHandler(async (req: Request, res: Response) => {
+  const calendar = await transactionService.getTransactionCalendar(
+    req.workspaceId,
+    req.validatedQuery as GetTransactionCalendarQuery
+  );
+
+  return ApiResponse.ok(res, calendar);
 });
 
 export const getTransactionCount = asyncHandler(async (req: Request, res: Response) => {

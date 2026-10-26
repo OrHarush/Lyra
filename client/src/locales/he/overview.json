@@ -45,46 +45,11 @@
       "fuel": { "label": "דלק", "amount": "280" }
     }
   },
-  "noData": {
-    "title": "אין נתונים עדיין",
-    "detail": "הוסיפו עסקאות לחודש זה כדי לראות תובנות פיננסיות"
-  },
-  "buildingPattern": {
-    "title": "דפוס הוצאות",
-    "value": "מנתחים את ההוצאות שלך",
-    "description": "Lyra לומדת את דפוסי ההוצאות שלך ככל שאתה מוסיף עסקאות. בקרוב תראה כאן תובנות על ההרגלים שלך."
-  },
   "recurringBanner": {
     "title": "המספרים מבוססים על מה שהזנת",
     "bodyLink": "הוסף תזרים קבוע",
     "bodyRest": " כמו משכורת ושכירות כדי ש-Lyra תציג יתרה ותחזית מדויקות יותר.",
     "dismiss": "סגור"
-  },
-  "noIncome": {
-    "title": "אין הכנסות החודש",
-    "detail": "הוסף עסקת הכנסה כדי לראות כיצד התקציב שלך מתנהל החודש."
-  },
-  "monthlyInsight": {
-    "excellent": {
-      "title": "חודש מצוין",
-      "message": "ניהול הוצאות יעיל ושמירה על יתרה חיובית"
-    },
-    "good": {
-      "title": "חודש טוב",
-      "message": "הוצאות מאוזנות ביחס להכנסות"
-    },
-    "balanced": {
-      "title": "צמוד לתקציב",
-      "message": "נותר תקציב קטן — אתה קרוב לנקודת האיזון"
-    },
-    "atRisk": {
-      "title": "קצב הוצאה גבוה",
-      "message": "בקצב הנוכחי תחרוג מהתקציב הנותר לפני סוף החודש"
-    },
-    "overspent": {
-      "title": "חודש בחריגה",
-      "message": "ההוצאות גבוהות מההכנסות החודש"
-    }
   },
 
   "incomeUsageMeter": {
@@ -100,63 +65,6 @@
       "warning": "בסיכון",
       "critical": "קריטי"
     }
-  },
-
-  "budgetRunwayCard": {
-    "title": "טווח תקציב",
-    "daysLeft_one": "נותר יום אחד",
-    "daysLeft_two": "נותרו יומיים",
-    "daysLeft_many": "נותרו {{count}} ימים",
-    "daysLeft_other": "נותרו {{count}} ימים",
-    "runwayDetail": "הכסף ייגמר עד {{date}} בקצב הנוכחי",
-    "onTrack": "אתה במסלול תקין",
-    "enoughForMonth": "בקצב מספיק לסיום החודש",
-    "enoughForMonthDesc": "צפוי להישאר במסגרת התקציב",
-    "atBurnRate": "בקצב ההוצאות הנוכחי",
-    "noRunway": "לא נותר טווח תקציב",
-    "noRunwayDetail": "קצב ההוצאות גבוה מההכנסה"
-  },
-
-  "dailySpendCard": {
-    "title": "הוצאה יומית נדרשת",
-    "valuePerDay": "{{amount}} ₪ ליום",
-    "toUseRemainingBudget": "לניצול יתרת התקציב עד סוף החודש",
-    "toStayWithinBudget": "להישארות במסגרת התקציב החודש",
-    "gap": "יש להפחית {{gap}}₪ ליום ({{current}}₪ → {{target}}₪)",
-    "capacity": {
-      "title": "קיבולת הוצאה יומית",
-      "belowKeepsOnTrack": "שמירה מתחת לערך זה משאירה אתכם במסלול",
-      "exceedingOverspends": "חריגה תוביל לעודף הוצאות חודשי"
-    }
-  },
-
-  "overBudgetCard": {
-    "title": "חריגה מהתקציב",
-    "amount": "חריגה של {{amount}} ₪",
-    "description": "ההוצאות חרגו מהתקציב הזמין"
-  },
-
-  "projectedOverspendCard": {
-    "title": "חריגה צפויה",
-    "amount": "חריגה של {{amount}} ₪ עד סוף החודש",
-    "description": "בקצב ההוצאות הנוכחי"
-  },
-
-  "retrospectiveCard": {
-    "title": "קצב ההוצאה החודשי",
-    "perDayOnAverage": "ליום בממוצע",
-    "dailyAverageDescription_one": "סך כל ההוצאות מחולק ביום אחד",
-    "dailyAverageDescription_two": "סך כל ההוצאות מחולק ב־{{count}} ימים",
-    "dailyAverageDescription_many": "סך כל ההוצאות מחולק ב־{{count}} ימים",
-    "dailyAverageDescription_other": "סך כל ההוצאות מחולק ב־{{count}} ימים",
-    "mostExpensiveDayLabel": "היום היקר ביותר",
-    "mostExpensiveDayValue": "{{day}} · {{amount}} ₪",
-    "mostExpensiveDayEmpty": "ללא הוצאות",
-    "spendFreeDaysLabel": "ימים ללא הוצאה",
-    "spendFreeDaysValue_one": "יום אחד",
-    "spendFreeDaysValue_two": "יומיים",
-    "spendFreeDaysValue_many": "{{count}} ימים",
-    "spendFreeDaysValue_other": "{{count}} ימים"
   },
 
   "retrospectiveOverview": {
@@ -214,5 +122,30 @@
     "title": "תקציבים",
     "noBudgets": "עדיין לא הוגדרו תקציבים",
     "addBudgetCTA": "הגדר תקציב"
+  },
+
+  "calendar": {
+    "stillToCome": "עוד צפוי",
+    "upcoming": "בקרוב",
+    "biggestMovements": "הגדולים החודש",
+    "cardBill": "חיוב {{name}}{{lastFour}}",
+    "purchases_one": "רכישה אחת",
+    "purchases_other": "{{count}} רכישות",
+    "scheduled": "מתוכנן",
+    "nothingScheduled": "אין תנועות ביום הזה",
+    "nothingLeft": "אין עוד תנועות החודש",
+    "empty": "הוסיפו הוראות קבע או יום חיוב לכרטיס כדי לראות אותם כאן",
+    "demo": {
+      "rent": "שכר דירה",
+      "visa": "ויזה",
+      "salary": "משכורת",
+      "max": "מקס",
+      "insurance": "ביטוח רכב"
+    },
+    "unnamed": {
+      "income": "הכנסה",
+      "expense": "הוצאה",
+      "cardBill": "חיוב כרטיס"
+    }
   }
 }

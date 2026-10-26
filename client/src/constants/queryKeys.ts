@@ -18,6 +18,13 @@ export const queryKeys = {
     accountId,
     from,
   ],
+  transactionCalendar: (year: number, month: number, accountId: string) => [
+    'transactions',
+    'calendar',
+    year,
+    month,
+    accountId,
+  ],
   transactionsCount: () => ['transactions', 'count'],
   transactionsReviewCount: () => ['transactions', 'reviewCount'],
   transactionsReview: () => ['transactions', 'review'],

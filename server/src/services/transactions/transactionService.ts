@@ -10,6 +10,7 @@ import User from '../../models/User';
 import * as recurringTemplateRepository from '../../repositories/recurringTemplateRepository';
 import * as transactionRepository from '../../repositories/transactionRepository';
 import {
+  GetTransactionCalendarQuery,
   GetTransactionsOptions,
   GetTransactionSummaryQuery,
 } from '../../schemas/transactionSchemas';
@@ -28,6 +29,7 @@ import {
 import * as accountService from '../accountService';
 import * as analyticsService from '../analyticsService';
 import { syncAccountBalance } from '../balanceService';
+import { buildCalendarDays } from './buildCalendarDays';
 import { buildVirtualTransactions } from './buildVirtualTransactions';
 import { invalidateQuickChipsCache } from './quickChipsService';
 
@@ -191,6 +193,31 @@ export const getTransactionSummary = async (
     monthlyIncome: fromCents(bucket.monthlyIncome),
     monthlyExpenses: fromCents(bucket.monthlyExpenses),
   }));
+};
+
+export const getTransactionCalendar = async (
+  workspaceId: string,
+  { year, month, accountId }: GetTransactionCalendarQuery
+) => {
+  // Credit-card purchases from the previous month are charged on this month's billing day.
+  const fromDate = dayjs.utc(Date.UTC(year, month, 1)).subtract(1, 'month').toDate();
+  const endDate = new Date(Date.UTC(year, month + 1, 1));
+
+  const transactions = await transactionRepository.findMany(workspaceId, {
+    accountId,
+    from: fromDate,
+    to: endDate,
+  });
+
+  const templates = await recurringTemplateRepository.findActiveForDateRangePopulated(
+    workspaceId,
+    fromDate,
+    endDate
+  );
+
+  transactions.push(...buildVirtualTransactions(templates, transactions, fromDate, endDate));
+
+  return buildCalendarDays(transactions, year, month, accountId);
 };
 
 export const countAll = async (
