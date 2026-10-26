@@ -11,6 +11,7 @@ interface CalendarDayCellProps {
   details: CalendarDayDto;
   isToday: boolean;
   isPast: boolean;
+  isOutsideMonth: boolean;
   isSelected: boolean;
   hasTooltip: boolean;
   selectDay?: (date: string) => void;
@@ -21,6 +22,7 @@ const CalendarDayCell = ({
   details,
   isToday,
   isPast,
+  isOutsideMonth,
   isSelected,
   hasTooltip,
   selectDay,
@@ -36,6 +38,7 @@ const CalendarDayCell = ({
       sx={getDayCellStyle({
         isToday,
         isPast,
+        isOutsideMonth,
         isSelected,
         isClickable: !!selectDay || (hasTooltip && hasDetails),
       })}

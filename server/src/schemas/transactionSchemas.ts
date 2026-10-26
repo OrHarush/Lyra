@@ -81,17 +81,21 @@ export const GetTransactionSummarySchema = z
 
 export type GetTransactionSummaryQuery = z.infer<typeof GetTransactionSummarySchema>;
 
+const CALENDAR_MAX_RANGE_DAYS = 62;
+const isoDay = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'must be a YYYY-MM-DD date');
+
 export const GetTransactionCalendarSchema = z
   .object({
-    year: z.string().regex(/^\d{4}$/, 'year must be a 4-digit number'),
-    month: z.string().regex(/^(1[0-2]|[1-9])$/, 'month must be between 1 and 12'),
+    from: isoDay,
+    to: isoDay,
     accountId: z.string().optional(),
   })
-  .transform((data) => ({
-    year: parseInt(data.year, 10),
-    month: parseInt(data.month, 10) - 1,
-    accountId: data.accountId,
-  }));
+  .refine((data) => data.from <= data.to, { message: 'from must not be after to' })
+  .refine(
+    (data) =>
+      (Date.parse(data.to) - Date.parse(data.from)) / 86_400_000 <= CALENDAR_MAX_RANGE_DAYS,
+    { message: `range must not exceed ${CALENDAR_MAX_RANGE_DAYS} days` }
+  );
 
 export type GetTransactionCalendarQuery = z.infer<typeof GetTransactionCalendarSchema>;
 

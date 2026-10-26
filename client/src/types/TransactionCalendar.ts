@@ -22,3 +22,8 @@ export interface DatedCalendarEvent {
   date: string;
   event: CalendarEventDto;
 }
+
+export interface TransactionCalendarDto {
+  days: CalendarDayDto[];
+  upcoming: DatedCalendarEvent[];
+}

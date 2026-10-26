@@ -18,11 +18,11 @@ export const queryKeys = {
     accountId,
     from,
   ],
-  transactionCalendar: (year: number, month: number, accountId: string) => [
+  transactionCalendar: (from: string, to: string, accountId: string) => [
     'transactions',
     'calendar',
-    year,
-    month,
+    from,
+    to,
     accountId,
   ],
   transactionsCount: () => ['transactions', 'count'],

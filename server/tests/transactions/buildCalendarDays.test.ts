@@ -1,14 +1,24 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Types } from 'mongoose';
 import { describe, expect, it } from 'vitest';
 
 import { IAccount } from '../../src/models/Account';
 import { IPaymentMethod } from '../../src/models/PaymentMethod';
-import { buildCalendarDays } from '../../src/services/transactions/buildCalendarDays';
+import {
+  buildCalendarDays,
+  flattenEvents,
+} from '../../src/services/transactions/buildCalendarDays';
 import { ITransactionPopulated } from '../../src/types/Transaction';
 
 const ACCOUNT_ID = new Types.ObjectId().toString();
 const OTHER_ACCOUNT_ID = new Types.ObjectId().toString();
-const OCTOBER = 9;
+dayjs.extend(utc);
+
+const OCT_FROM = dayjs.utc('2026-10-01');
+const OCT_TO = dayjs.utc('2026-10-31');
+const NOV_FROM = dayjs.utc('2026-11-01');
+const NOV_TO = dayjs.utc('2026-11-30');
 
 const account = (id: string) => ({ _id: new Types.ObjectId(id) }) as unknown as IAccount;
 
@@ -45,8 +55,8 @@ describe('buildCalendarDays', () => {
         tx({ paymentMethod: card, date: new Date('2026-10-03T00:00:00Z'), amount: 5000 }),
         tx({ paymentMethod: card, date: new Date('2026-09-20T00:00:00Z'), amount: 2500 }),
       ],
-      2026,
-      OCTOBER,
+      OCT_FROM,
+      OCT_TO,
       ACCOUNT_ID
     );
 
@@ -63,8 +73,8 @@ describe('buildCalendarDays', () => {
   it('moves a card purchase made on or after the billing day to next month', () => {
     const days = buildCalendarDays(
       [tx({ paymentMethod: creditCard(10), date: new Date('2026-10-10T00:00:00Z') })],
-      2026,
-      OCTOBER,
+      OCT_FROM,
+      OCT_TO,
       ACCOUNT_ID
     );
 
@@ -74,8 +84,8 @@ describe('buildCalendarDays', () => {
   it('clamps a billing day of 31 to the last day of a 30-day month', () => {
     const days = buildCalendarDays(
       [tx({ paymentMethod: creditCard(31), date: new Date('2026-10-31T00:00:00Z') })],
-      2026,
-      10,
+      NOV_FROM,
+      NOV_TO,
       ACCOUNT_ID
     );
 
@@ -87,10 +97,15 @@ describe('buildCalendarDays', () => {
     const days = buildCalendarDays(
       [
         tx({ paymentMethod: card, date: new Date('2026-10-01T00:00:00Z'), amount: 10000 }),
-        tx({ paymentMethod: card, type: 'Income', date: new Date('2026-10-02T00:00:00Z'), amount: 3000 }),
+        tx({
+          paymentMethod: card,
+          type: 'Income',
+          date: new Date('2026-10-02T00:00:00Z'),
+          amount: 3000,
+        }),
       ],
-      2026,
-      OCTOBER,
+      OCT_FROM,
+      OCT_TO,
       ACCOUNT_ID
     );
 
@@ -108,8 +123,8 @@ describe('buildCalendarDays', () => {
           isVirtual: true,
         }),
       ],
-      2026,
-      OCTOBER,
+      OCT_FROM,
+      OCT_TO,
       ACCOUNT_ID
     );
 
@@ -122,8 +137,8 @@ describe('buildCalendarDays', () => {
   it('excludes other accounts and transfers', () => {
     const days = buildCalendarDays(
       [tx({ account: account(OTHER_ACCOUNT_ID) }), tx({ type: 'Transfer' })],
-      2026,
-      OCTOBER,
+      OCT_FROM,
+      OCT_TO,
       ACCOUNT_ID
     );
 
@@ -138,16 +153,20 @@ describe('buildCalendarDays', () => {
         tx({ date: new Date('2026-10-01T00:00:00Z'), paymentMethod: creditCard(10) }),
         tx({ date, type: 'Income', name: 'Salary' }),
       ],
-      2026,
-      OCTOBER,
+      OCT_FROM,
+      OCT_TO,
       ACCOUNT_ID
     );
 
-    expect(eventDays(days)[0].events.map(event => event.kind)).toEqual(['income', 'cardBill', 'expense']);
+    expect(eventDays(days)[0].events.map(event => event.kind)).toEqual([
+      'income',
+      'cardBill',
+      'expense',
+    ]);
   });
 
   it('returns every day of the month', () => {
-    expect(buildCalendarDays([], 2026, OCTOBER, ACCOUNT_ID)).toHaveLength(31);
+    expect(buildCalendarDays([], OCT_FROM, OCT_TO, ACCOUNT_ID)).toHaveLength(31);
   });
 
   describe('daily balances', () => {
@@ -159,8 +178,8 @@ describe('buildCalendarDays', () => {
     it('walks back over real transactions for past days', () => {
       const days = buildCalendarDays(
         [tx({ type: 'Income', amount: 20000, date: new Date('2026-10-12T00:00:00Z') })],
-        2026,
-        OCTOBER,
+        OCT_FROM,
+        OCT_TO,
         ACCOUNT_ID,
         context
       );
@@ -173,10 +192,14 @@ describe('buildCalendarDays', () => {
       const days = buildCalendarDays(
         [
           tx({ amount: 30000, date: new Date('2026-10-20T00:00:00Z'), isVirtual: true }),
-          tx({ paymentMethod: creditCard(25), amount: 5000, date: new Date('2026-10-14T00:00:00Z') }),
+          tx({
+            paymentMethod: creditCard(25),
+            amount: 5000,
+            date: new Date('2026-10-14T00:00:00Z'),
+          }),
         ],
-        2026,
-        OCTOBER,
+        OCT_FROM,
+        OCT_TO,
         ACCOUNT_ID,
         context
       );
@@ -189,8 +212,8 @@ describe('buildCalendarDays', () => {
     it('ignores virtual items when walking back', () => {
       const days = buildCalendarDays(
         [tx({ amount: 30000, date: new Date('2026-10-12T00:00:00Z'), isVirtual: true })],
-        2026,
-        OCTOBER,
+        OCT_FROM,
+        OCT_TO,
         ACCOUNT_ID,
         context
       );
@@ -210,8 +233,8 @@ describe('buildCalendarDays', () => {
             date: new Date('2026-10-18T00:00:00Z'),
           }),
         ],
-        2026,
-        OCTOBER,
+        OCT_FROM,
+        OCT_TO,
         ACCOUNT_ID,
         context
       );
@@ -220,7 +243,37 @@ describe('buildCalendarDays', () => {
     });
 
     it('leaves balance empty without a balance context', () => {
-      expect(buildCalendarDays([], 2026, OCTOBER, ACCOUNT_ID)[0].balance).toBeNull();
+      expect(buildCalendarDays([], OCT_FROM, OCT_TO, ACCOUNT_ID)[0].balance).toBeNull();
     });
+  });
+
+  it('covers neighbouring-month days when the range spans them', () => {
+    const days = buildCalendarDays(
+      [tx({ paymentMethod: creditCard(2), date: new Date('2026-10-20T00:00:00Z'), amount: 4000 })],
+      dayjs.utc('2026-09-27'),
+      dayjs.utc('2026-11-07'),
+      ACCOUNT_ID
+    );
+
+    expect(days).toHaveLength(42);
+    expect(days[0].date).toBe('2026-09-27');
+    expect(eventDays(days)).toMatchObject([{ date: '2026-11-02', events: [{ kind: 'cardBill' }] }]);
+  });
+
+  it('flattens events with their dates in day order', () => {
+    const days = buildCalendarDays(
+      [
+        tx({ type: 'Income', name: 'Salary', date: new Date('2026-10-10T00:00:00Z') }),
+        tx({ name: 'Rent', date: new Date('2026-10-01T00:00:00Z') }),
+      ],
+      OCT_FROM,
+      OCT_TO,
+      ACCOUNT_ID
+    );
+
+    expect(flattenEvents(days).map(({ date, event }) => [date, event.name])).toEqual([
+      ['2026-10-01', 'Rent'],
+      ['2026-10-10', 'Salary'],
+    ]);
   });
 });

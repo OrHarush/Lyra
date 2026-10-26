@@ -18,6 +18,7 @@ export const getCalendarGridStyle = (weekCount: number) => ({
 interface DayCellStyleParams {
   isToday: boolean;
   isPast: boolean;
+  isOutsideMonth: boolean;
   isSelected: boolean;
   isClickable: boolean;
 }
@@ -25,6 +26,7 @@ interface DayCellStyleParams {
 export const getDayCellStyle = ({
   isToday,
   isPast,
+  isOutsideMonth,
   isSelected,
   isClickable,
 }: DayCellStyleParams): SxProps<Theme> => ({
@@ -36,7 +38,14 @@ export const getDayCellStyle = ({
   fontSize: '0.8rem',
   lineHeight: 1.2,
   fontWeight: isToday ? 600 : 400,
-  color: isToday ? 'primary.main' : isPast ? 'text.disabled' : 'text.primary',
+  color: isToday
+    ? 'primary.main'
+    : isOutsideMonth
+      ? 'text.disabled'
+      : isPast
+        ? 'text.secondary'
+        : 'text.primary',
+  opacity: isOutsideMonth ? 0.4 : 1,
   bgcolor: (theme: Theme) => (isToday ? alpha(theme.palette.primary.main, 0.12) : 'transparent'),
   outline: '1.5px solid',
   outlineColor: (theme: Theme) =>

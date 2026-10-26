@@ -24,7 +24,7 @@ const MoneyCalendarUpcoming = ({ title, emptyText, events }: MoneyCalendarUpcomi
     {events.map(({ date, event }, index) => (
       <Fragment key={`${date}-${event.id}`}>
         {index > 0 && <Divider />}
-        <CalendarEventRow event={event} date={date} />
+        <CalendarEventRow event={event} date={date} showDate />
       </Fragment>
     ))}
   </Column>

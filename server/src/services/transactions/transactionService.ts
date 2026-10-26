@@ -15,6 +15,7 @@ import {
   GetTransactionSummaryQuery,
 } from '../../schemas/transactionSchemas';
 import { ITransactionPopulated } from '../../types/Transaction';
+import { TransactionCalendar } from '../../types/TransactionCalendar';
 import { isCategoryCompatibleWithTransactionType } from '../../utils/categoryCompatibility';
 import { fingerprintForTransaction } from '../../utils/importFingerprint';
 import {
@@ -29,7 +30,7 @@ import {
 import * as accountService from '../accountService';
 import * as analyticsService from '../analyticsService';
 import { computeAccountBalance, syncAccountBalance } from '../balanceService';
-import { buildCalendarDays } from './buildCalendarDays';
+import { buildCalendarDays, flattenEvents } from './buildCalendarDays';
 import { buildVirtualTransactions } from './buildVirtualTransactions';
 import { invalidateQuickChipsCache } from './quickChipsService';
 
@@ -195,31 +196,35 @@ export const getTransactionSummary = async (
   }));
 };
 
+const UPCOMING_WINDOW_DAYS = 30;
+
 export const getTransactionCalendar = async (
   workspaceId: string,
-  { year, month, accountId }: GetTransactionCalendarQuery
-) => {
+  { from, to, accountId }: GetTransactionCalendarQuery
+): Promise<TransactionCalendar> => {
   const now = dayjs.utc().add(3, 'hours');
-  const monthStart = dayjs.utc(Date.UTC(year, month, 1));
-  const monthEnd = monthStart.add(1, 'month');
-  // Starts a month early because card purchases are charged on the next billing day; spans
-  // up to now so balances can be walked between today and any viewed month.
-  const fromDate = (now.isBefore(monthStart) ? now : monthStart).subtract(1, 'month').toDate();
-  const endDate = (now.isAfter(monthEnd) ? now : monthEnd).toDate();
+  const rangeStart = dayjs.utc(from);
+  const rangeEnd = dayjs.utc(to).endOf('day');
+  const upcomingStart = now.startOf('day');
+  const upcomingEnd = upcomingStart.add(UPCOMING_WINDOW_DAYS, 'day').endOf('day');
+  // Starts a month early because card purchases are charged on the next billing day, and
+  // always spans today so balances can be walked from the current balance to any range.
+  const fetchFrom = (now.isBefore(rangeStart) ? now : rangeStart).subtract(1, 'month').toDate();
+  const fetchTo = (upcomingEnd.isAfter(rangeEnd) ? upcomingEnd : rangeEnd).toDate();
 
   const transactions = await transactionRepository.findMany(workspaceId, {
     accountId,
-    from: fromDate,
-    to: endDate,
+    from: fetchFrom,
+    to: fetchTo,
   });
 
   const templates = await recurringTemplateRepository.findActiveForDateRangePopulated(
     workspaceId,
-    fromDate,
-    endDate
+    fetchFrom,
+    fetchTo
   );
 
-  transactions.push(...buildVirtualTransactions(templates, transactions, fromDate, endDate));
+  transactions.push(...buildVirtualTransactions(templates, transactions, fetchFrom, fetchTo));
 
   const balanceContext = accountId
     ? {
@@ -228,7 +233,10 @@ export const getTransactionCalendar = async (
       }
     : undefined;
 
-  return buildCalendarDays(transactions, year, month, accountId, balanceContext);
+  return {
+    days: buildCalendarDays(transactions, rangeStart, rangeEnd, accountId, balanceContext),
+    upcoming: flattenEvents(buildCalendarDays(transactions, upcomingStart, upcomingEnd, accountId)),
+  };
 };
 
 export const countAll = async (

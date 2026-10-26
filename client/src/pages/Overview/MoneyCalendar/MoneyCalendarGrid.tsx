@@ -3,12 +3,9 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import CalendarDayCell from '@/pages/Overview/MoneyCalendar/CalendarDayCell';
-import {
-  getCalendarGridStyle,
-  WEEKDAY_ROW_HEIGHT,
-} from '@/pages/Overview/MoneyCalendar/styles';
+import { getCalendarGridStyle, WEEKDAY_ROW_HEIGHT } from '@/pages/Overview/MoneyCalendar/styles';
 import { CalendarDayDto } from '@/types/TransactionCalendar';
-import { countCalendarWeeks, findDay } from '@/utils/entities/calendar';
+import { countCalendarWeeks, findDay, listVisibleDays } from '@/utils/entities/calendar';
 
 interface MoneyCalendarGridProps {
   month: Dayjs;
@@ -38,20 +35,20 @@ const MoneyCalendarGrid = ({
   selectDay,
 }: MoneyCalendarGridProps) => {
   const { i18n } = useTranslation();
-  const firstDay = month.startOf('month');
-  const monthDays = Array.from({ length: month.daysInMonth() }, (_, index) =>
-    firstDay.add(index, 'day')
-  );
 
   return (
     <Box sx={getCalendarGridStyle(countCalendarWeeks(month))}>
       {buildWeekdayLabels(i18n.language).map((label, index) => (
-        <Typography key={index} variant="caption" color="text.secondary" lineHeight={`${WEEKDAY_ROW_HEIGHT}px`}>
+        <Typography
+          key={index}
+          variant="caption"
+          color="text.secondary"
+          lineHeight={`${WEEKDAY_ROW_HEIGHT}px`}
+        >
           {label}
         </Typography>
       ))}
-      {firstDay.day() > 0 && <Box sx={{ gridColumn: `span ${firstDay.day()}` }} />}
-      {monthDays.map(day => {
+      {listVisibleDays(month).map(day => {
         const date = day.format('YYYY-MM-DD');
 
         return (
@@ -61,6 +58,7 @@ const MoneyCalendarGrid = ({
             details={findDay(days, date)}
             isToday={day.isSame(today, 'day')}
             isPast={day.isBefore(today, 'day')}
+            isOutsideMonth={!day.isSame(month, 'month')}
             isSelected={date === selectedDate}
             hasTooltip={hasTooltips}
             selectDay={selectDay}

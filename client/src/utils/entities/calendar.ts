@@ -1,9 +1,32 @@
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { CalendarDayDto, CalendarEventDto, DatedCalendarEvent } from '@/types/TransactionCalendar';
 
 export const countCalendarWeeks = (month: Dayjs) =>
   Math.ceil((month.startOf('month').day() + month.daysInMonth()) / 7);
+
+export const getVisibleRange = (month: Dayjs) => {
+  const monthStart = month.startOf('month');
+  const monthEnd = month.endOf('month').startOf('day');
+
+  return {
+    start: monthStart.subtract(monthStart.day(), 'day'),
+    end: monthEnd.add(6 - monthEnd.day(), 'day'),
+  };
+};
+
+export const listVisibleDays = (month: Dayjs) => {
+  const { start } = getVisibleRange(month);
+
+  return Array.from({ length: countCalendarWeeks(month) * 7 }, (_, index) =>
+    start.add(index, 'day')
+  );
+};
+
+export const isInMonth = (date: string, month: Dayjs) => dayjs(date).isSame(month, 'month');
+
+export const isOpenCardBill = (event: CalendarEventDto, date: string, today: Dayjs) =>
+  event.kind === 'cardBill' && dayjs(date).isAfter(today, 'day');
 
 export const toSignedAmount = (event: CalendarEventDto) =>
   event.kind === 'income' ? event.amount : -event.amount;

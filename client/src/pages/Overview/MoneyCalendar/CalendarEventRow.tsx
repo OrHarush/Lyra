@@ -6,14 +6,15 @@ import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import CurrencyText from '@/components/shared/ui/CurrencyText';
 import { CalendarEventDto } from '@/types/TransactionCalendar';
-import { toSignedAmount } from '@/utils/entities/calendar';
+import { isOpenCardBill, toSignedAmount } from '@/utils/entities/calendar';
 
 interface CalendarEventRowProps {
   event: CalendarEventDto;
-  date?: string;
+  date: string;
+  showDate?: boolean;
 }
 
-const CalendarEventRow = ({ event, date }: CalendarEventRowProps) => {
+const CalendarEventRow = ({ event, date, showDate = false }: CalendarEventRowProps) => {
   const { t } = useTranslation('overview');
 
   const title =
@@ -25,8 +26,11 @@ const CalendarEventRow = ({ event, date }: CalendarEventRowProps) => {
       : event.name || t(`calendar.unnamed.${event.kind}`);
 
   const details = [
-    date && dayjs(date).format('D MMM'),
-    event.kind === 'cardBill' && t('calendar.purchases', { count: event.transactionCount }),
+    showDate && dayjs(date).format('D MMM'),
+    event.kind === 'cardBill' &&
+      t(isOpenCardBill(event, date, dayjs()) ? 'calendar.purchasesSoFar' : 'calendar.purchases', {
+        count: event.transactionCount,
+      }),
     event.kind !== 'cardBill' && event.isVirtual && t('calendar.scheduled'),
   ].filter(Boolean);
 

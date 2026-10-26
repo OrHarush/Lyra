@@ -28,7 +28,13 @@ const MoneyCalendarHeader = ({ month, remainingTotal }: MoneyCalendarHeaderProps
       {remainingTotal !== null && (
         <Typography variant="caption" color="text.secondary">
           {t('calendar.stillToCome')}{' '}
-          <CurrencyText value={remainingTotal} variant="caption" fontWeight={600} hasSign hasColor />
+          <CurrencyText
+            value={remainingTotal}
+            variant="caption"
+            fontWeight={600}
+            hasSign
+            hasColor
+          />
         </Typography>
       )}
     </Row>

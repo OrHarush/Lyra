@@ -27,7 +27,7 @@ const CalendarDayDetails = ({ day }: CalendarDayDetailsProps) => {
         </Typography>
       )}
       {events.map(event => (
-        <CalendarEventRow key={event.id} event={event} />
+        <CalendarEventRow key={event.id} event={event} date={date} />
       ))}
       {balance !== null && (
         <>

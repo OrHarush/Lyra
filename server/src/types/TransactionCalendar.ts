@@ -18,6 +18,16 @@ export interface CalendarDay {
   events: CalendarEvent[];
 }
 
+export interface DatedCalendarEvent {
+  date: string;
+  event: CalendarEvent;
+}
+
+export interface TransactionCalendar {
+  days: CalendarDay[];
+  upcoming: DatedCalendarEvent[];
+}
+
 export interface CalendarBalanceContext {
   currentBalance: number;
   now: Date;

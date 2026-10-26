@@ -1,8 +1,13 @@
 import { fromCents } from '@lyra/shared';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
-import { CalendarBalanceContext, CalendarDay, CalendarEvent } from '../../types/TransactionCalendar';
+import {
+  CalendarBalanceContext,
+  CalendarDay,
+  CalendarEvent,
+  DatedCalendarEvent,
+} from '../../types/TransactionCalendar';
 import { ITransactionPopulated } from '../../types/Transaction';
 import { getEffectiveBalanceDate } from '../../utils/transaction';
 import { buildDailyBalances } from './buildDailyBalances';
@@ -13,28 +18,25 @@ const KIND_ORDER: Record<CalendarEvent['kind'], number> = { income: 0, cardBill:
 
 export const buildCalendarDays = (
   transactions: ITransactionPopulated[],
-  year: number,
-  month: number,
+  from: Dayjs,
+  to: Dayjs,
   accountId?: string,
   balanceContext?: CalendarBalanceContext
 ): CalendarDay[] => {
-  const eventsByDate = groupEventsByDate(transactions, year, month, accountId);
-  const monthStart = dayjs.utc(Date.UTC(year, month, 1));
-  const monthDays = Array.from({ length: monthStart.daysInMonth() }, (_, index) =>
-    monthStart.add(index, 'day')
-  );
+  const rangeDays = listDays(from, to);
+  const eventsByDate = groupEventsByDate(transactions, from, to, accountId);
   const balances =
     accountId && balanceContext
       ? buildDailyBalances(
           transactions,
-          monthDays,
+          rangeDays,
           accountId,
           balanceContext.currentBalance,
           balanceContext.now
         )
       : new Map<string, number>();
 
-  return monthDays.map(day => {
+  return rangeDays.map(day => {
     const date = day.format('YYYY-MM-DD');
     const balance = balances.get(date);
 
@@ -47,10 +49,23 @@ export const buildCalendarDays = (
   });
 };
 
+export const flattenEvents = (days: CalendarDay[]): DatedCalendarEvent[] =>
+  days.flatMap(day => day.events.map(event => ({ date: day.date, event })));
+
+const listDays = (from: Dayjs, to: Dayjs) => {
+  const days: Dayjs[] = [];
+
+  for (let day = from.startOf('day'); !day.isAfter(to, 'day'); day = day.add(1, 'day')) {
+    days.push(day);
+  }
+
+  return days;
+};
+
 const groupEventsByDate = (
   transactions: ITransactionPopulated[],
-  year: number,
-  month: number,
+  from: Dayjs,
+  to: Dayjs,
   accountId?: string
 ) => {
   const eventsByDate = new Map<string, Map<string, CalendarEvent>>();
@@ -62,7 +77,7 @@ const groupEventsByDate = (
 
     const effectiveDate = dayjs.utc(getEffectiveBalanceDate(tx));
 
-    if (effectiveDate.year() !== year || effectiveDate.month() !== month) {
+    if (effectiveDate.isBefore(from, 'day') || effectiveDate.isAfter(to, 'day')) {
       continue;
     }
 

@@ -131,6 +131,9 @@
     "empty": "Add recurring items or a card billing day to see them here",
     "endOfDayBalance": "Balance",
     "projectedBalance": "Projected balance",
+    "purchasesSoFar_one": "{{count}} purchase so far",
+    "purchasesSoFar_other": "{{count}} purchases so far",
+    "nothingNext30Days": "Nothing in the next 30 days",
     "demo": {
       "rent": "Rent",
       "visa": "Visa",

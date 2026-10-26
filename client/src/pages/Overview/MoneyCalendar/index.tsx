@@ -16,6 +16,7 @@ import MoneyCalendarUpcoming from '@/pages/Overview/MoneyCalendar/MoneyCalendarU
 import { useOverviewFilters } from '@/pages/Overview/OverviewFiltersProvider';
 import {
   findDay,
+  isInMonth,
   selectEventsFrom,
   selectLargestEvents,
   sumSignedAmounts,
@@ -25,8 +26,8 @@ const SIDE_LIST_LIMIT = 3;
 
 const MoneyCalendar = () => {
   const { t } = useTranslation('overview');
-  const { date, year, month, account } = useOverviewFilters();
-  const { days, isLoading } = useTransactionCalendar(year, month, account?._id);
+  const { date, account } = useOverviewFilters();
+  const { days, upcoming, isLoading } = useTransactionCalendar(date, account?._id);
   const isSmallScreen = useIsSmallScreen();
   const today = dayjs();
   const [selectedDate, setSelectedDate] = useState(today.format('YYYY-MM-DD'));
@@ -36,16 +37,20 @@ const MoneyCalendar = () => {
   }
 
   const isPastMonth = date.isBefore(today, 'month');
-  const listFrom = date.isSame(today, 'month')
-    ? today.format('YYYY-MM-DD')
-    : date.startOf('month').format('YYYY-MM-DD');
-  const remainingEvents = isPastMonth ? [] : selectEventsFrom(days, listFrom);
-  const sideEvents = isPastMonth
-    ? selectLargestEvents(days, SIDE_LIST_LIMIT)
-    : remainingEvents.slice(0, SIDE_LIST_LIMIT);
-  const hasAnyEvents = days.some(day => day.events.length > 0);
+  const isCurrentMonth = date.isSame(today, 'month');
+  const monthDays = days.filter(day => isInMonth(day.date, date));
+  const hasAnyEvents = monthDays.some(day => day.events.length > 0);
+  const remainingEvents = isPastMonth
+    ? []
+    : selectEventsFrom(monthDays, isCurrentMonth ? today.format('YYYY-MM-DD') : '');
   const remainingTotal = remainingEvents.length > 0 ? sumSignedAmounts(remainingEvents) : null;
-  const visibleSelectedDate = date.isSame(selectedDate, 'month')
+  const sideEvents = isPastMonth
+    ? selectLargestEvents(monthDays, SIDE_LIST_LIMIT)
+    : (isCurrentMonth ? upcoming : remainingEvents).slice(0, SIDE_LIST_LIMIT);
+  const emptyText = isCurrentMonth
+    ? t('calendar.nothingNext30Days')
+    : t(hasAnyEvents ? 'calendar.nothingLeft' : 'calendar.empty');
+  const visibleSelectedDate = days.some(day => day.date === selectedDate)
     ? selectedDate
     : date.startOf('month').format('YYYY-MM-DD');
 
@@ -72,7 +77,7 @@ const MoneyCalendar = () => {
             </Column>
             <MoneyCalendarUpcoming
               title={t(isPastMonth ? 'calendar.biggestMovements' : 'calendar.upcoming')}
-              emptyText={t(hasAnyEvents ? 'calendar.nothingLeft' : 'calendar.empty')}
+              emptyText={emptyText}
               events={sideEvents}
             />
           </Row>

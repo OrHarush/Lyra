@@ -137,6 +137,9 @@
     "empty": "הוסיפו הוראות קבע או יום חיוב לכרטיס כדי לראות אותם כאן",
     "endOfDayBalance": "יתרה",
     "projectedBalance": "יתרה צפויה",
+    "purchasesSoFar_one": "רכישה אחת עד כה",
+    "purchasesSoFar_other": "{{count}} רכישות עד כה",
+    "nothingNext30Days": "אין תנועות ב-30 הימים הקרובים",
     "demo": {
       "rent": "שכר דירה",
       "visa": "ויזה",
