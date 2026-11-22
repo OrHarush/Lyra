@@ -1,0 +1,115 @@
+{
+  "page": {
+    "title": "השקעות"
+  },
+  "header": {
+    "subtitle": "מחירים נכונים ל־{{date}}",
+    "staleHint": "לא הצלחנו לעדכן מחירים — מוצגים המחירים האחרונים",
+    "addPurchase": "הוסף רכישה",
+    "currencyChip": "שקלים (₪)"
+  },
+  "summary": {
+    "currentValue": "שווי נוכחי",
+    "invested": "הושקעו",
+    "profit": "רווח",
+    "priceUnavailable": "המחיר לא זמין כרגע",
+    "fromInvested": "מההפקדה"
+  },
+  "allocation": {
+    "title": "חלוקת התיק",
+    "other": "אחר",
+    "funds_one": "קרן",
+    "funds_two": "קרנות",
+    "funds_other": "קרנות"
+  },
+  "filter": {
+    "allFunds": "כל הקרנות"
+  },
+  "chart": {
+    "title": "מתי הפקדתי ומה קרה",
+    "range": {
+      "3M": "3ח׳",
+      "1Y": "שנה",
+      "ALL": "הכל"
+    },
+    "noData": "אין נתונים להצגה",
+    "error": "לא הצלחנו לטעון את הגרף",
+    "retry": "נסה שוב",
+    "tooltipValue": "שווי",
+    "tooltipInvested": "הפקדתי",
+    "waitingForTradingDay": "הגרף יופיע אחרי יום המסחר הבא",
+    "subtitle": "{{from}} עד היום",
+    "investedTag": "הפקדה"
+  },
+  "purchases": {
+    "title": "הרכישות שלי",
+    "hint": "כמה שווה כל הפקדה היום",
+    "invested": "הפקדתי",
+    "priceFrom": "מחיר מ־{{date}}",
+    "unavailable": "—",
+    "columns": {
+      "fund": "קרן",
+      "date": "תאריך",
+      "invested": "הפקדה",
+      "valueToday": "שווה היום",
+      "profit": "רווח"
+    }
+  },
+  "dialog": {
+    "addTitle": "הוספת רכישה",
+    "editTitle": "עריכת רכישה",
+    "fund": "קרן",
+    "fundPlaceholder": "חפש לפי שם, מדד או מספר קרן",
+    "date": "תאריך",
+    "advanced": "הגדרות מתקדמות",
+    "units": "כמות יחידות מדויקת",
+    "unitsHelp": "אם תמלא, נשתמש בזה במקום לחשב לפי מחיר הסגירה",
+    "noOptions": "לא נמצאו קרנות",
+    "submitAdd": "הוסף",
+    "submitSave": "שמור",
+    "delete": "מחק רכישה",
+    "amountIls": "סכום (₪)",
+    "amountUsd": "סכום ($)",
+    "hedged": "מנוטרלת מט״ח",
+    "groups": {
+      "israeli": "קרנות סל בישראל",
+      "foreign": "קרנות וניירות בחו״ל ($)"
+    },
+    "foreignUnavailable": "קרנות חו״ל לא זמינות כרגע — מוצגות קרנות ישראליות בלבד"
+  },
+  "toast": {
+    "added": "הרכישה נוספה",
+    "updated": "הרכישה עודכנה",
+    "deleted": "הרכישה נמחקה"
+  },
+  "delete": {
+    "title": "למחוק את הרכישה?",
+    "body": "הרכישה תוסר מחישובי התיק, ואי אפשר לשחזר אותה."
+  },
+  "errors": {
+    "symbolNotFound": "לא מצאנו קרן כזו",
+    "unsupportedCurrency": "רק קרנות זרות שנסחרות בדולר נתמכות",
+    "futureDate": "אי אפשר לבחור תאריך עתידי",
+    "invalidDate": "התאריך אינו תקין",
+    "noPriceForDate": "אין מחיר לקרן הזו בתאריך הזה",
+    "marketDataUnavailable": "נתוני השוק לא זמינים כרגע, נסה שוב בעוד רגע",
+    "purchaseNotFound": "הרכישה לא נמצאה",
+    "saveFailed": "לא הצלחנו לשמור את הרכישה",
+    "deleteFailed": "לא הצלחנו למחוק את הרכישה",
+    "fundRequired": "בחר קרן",
+    "instrumentNotFound": "לא מצאנו קרן כזו"
+  },
+  "empty": {
+    "title": "עקוב אחרי ההשקעות שלך",
+    "body": "רשום כמה השקעת ומתי — Lyra תראה לך כמה זה שווה היום ואיך זה השתנה לאורך זמן.",
+    "cta": "הוסף רכישה ראשונה"
+  },
+  "error": {
+    "title": "לא הצלחנו לטעון את ההשקעות",
+    "retry": "נסה שוב"
+  },
+  "warnings": {
+    "missingPrices": "אין מחיר כרגע עבור: {{funds}}. הסכומים לא כוללים את הקרנות האלה.",
+    "fxApproximate": "חלק מהרכישות בדולרים מחושבות לפי השער של היום, ולכן הנתונים משוערים."
+  }
+}

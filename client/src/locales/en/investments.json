@@ -1,0 +1,115 @@
+{
+  "page": {
+    "title": "Investments"
+  },
+  "header": {
+    "subtitle": "Prices as of {{date}}",
+    "staleHint": "Couldn't refresh prices — showing the latest known prices",
+    "addPurchase": "Add purchase",
+    "currencyChip": "ILS (₪)"
+  },
+  "summary": {
+    "currentValue": "Current value",
+    "invested": "Invested",
+    "profit": "Profit",
+    "priceUnavailable": "Price unavailable right now",
+    "fromInvested": "on invested"
+  },
+  "allocation": {
+    "title": "Portfolio split",
+    "other": "Other",
+    "funds_one": "Fund",
+    "funds_two": "Funds",
+    "funds_other": "Funds"
+  },
+  "filter": {
+    "allFunds": "All funds"
+  },
+  "chart": {
+    "title": "When I invested and what happened",
+    "range": {
+      "3M": "3M",
+      "1Y": "1Y",
+      "ALL": "All"
+    },
+    "noData": "No data to show",
+    "error": "Couldn't load the chart",
+    "retry": "Try again",
+    "tooltipValue": "Value",
+    "tooltipInvested": "Invested",
+    "waitingForTradingDay": "The chart will appear after the next trading day",
+    "subtitle": "{{from}} to today",
+    "investedTag": "Invested"
+  },
+  "purchases": {
+    "title": "My purchases",
+    "hint": "What each deposit is worth today",
+    "invested": "Invested",
+    "priceFrom": "Price from {{date}}",
+    "unavailable": "—",
+    "columns": {
+      "fund": "Fund",
+      "date": "Date",
+      "invested": "Invested",
+      "valueToday": "Worth today",
+      "profit": "Profit"
+    }
+  },
+  "dialog": {
+    "addTitle": "Add purchase",
+    "editTitle": "Edit purchase",
+    "fund": "Fund",
+    "fundPlaceholder": "Search by name, index or fund number",
+    "date": "Date",
+    "advanced": "Advanced settings",
+    "units": "Exact units",
+    "unitsHelp": "If filled, we use this instead of calculating from the closing price",
+    "noOptions": "No funds found",
+    "submitAdd": "Add",
+    "submitSave": "Save",
+    "delete": "Delete purchase",
+    "amountIls": "Amount (₪)",
+    "amountUsd": "Amount ($)",
+    "hedged": "Hedged",
+    "groups": {
+      "israeli": "Israeli funds",
+      "foreign": "Foreign funds and securities ($)"
+    },
+    "foreignUnavailable": "Foreign funds are unavailable right now — Israeli funds only"
+  },
+  "toast": {
+    "added": "Purchase added",
+    "updated": "Purchase updated",
+    "deleted": "Purchase deleted"
+  },
+  "delete": {
+    "title": "Delete this purchase?",
+    "body": "It will be removed from your portfolio calculations and can't be restored."
+  },
+  "errors": {
+    "symbolNotFound": "We couldn't find that fund",
+    "unsupportedCurrency": "Only USD-traded foreign funds are supported",
+    "futureDate": "You can't pick a future date",
+    "invalidDate": "That date isn't valid",
+    "noPriceForDate": "No price for this fund on that date",
+    "marketDataUnavailable": "Market data is unavailable right now, try again in a moment",
+    "purchaseNotFound": "Purchase not found",
+    "saveFailed": "Couldn't save the purchase",
+    "deleteFailed": "Couldn't delete the purchase",
+    "fundRequired": "Pick a fund",
+    "instrumentNotFound": "We couldn't find that fund"
+  },
+  "empty": {
+    "title": "Track your investments",
+    "body": "Log how much you invested and when — Lyra will show what it's worth today and how it changed over time.",
+    "cta": "Add your first purchase"
+  },
+  "error": {
+    "title": "We couldn't load your investments",
+    "retry": "Try again"
+  },
+  "warnings": {
+    "missingPrices": "No price right now for: {{funds}}. Totals leave these funds out.",
+    "fxApproximate": "Some dollar purchases use today's exchange rate, so figures are approximate."
+  }
+}

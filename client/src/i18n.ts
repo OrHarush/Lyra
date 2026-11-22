@@ -9,19 +9,20 @@ import { initReactI18next } from 'react-i18next';
 import enAccessibility from '@/locales/en/accessibility.json';
 import enAccounts from '@/locales/en/accounts.json';
 import enAdmin from '@/locales/en/admin.json';
+import enBlog from '@/locales/en/blog.json';
 import enBudgets from '@/locales/en/budgets.json';
 import enCalculators from '@/locales/en/calculators.json';
+import enCashflowGuide from '@/locales/en/cashflowGuide.json';
 import enCategories from '@/locales/en/categories.json';
 import enChat from '@/locales/en/chat.json';
 import enCommon from '@/locales/en/common.json';
 import enGoals from '@/locales/en/goals.json';
 import enHome from '@/locales/en/home.json';
+import enInvestments from '@/locales/en/investments.json';
 import enLogin from '@/locales/en/login.json';
 import enOverview from '@/locales/en/overview.json';
 import enPaymentMethods from '@/locales/en/paymentMethods.json';
 import enPrivacyPolicy from '@/locales/en/privacyPolicy.json';
-import enBlog from '@/locales/en/blog.json';
-import enCashflowGuide from '@/locales/en/cashflowGuide.json';
 import enRiseupReview from '@/locales/en/riseupReview.json';
 import enSidebar from '@/locales/en/sidebar.json';
 import enTermsOfService from '@/locales/en/termsOfService.json';
@@ -30,19 +31,20 @@ import enUser from '@/locales/en/user.json';
 import heAccessibility from '@/locales/he/accessibility.json';
 import heAccounts from '@/locales/he/accounts.json';
 import heAdmin from '@/locales/he/admin.json';
+import heBlog from '@/locales/he/blog.json';
 import heBudgets from '@/locales/he/budgets.json';
 import heCalculators from '@/locales/he/calculators.json';
+import heCashflowGuide from '@/locales/he/cashflowGuide.json';
 import heCategories from '@/locales/he/categories.json';
 import heChat from '@/locales/he/chat.json';
 import heCommon from '@/locales/he/common.json';
 import heGoals from '@/locales/he/goals.json';
 import heHome from '@/locales/he/home.json';
+import heInvestments from '@/locales/he/investments.json';
 import heLogin from '@/locales/he/login.json';
 import heOverview from '@/locales/he/overview.json';
 import hePaymentMethods from '@/locales/he/paymentMethods.json';
 import hePrivacyPolicy from '@/locales/he/privacyPolicy.json';
-import heBlog from '@/locales/he/blog.json';
-import heCashflowGuide from '@/locales/he/cashflowGuide.json';
 import heRiseupReview from '@/locales/he/riseupReview.json';
 import heSidebar from '@/locales/he/sidebar.json';
 import heTermsOfService from '@/locales/he/termsOfService.json';
@@ -76,6 +78,7 @@ i18n
         chat: enChat,
         goals: enGoals,
         calculators: enCalculators,
+        investments: enInvestments,
       },
       he: {
         admin: heAdmin,
@@ -99,6 +102,7 @@ i18n
         chat: heChat,
         goals: heGoals,
         calculators: heCalculators,
+        investments: heInvestments,
       },
     },
     fallbackLng: 'he',

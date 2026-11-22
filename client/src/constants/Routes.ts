@@ -15,6 +15,7 @@ export const ROUTES = {
   GOALS_URL: '/goals',
   GOAL_DETAIL_URL: '/goals/:id',
   CALCULATORS_URL: '/calculators',
+  INVESTMENTS_URL: '/investments',
   ACCOUNTS_URL: '/accounts',
   ADMIN_KPIS_URL: '/admin/kpis',
   ADMIN_DEBUG_URL: '/admin/debug',
@@ -97,6 +98,18 @@ export const API_ROUTES = {
   GOAL_DELETE: (id: string, keepCategory: boolean) =>
     `/api/goals/${id}?keepCategory=${keepCategory}`,
   GOAL_GHOSTS: (month: string) => `/api/goals/ghosts?month=${month}`,
+
+  INVESTMENTS: {
+    INSTRUMENT_SEARCH: (query: string) => `/api/investments/instruments/search?q=${encodeURIComponent(query)}`,
+    PURCHASES: '/api/investments/purchases',
+    PURCHASE_TRENDS: '/api/investments/purchases/trends',
+    PURCHASE_BY_ID: (id: string) => `/api/investments/purchases/${id}`,
+    SUMMARY: '/api/investments/summary',
+    HISTORY: (range: string, symbols: string[]) =>
+      `/api/investments/history?range=${range}${
+        symbols.length > 0 ? `&symbols=${encodeURIComponent(symbols.join(','))}` : ''
+      }`,
+  },
 
   USERS: '/api/users',
   USERS_ME: '/api/users/me',

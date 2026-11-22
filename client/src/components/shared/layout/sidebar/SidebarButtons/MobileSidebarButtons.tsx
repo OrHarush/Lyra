@@ -6,6 +6,7 @@ import AdminNavigation from '@/components/shared/layout/sidebar/SidebarButtons/A
 import {
   buildAdminNavigationButtons,
   calculatorsButton,
+  investmentsButton,
   manageNavigation,
 } from '@/components/shared/layout/sidebar/SidebarButtons/sidebarButtonUtils';
 import SidebarNavigationButton from '@/components/shared/layout/sidebar/SidebarButtons/SidebarNavigationButton';
@@ -13,12 +14,15 @@ import { SidebarButtonsStyles } from '@/components/shared/layout/sidebar/Sidebar
 import { useAuth } from '@/providers/AuthProvider';
 import { isAdmin } from '@/utils/env';
 
-const mobileNavigation = [...manageNavigation, calculatorsButton];
-
 const MobileSidebarButtons = () => {
   const { t } = useTranslation('sidebar');
   const location = useLocation();
   const { user } = useAuth();
+  const mobileNavigation = [
+    ...manageNavigation,
+    investmentsButton,
+    calculatorsButton,
+  ];
 
   const adminNavigation = buildAdminNavigationButtons(isAdmin(user));
   const rows = [...mobileNavigation, ...adminNavigation];

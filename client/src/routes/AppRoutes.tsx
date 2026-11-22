@@ -22,6 +22,7 @@ import Goals from '@/pages/Goals';
 import GoalDetail from '@/pages/Goals/GoalDetail';
 import HomePage from '@/pages/Home';
 import ImportWizardPage from '@/pages/Import/ImportWizardPage';
+import Investments from '@/pages/Investments';
 import InvitationLandingPage from '@/pages/Invitation/InvitationLandingPage';
 import LegalPage from '@/pages/LegalPage/LegalPage';
 import LoginPage from '@/pages/Login';
@@ -128,6 +129,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.BUDGETS_URL} element={<Budgets />} />
             <Route path={ROUTES.GOALS_URL} element={<Goals />} />
             <Route path={ROUTES.GOAL_DETAIL_URL} element={<GoalDetail />} />
+            <Route path={ROUTES.INVESTMENTS_URL} element={<Investments />} />
             <Route path={ROUTES.CALCULATORS_URL} element={<Calculators />} />
             <Route
               path={ROUTES.CHAT_URL}

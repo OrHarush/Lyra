@@ -73,6 +73,18 @@ export const queryKeys = {
   goalGhosts: (month: string) => ['goals', 'ghosts', month],
   allGoalGhosts: () => ['goals', 'ghosts'],
 
+  allInvestments: () => ['investments'],
+  investmentSummary: () => ['investments', 'summary'],
+  investmentPurchases: () => ['investments', 'purchases'],
+  investmentPurchaseTrends: () => ['investments', 'purchases', 'trends'],
+  investmentHistory: (range: string, symbols: string[]) => [
+    'investments',
+    'history',
+    range,
+    [...symbols].sort().join(','),
+  ],
+  investmentInstrumentSearch: (query: string) => ['investments', 'instruments', query],
+
   paymentMethods: () => ['paymentMethods'],
   yearlyChart: (year: number) => ['yearlyChart', year],
 

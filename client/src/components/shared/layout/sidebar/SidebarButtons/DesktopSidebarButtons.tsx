@@ -10,6 +10,7 @@ import {
   buildAdminNavigationButtons,
   calculatorsButton,
   goalsButton,
+  investmentsButton,
   manageNavigation,
   primaryNavigation,
 } from '@/components/shared/layout/sidebar/SidebarButtons/sidebarButtonUtils';
@@ -21,13 +22,17 @@ import { useReviewCount } from '@/hooks/entities/useTransactionReview';
 import { useAuth } from '@/providers/AuthProvider';
 import { isAdmin } from '@/utils/env';
 
-const standaloneNavigation = [budgetButton, goalsButton, calculatorsButton];
-
 const DesktopSidebarButtons = () => {
   const { t } = useTranslation('sidebar');
   const location = useLocation();
   const { user } = useAuth();
   const { expanded } = useSidebar();
+  const standaloneNavigation = [
+    budgetButton,
+    goalsButton,
+    investmentsButton,
+    calculatorsButton,
+  ];
   const [isManageExpanded, setIsManageExpanded] = useState(false);
   const { data: reviewCountData } = useReviewCount(!!user);
 

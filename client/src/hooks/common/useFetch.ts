@@ -25,6 +25,7 @@ interface UseFetchProps<TData, TError = AxiosError> {
   onError?: (error: TError) => void;
   enabled?: boolean;
   refetchInterval?: number | false;
+  staleTime?: number;
 }
 
 export const useFetch = <TData, TError = AxiosError>({
@@ -34,6 +35,7 @@ export const useFetch = <TData, TError = AxiosError>({
   onError,
   enabled = true,
   refetchInterval,
+  staleTime,
 }: UseFetchProps<TData, TError>) => {
   const query = useQuery<ApiResponse<TData>, TError>({
     queryKey,
@@ -48,6 +50,7 @@ export const useFetch = <TData, TError = AxiosError>({
     },
     enabled,
     refetchInterval,
+    staleTime,
   });
 
   const pagination = query.data?.pagination;

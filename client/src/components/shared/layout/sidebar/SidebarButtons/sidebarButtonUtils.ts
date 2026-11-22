@@ -7,6 +7,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import SavingsIcon from '@mui/icons-material/Savings';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 
@@ -28,6 +29,12 @@ export const goalsButton: SidebarButtonConfig = {
   titleKey: 'goals',
   icon: TrackChangesIcon,
   route: ROUTES.GOALS_URL,
+};
+
+export const investmentsButton: SidebarButtonConfig = {
+  titleKey: 'investments',
+  icon: ShowChartIcon,
+  route: ROUTES.INVESTMENTS_URL,
 };
 
 export const calculatorsButton: SidebarButtonConfig = {
