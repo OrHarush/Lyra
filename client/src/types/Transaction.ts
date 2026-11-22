@@ -6,6 +6,14 @@ import { PaymentMethodDto } from '@/types/PaymentMethod';
 
 export type TransactionSource = 'manual' | 'csv' | 'google_pay' | 'apple_pay';
 
+export type TransactionTypeFilter = 'All' | 'Income' | 'Expense';
+
+export interface TransactionTotalsDto {
+  income: number;
+  expenses: number;
+  net: number;
+}
+
 export interface TransactionPageFormValues {
   searchValue: string;
   category: string;

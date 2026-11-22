@@ -1,37 +1,19 @@
 import {
-  Paper,
   Skeleton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
-  Typography,
 } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import TransactionTableHeaders from '@/pages/Transactions/TransactionsPreview/TransactionsTableView/TransactionTableHeaders';
 
-const TransactionsTableSkeleton = () => {
-  const { t } = useTranslation('transactions');
-
-  return (
-    <Column height={'100%'} minHeight={0} spacing={2}>
-      <Row spacing={4} alignItems="center">
-        <Row spacing={1} alignItems="center">
-          <Typography color="text.secondary">{t('totals.expenses')}:</Typography>
-          <Skeleton variant="rectangular" height={24} width={70} sx={{ borderRadius: 2 }} />
-        </Row>
-        <Row spacing={1} alignItems="center">
-          <Typography color="text.secondary">{t('totals.income')}:</Typography>
-          <Skeleton variant="rectangular" height={24} width={70} sx={{ borderRadius: 2 }} />
-        </Row>
-      </Row>
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}
-      >
+const TransactionsTableSkeleton = () => (
+    <Column height={'100%'} minHeight={0}>
+      <Column flex={1} minHeight={0} sx={{ overflow: 'hidden' }}>
         <TableContainer sx={{ flex: 1, minHeight: 0 }}>
           <Table
             stickyHeader
@@ -96,9 +78,8 @@ const TransactionsTableSkeleton = () => {
           height={52}
           sx={{ borderTop: '1px solid', borderColor: 'divider' }}
         />
-      </Paper>
+      </Column>
     </Column>
   );
-};
 
 export default TransactionsTableSkeleton;

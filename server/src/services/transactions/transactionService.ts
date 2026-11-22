@@ -24,6 +24,7 @@ import {
   filterTransactionsByDateRange,
   getEffectiveMonth,
   sortAndPaginate,
+  sumIncomeAndExpenses,
   summarizeSingleMonth,
   summarizeWholeYear,
 } from '../../utils/transaction';
@@ -71,6 +72,7 @@ export const findAll = async (workspaceId: string, options: GetTransactionsOptio
     paymentMethodIds,
     accountIds,
     accountId,
+    type,
   } = options;
   const resolvedAccountIds = accountIds ?? (accountId ? [accountId] : undefined);
 
@@ -119,11 +121,21 @@ export const findAll = async (workspaceId: string, options: GetTransactionsOptio
     filtered = filtered.filter(t => t.name?.toLowerCase().includes(term));
   }
 
+  if (type) {
+    filtered = filtered.filter(tx => tx.type === type);
+  }
+
+  const { income, expenses } = sumIncomeAndExpenses(filtered);
   const result = sortAndPaginate(filtered, sort, page, limit);
 
   return {
     ...result,
     data: result.data.map(tx => ({ ...tx, amount: fromCents(tx.amount) })),
+    totals: {
+      income: fromCents(income),
+      expenses: fromCents(expenses),
+      net: fromCents(income - expenses),
+    },
   };
 };
 

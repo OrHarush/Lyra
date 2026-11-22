@@ -1,11 +1,20 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 
+import { useDebouncedValue } from '@/hooks/common/useDebouncedValue';
 import { useAccounts } from '@/hooks/entities/useAccounts';
 import { useCategories } from '@/hooks/entities/useCategories';
 import { usePaymentMethods } from '@/hooks/entities/usePaymentMethods';
-import { ExpandedTransactionDto } from '@/types/Transaction';
+import {
+  ExpandedTransactionDto,
+  TransactionPageFormValues,
+  TransactionTypeFilter,
+} from '@/types/Transaction';
+
+const SEARCH_DEBOUNCE_MS = 300;
+const DEFAULT_PAGE_SIZE = 20;
 
 const monthFromParam = (value: string | null): Dayjs | null => {
   const match = value ? /^(\d{4})-(\d{2})$/.exec(value) : null;
@@ -44,6 +53,14 @@ interface SelectedTransactionContextValue {
   setSelectedAccountIds: (ids: string[]) => void;
   selectedPaymentMethodIds: string[];
   setSelectedPaymentMethodIds: (ids: string[]) => void;
+  selectedType: TransactionTypeFilter;
+  setSelectedType: (type: TransactionTypeFilter) => void;
+  search: string;
+  page: number;
+  setPage: (page: number) => void;
+  pageSize: number;
+  setPageSize: (pageSize: number) => void;
+  activeFilterCount: number;
   resetFilters: () => void;
   selectedMonth: Dayjs;
   setSelectedMonth: (selectedMonth: Dayjs) => void;
@@ -70,6 +87,12 @@ export const TransactionPageDataProvider = ({ children }: { children: ReactNode 
   );
   const [selectedAccountIds, setSelectedAccountIds] = useState<string[]>([]);
   const [selectedPaymentMethodIds, setSelectedPaymentMethodIds] = useState<string[]>([]);
+  const [selectedType, setSelectedType] = useState<TransactionTypeFilter>('All');
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [pageState, setPageState] = useState({ key: '', page: 1 });
+  const { control } = useFormContext<TransactionPageFormValues>();
+  const searchInput = useWatch({ control, name: 'searchValue' }) ?? '';
+  const search = useDebouncedValue(searchInput.trim(), SEARCH_DEBOUNCE_MS);
   const [selectedTransaction, setSelectedTransaction] = useState<ExpandedTransactionDto>();
   const [transactionAction, setTransactionAction] = useState<TransactionAction>();
 
@@ -112,6 +135,25 @@ export const TransactionPageDataProvider = ({ children }: { children: ReactNode 
     }
   }, [paymentMethods, selectedPaymentMethodIds]);
 
+  // Any change to what the list shows invalidates the page, so a stale page index is never requested.
+  const listKey = JSON.stringify([
+    selectedMonth.format('YYYY-MM'),
+    selectedCategoryIds,
+    selectedAccountIds,
+    selectedPaymentMethodIds,
+    selectedType,
+    search,
+    pageSize,
+  ]);
+  const page = pageState.key === listKey ? pageState.page : 1;
+  const setPage = (nextPage: number) => setPageState({ key: listKey, page: nextPage });
+
+  const activeFilterCount = [
+    selectedCategoryIds,
+    selectedAccountIds,
+    selectedPaymentMethodIds,
+  ].filter(ids => ids.length > 0).length;
+
   const resetFilters = useCallback(() => {
     setSelectedCategoryIds([]);
     setSelectedAccountIds([]);
@@ -129,6 +171,14 @@ export const TransactionPageDataProvider = ({ children }: { children: ReactNode 
         setSelectedAccountIds,
         selectedPaymentMethodIds,
         setSelectedPaymentMethodIds,
+        selectedType,
+        setSelectedType,
+        search,
+        page,
+        setPage,
+        pageSize,
+        setPageSize,
+        activeFilterCount,
         resetFilters,
         selectedTransaction,
         setSelectedTransaction,

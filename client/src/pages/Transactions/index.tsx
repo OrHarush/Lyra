@@ -1,25 +1,21 @@
-import { useMediaQuery, useTheme } from '@mui/material';
+import { Paper } from '@mui/material';
 import { FormProvider, useForm, useFormContext, useWatch } from 'react-hook-form';
 
 import Column from '@/components/shared/layout/containers/Column';
-import Row from '@/components/shared/layout/containers/Row';
 import PageLayout from '@/components/shared/layout/page/PageLayout';
 import { usePrimaryAction } from '@/components/shared/layout/PageHeaderContext';
-import ActionFab from '@/components/shared/ui/ActionFab';
-import { useIsSmallScreen } from '@/hooks/common/useIsSmallScreen';
 import { useOpen } from '@/hooks/common/useOpen';
 import { useGhosts } from '@/hooks/entities/useGoals';
 import { useTransactions } from '@/hooks/entities/useTransactions';
-import TransactionActions from '@/pages/Transactions/TransactionActions';
 import {
   TransactionPageDataProvider,
   useTransactionPageData,
 } from '@/pages/Transactions/TransactionPageDataProvider';
 import TransactionDialogs from '@/pages/Transactions/TransactionsDialogs';
 import TransactionsEmptyState from '@/pages/Transactions/TransactionsEmptyState';
-import TransactionsFilters from '@/pages/Transactions/TransactionsFilters';
 import TransactionsHeader from '@/pages/Transactions/TransactionsHeader';
 import TransactionsPreview from '@/pages/Transactions/TransactionsPreview';
+import TransactionsToolbar from '@/pages/Transactions/TransactionsToolbar';
 import { TransactionPageFormValues } from '@/types/Transaction';
 
 interface TransactionsBodyProps {
@@ -27,11 +23,13 @@ interface TransactionsBodyProps {
 }
 
 const TransactionsBody = ({ openCreateDialog }: TransactionsBodyProps) => {
-  const theme = useTheme();
-  const isLgUp = useMediaQuery(theme.breakpoints.up('lg'));
-  const isSmallScreen = useIsSmallScreen();
-  const { selectedMonth, selectedCategoryIds, selectedAccountIds, selectedPaymentMethodIds } =
-    useTransactionPageData();
+  const {
+    selectedMonth,
+    selectedCategoryIds,
+    selectedAccountIds,
+    selectedPaymentMethodIds,
+    selectedType,
+  } = useTransactionPageData();
   const { control } = useFormContext<TransactionPageFormValues>();
   const searchValue = useWatch({ control, name: 'searchValue' });
 
@@ -44,6 +42,7 @@ const TransactionsBody = ({ openCreateDialog }: TransactionsBodyProps) => {
 
   const hasNoFiltersActive =
     !searchValue &&
+    selectedType === 'All' &&
     selectedCategoryIds.length === 0 &&
     selectedAccountIds.length === 0 &&
     selectedPaymentMethodIds.length === 0;
@@ -62,15 +61,15 @@ const TransactionsBody = ({ openCreateDialog }: TransactionsBodyProps) => {
 
   return (
     <>
-      <Column height={'100%'} minHeight={0} spacing={2}>
-        <TransactionsHeader />
-        <Row alignItems="center" justifyContent="space-between" spacing={1}>
-          <TransactionsFilters />
-          {isLgUp && <TransactionActions openCreateDialog={openCreateDialog} />}
-        </Row>
-        <TransactionsPreview />
-      </Column>
-      {!isSmallScreen && <ActionFab onClick={openCreateDialog} showBelow={'lg'} />}
+      <TransactionsHeader />
+      <Paper
+        sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}
+      >
+        <TransactionsToolbar openCreateDialog={openCreateDialog} />
+        <Column flex={1} minHeight={0} sx={{ overflow: 'auto' }}>
+          <TransactionsPreview />
+        </Column>
+      </Paper>
     </>
   );
 };
@@ -83,15 +82,15 @@ export const Transactions = () => {
 
   return (
     <PageLayout>
-      <TransactionPageDataProvider>
-        <FormProvider {...methods}>
+      <FormProvider {...methods}>
+        <TransactionPageDataProvider>
           <TransactionsBody openCreateDialog={openCreateDialog} />
           <TransactionDialogs
             isCreateDialogOpen={isCreateDialogOpen}
             closeCreateDialog={closeCreateDialog}
           />
-        </FormProvider>
-      </TransactionPageDataProvider>
+        </TransactionPageDataProvider>
+      </FormProvider>
     </PageLayout>
   );
 };

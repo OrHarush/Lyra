@@ -9,6 +9,7 @@ export const queryKeys = {
     page?: number;
     limit?: number;
     search?: string;
+    type?: string;
   }) => ['transactions', filters ?? {}],
   transaction: (id: string) => ['transactions', id],
   transactionSummary: (year: number, month: number, accountId: string, from?: string) => [

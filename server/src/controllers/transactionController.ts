@@ -24,6 +24,7 @@ export const getTransactions = asyncHandler(async (req: Request, res: Response) 
   return ApiResponse.ok(res, {
     data: result.data,
     pagination: result.pagination,
+    totals: result.totals,
   });
 });
 

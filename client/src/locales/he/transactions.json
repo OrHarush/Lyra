@@ -46,7 +46,8 @@
   },
   "totals": {
     "income": "סך הכנסות",
-    "expenses": "סך הוצאות"
+    "expenses": "סך הוצאות",
+    "net": "נטו"
   },
   "swipeToDeleteHint": "החליקו למחיקה · הקלקה לעריכה",
   "fields": {
@@ -243,7 +244,10 @@
     "selectedPaymentMethods_two": "{{count}} אמצעי תשלום",
     "selectedPaymentMethods_many": "{{count}} אמצעי תשלום",
     "selectedPaymentMethods_other": "{{count}} אמצעי תשלום",
-    "reset": "נקה סינון"
+    "reset": "נקה סינון",
+    "button": "סינון",
+    "sheetTitle": "סינון",
+    "done": "סיום"
   },
   "deleteDialog": {
     "body": "האם אתה בטוח שברצונך למחוק את העסקה הזו?",
@@ -282,5 +286,15 @@
       "bit_transfer": "ביט",
       "pharmacy": "בית מרקחת"
     }
+  },
+  "typeToggle": {
+    "label": "סוג עסקה",
+    "all": "הכל",
+    "income": "הכנסות",
+    "expenses": "הוצאות"
+  },
+  "day": {
+    "today": "היום",
+    "yesterday": "אתמול"
   }
 }

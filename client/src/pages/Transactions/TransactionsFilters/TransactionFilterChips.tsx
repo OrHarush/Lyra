@@ -20,7 +20,7 @@ const TransactionFilterChips = ({
   onAccountChange,
   onPaymentMethodChange,
 }: TransactionFilterChipsProps) => (
-  <Row spacing={1}>
+  <Row spacing={1} flexWrap="wrap" useFlexGap>
     <CategoryFilter selectedIds={selectedCategoryIds} onChange={onCategoryChange} />
     <AccountFilter selectedIds={selectedAccountIds} onChange={onAccountChange} />
     <PaymentMethodFilter selectedIds={selectedPaymentMethodIds} onChange={onPaymentMethodChange} />

@@ -5,12 +5,10 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import TextInput from '@/components/shared/inputs/TextInput';
-import { useIsMobile } from '@/hooks/common/useIsMobile';
 import { TransactionPageFormValues } from '@/types/Transaction';
 
 const TransactionSearchInput = () => {
   const { t } = useTranslation('common');
-  const isMobile = useIsMobile();
   const { control, setValue } = useFormContext<TransactionPageFormValues>();
   const searchValue = useWatch({ control, name: 'searchValue' });
 
@@ -21,8 +19,7 @@ const TransactionSearchInput = () => {
       placeholder={t('actions.search')}
       value={searchValue}
       size="small"
-      fullWidth={isMobile}
-      sx={{ width: { xs: '100%', sm: '220px' } }}
+      sx={{ width: { xs: 'auto', md: 280 }, flex: { xs: 1, md: 'none' }, minWidth: 0 }}
       slotProps={{
         input: {
           startAdornment: (

@@ -1,5 +1,3 @@
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { Paper, Skeleton } from '@mui/material';
 
 import Column from '@/components/shared/layout/containers/Column';
@@ -7,14 +5,6 @@ import Row from '@/components/shared/layout/containers/Row';
 
 const TransactionCardSkeleton = () => (
   <Column spacing={1}>
-    <Row spacing={2} alignItems="center" justifyContent={'center'}>
-      <Row spacing={1} alignItems="center">
-        <ArrowDownwardIcon fontSize="small" color="error" />
-        <Skeleton variant="rectangular" height={20} width={60} sx={{ borderRadius: 2 }} />
-      </Row>
-      <ArrowUpwardIcon fontSize="small" color="success" />
-      <Skeleton variant="rectangular" height={20} width={60} sx={{ borderRadius: 2 }} />
-    </Row>
     <Column>
       {Array.from({ length: 6 }).map((_, index) => (
         <Paper

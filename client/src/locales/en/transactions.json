@@ -46,7 +46,8 @@
   },
   "totals": {
     "income": "Total income",
-    "expenses": "Total expenses"
+    "expenses": "Total expenses",
+    "net": "Net"
   },
   "swipeToDeleteHint": "Swipe to delete · Tap to edit",
   "fields": {
@@ -237,7 +238,10 @@
     "allPaymentMethods": "Payment",
     "selectedPaymentMethods_one": "{{count}} Payment Method",
     "selectedPaymentMethods_other": "{{count}} Payment Methods",
-    "reset": "Clear filters"
+    "reset": "Clear filters",
+    "button": "Filters",
+    "sheetTitle": "Filters",
+    "done": "Done"
   },
   "deleteDialog": {
     "body": "Are you sure you want to delete this transaction?",
@@ -276,5 +280,15 @@
       "bit_transfer": "Bit",
       "pharmacy": "Pharmacy"
     }
+  },
+  "typeToggle": {
+    "label": "Transaction type",
+    "all": "All",
+    "income": "Income",
+    "expenses": "Expenses"
+  },
+  "day": {
+    "today": "Today",
+    "yesterday": "Yesterday"
   }
 }

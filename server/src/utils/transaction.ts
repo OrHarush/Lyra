@@ -180,6 +180,22 @@ export const filterTransactionsByDateRange = (
     return !((to && txDate.isSame(to, 'day')) || txDate.isAfter(to, 'day'));
   });
 
+export const sumIncomeAndExpenses = (transactions: { type: string; amount: number }[]) =>
+  transactions.reduce(
+    (totals, tx) => {
+      if (tx.type === 'Income') {
+        totals.income += tx.amount;
+      }
+
+      if (tx.type === 'Expense') {
+        totals.expenses += tx.amount;
+      }
+
+      return totals;
+    },
+    { income: 0, expenses: 0 }
+  );
+
 export const sortAndPaginate = (
   data: any[],
   sort: 'asc' | 'desc' = 'desc',

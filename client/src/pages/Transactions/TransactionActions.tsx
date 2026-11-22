@@ -17,7 +17,7 @@ const TransactionActions = ({ openCreateDialog }: TransactionActionsProps) => {
         variant="contained"
         startIcon={<AddIcon />}
         onClick={openCreateDialog}
-        sx={{ width: '180px' }}
+        sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
       >
         {t('actions.create')}
       </Button>

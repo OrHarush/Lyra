@@ -2,7 +2,7 @@ import { queryKeys } from '@/constants/queryKeys';
 import { API_ROUTES } from '@/constants/Routes';
 import { useFetch } from '@/hooks/common/useFetch';
 import { useAuth } from '@/providers/AuthProvider';
-import { TransactionDto } from '@/types/Transaction';
+import { TransactionDto, TransactionTotalsDto, TransactionTypeFilter } from '@/types/Transaction';
 
 export const useTransactions = (
   year?: number,
@@ -12,7 +12,8 @@ export const useTransactions = (
   accountIds?: string[],
   paymentMethodIds?: string[],
   page: number = 1,
-  limit?: number
+  limit?: number,
+  type: TransactionTypeFilter = 'All'
 ) => {
   const { user } = useAuth();
 
@@ -42,6 +43,10 @@ export const useTransactions = (
     params.append('limit', limit.toString());
   }
 
+  if (type !== 'All') {
+    params.append('type', type);
+  }
+
   if (search && search.trim()) {
     params.append('search', search.trim());
   }
@@ -56,6 +61,7 @@ export const useTransactions = (
       limit: number;
       totalPages: number;
     };
+    totals: TransactionTotalsDto;
   }>({
     url,
     queryKey: queryKeys.transactions({
@@ -67,6 +73,7 @@ export const useTransactions = (
       page,
       limit,
       search,
+      type: type === 'All' ? undefined : type,
     }),
     enabled: !!user,
   });
@@ -75,5 +82,6 @@ export const useTransactions = (
     ...query,
     transactions: query.data?.data ?? [],
     pagination: query.data?.pagination,
+    totals: query.data?.totals,
   };
 };

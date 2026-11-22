@@ -23,6 +23,7 @@ export const GetTransactionsSchema = z
       .regex(/^(1[0-2]|[1-9])$/, 'month must be between 1 and 12')
       .optional(),
     search: z.string().optional(),
+    type: z.enum(['Income', 'Expense']).optional(),
   })
   .transform((data) => {
     const year = data.year ? parseInt(data.year, 10) : undefined;
@@ -51,6 +52,7 @@ export const GetTransactionsSchema = z
       // month is 0-indexed to match JS Date convention (0 = January)
       targetMonth: month,
       search: data.search,
+      type: data.type,
     };
   });
 

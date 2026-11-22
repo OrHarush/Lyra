@@ -1,51 +1,34 @@
-import { Paper, Table, TableContainer, TablePagination } from '@mui/material';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { Table, TableContainer, TablePagination } from '@mui/material';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import CreateTransactionDialog from '@/components/features/transactions/CreateTransactionDialog';
 import EntityError from '@/components/entities/EntityError';
+import CreateTransactionDialog from '@/components/features/transactions/CreateTransactionDialog';
 import Column from '@/components/shared/layout/containers/Column';
 import UndoSnackbar from '@/components/shared/ui/UndoSnackbar';
 import { useGhosts } from '@/hooks/entities/useGoals';
-import { useTransactions } from '@/hooks/entities/useTransactions';
-import TransactionsTotals from '@/pages/Transactions/components/TransactionsTotals';
+import { formatGoalAmount } from '@/pages/Goals/utils/goalFormatters';
 import { useTransactionPageData } from '@/pages/Transactions/TransactionPageDataProvider';
 import TransactionTableBody from '@/pages/Transactions/TransactionsPreview/TransactionsTableView/TransactionsTableBody/TransactionTableBody';
 import TransactionsTableSkeleton from '@/pages/Transactions/TransactionsPreview/TransactionsTableView/TransactionsTableSkeleton';
 import TransactionTableHeaders from '@/pages/Transactions/TransactionsPreview/TransactionsTableView/TransactionTableHeaders';
 import { useGhostQuickContribute } from '@/pages/Transactions/TransactionsPreview/useGhostQuickContribute';
-import { SortableColumn, SortOrder, TransactionPageFormValues } from '@/types/Transaction';
+import { useTransactionsPageQuery } from '@/pages/Transactions/useTransactionsPageQuery';
 import type { GhostContributionDto } from '@/types/Goal';
+import { SortableColumn, SortOrder } from '@/types/Transaction';
 import { compareTransactions } from '@/utils/entities/transaction';
-import { formatGoalAmount } from '@/pages/Goals/utils/goalFormatters';
 
 const TransactionsTableView = () => {
   const { t } = useTranslation('transactions');
   const { t: tGoals } = useTranslation('goals');
   const { t: tCommon } = useTranslation('common');
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(20);
   const [order, setOrder] = useState<SortOrder>('desc');
   const [orderBy, setOrderBy] = useState<SortableColumn>('date');
   const [dialogGhost, setDialogGhost] = useState<GhostContributionDto | null>(null);
-  const { selectedMonth, selectedCategoryIds, selectedAccountIds, selectedPaymentMethodIds } =
-    useTransactionPageData();
-  const { control } = useFormContext<TransactionPageFormValues>();
-
-  const searchValue = useWatch({ control, name: 'searchValue' });
+  const { selectedMonth, page, setPage, pageSize, setPageSize } = useTransactionPageData();
   const selectedYearMonth = useMemo(() => selectedMonth.format('YYYY-MM'), [selectedMonth]);
 
-  const { transactions, pagination, isLoading, error, refetch } = useTransactions(
-    selectedMonth.year(),
-    selectedMonth.month(),
-    searchValue,
-    selectedCategoryIds,
-    selectedAccountIds,
-    selectedPaymentMethodIds,
-    page + 1,
-    rowsPerPage
-  );
+  const { transactions, pagination, isLoading, error, refetch } = useTransactionsPageQuery();
 
   const { ghosts } = useGhosts(selectedYearMonth);
   const {
@@ -57,19 +40,6 @@ const TransactionsTableView = () => {
     defaultPaymentMethodId,
   } = useGhostQuickContribute();
 
-  const { totalIncome, totalExpenses } = transactions.reduce(
-    (acc, tx) => {
-      if (tx.type === 'Income') {
-        acc.totalIncome += tx.amount;
-      }
-      if (tx.type === 'Expense') {
-        acc.totalExpenses += tx.amount;
-      }
-      return acc;
-    },
-    { totalIncome: 0, totalExpenses: 0 }
-  );
-
   const sortedTransactions = useMemo(
     () => [...transactions].sort((a, b) => compareTransactions(a, b, order, orderBy)),
     [transactions, order, orderBy]
@@ -80,25 +50,14 @@ const TransactionsTableView = () => {
     setOrderBy(column);
   };
 
-  const handleChangePage = (_: unknown, newPage: number) => setPage(newPage);
+  const handleChangePage = (_: unknown, newPage: number) => setPage(newPage + 1);
 
   const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setPageSize(parseInt(event.target.value, 10));
   };
 
   const openGhostDialog = (ghost: GhostContributionDto) => setDialogGhost(ghost);
   const closeGhostDialog = () => setDialogGhost(null);
-
-  useEffect(() => {
-    setPage(0);
-  }, [
-    selectedMonth,
-    selectedCategoryIds,
-    selectedAccountIds,
-    selectedPaymentMethodIds,
-    searchValue,
-  ]);
 
   if (isLoading) {
     return <TransactionsTableSkeleton />;
@@ -110,10 +69,7 @@ const TransactionsTableView = () => {
 
   return (
     <Column spacing={2} flex={1} minHeight={0}>
-      <TransactionsTotals totalIncome={totalIncome} totalExpenses={totalExpenses} />
-      <Paper
-        sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}
-      >
+      <Column flex={1} minHeight={0} sx={{ overflow: 'hidden' }}>
         <TableContainer sx={{ flex: 1, minHeight: 0 }}>
           <Table
             stickyHeader
@@ -147,9 +103,9 @@ const TransactionsTableView = () => {
         <TablePagination
           component="div"
           count={pagination?.total ?? 0}
-          page={page}
+          page={page - 1}
           onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
+          rowsPerPage={pageSize}
           onRowsPerPageChange={handleChangeRowsPerPage}
           rowsPerPageOptions={[10, 20, 50]}
           labelRowsPerPage={t('table.rowsPerPage')}
@@ -157,7 +113,7 @@ const TransactionsTableView = () => {
             t('table.displayedRows', { from, to, count })
           }
         />
-      </Paper>
+      </Column>
       {dialogGhost && (
         <CreateTransactionDialog
           isOpen

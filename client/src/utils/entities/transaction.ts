@@ -154,3 +154,22 @@ export const getTransactionAmountColor = (tx: TransactionDto): 'error.main' | 's
 
   return tx.type === 'Expense' ? 'error.main' : 'success.main';
 };
+
+export interface TransactionDayGroup {
+  date: string;
+  transactions: ExpandedTransactionDto[];
+}
+
+export const groupTransactionsByDay = (
+  transactions: ExpandedTransactionDto[]
+): TransactionDayGroup[] => {
+  const groups = new Map<string, ExpandedTransactionDto[]>();
+
+  transactions.forEach(tx => {
+    const day = getTransactionDisplayDate(tx).split('T')[0];
+
+    groups.set(day, [...(groups.get(day) ?? []), tx]);
+  });
+
+  return [...groups].map(([date, dayTransactions]) => ({ date, transactions: dayTransactions }));
+};
