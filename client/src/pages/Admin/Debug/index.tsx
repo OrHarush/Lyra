@@ -1,8 +1,8 @@
 import { Typography } from '@mui/material';
 
 import Column from '@/components/shared/layout/containers/Column';
-import { usePageHeader } from '@/components/shared/layout/PageHeaderContext';
 import PageLayout from '@/components/shared/layout/page/PageLayout';
+import { usePageHeader } from '@/components/shared/layout/PageHeaderContext';
 
 import BalanceBreakdownCard from './BalanceBreakdownCard';
 import RunCard from './RunCard';
@@ -16,7 +16,7 @@ export const AdminDebugPage = () => {
   const list = snapshots ?? [];
 
   return (
-    <PageLayout>
+    <PageLayout hasNaturalHeight spacing={3}>
       <Column spacing={0.5}>
         <Typography variant="h5" sx={{ fontWeight: 700 }}>
           דיבוג

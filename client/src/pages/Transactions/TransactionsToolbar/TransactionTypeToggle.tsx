@@ -11,11 +11,7 @@ const TYPE_OPTIONS: { value: TransactionTypeFilter; labelKey: string }[] = [
   { value: 'Expense', labelKey: 'typeToggle.expenses' },
 ];
 
-interface TransactionTypeToggleProps {
-  isFullWidth?: boolean;
-}
-
-const TransactionTypeToggle = ({ isFullWidth = false }: TransactionTypeToggleProps) => {
+const TransactionTypeToggle = () => {
   const { t } = useTranslation('transactions');
   const { selectedType, setSelectedType } = useTransactionPageData();
 
@@ -31,14 +27,19 @@ const TransactionTypeToggle = ({ isFullWidth = false }: TransactionTypeTogglePro
       size="small"
       value={selectedType}
       onChange={changeType}
-      fullWidth={isFullWidth}
       aria-label={t('typeToggle.label')}
+      sx={{
+        borderRadius: '999px',
+        '& .MuiToggleButton-root': { borderRadius: '999px', border: 0, px: 2 },
+        backgroundColor: 'action.hover',
+        p: 0.5,
+      }}
     >
       {TYPE_OPTIONS.map(({ value, labelKey }) => (
         <ToggleButton
           key={value}
           value={value}
-          sx={{ px: 2, textTransform: 'none', whiteSpace: 'nowrap' }}
+          sx={{ textTransform: 'none', whiteSpace: 'nowrap' }}
         >
           {t(labelKey)}
         </ToggleButton>

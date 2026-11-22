@@ -57,10 +57,14 @@ const matchesSearch = (user: AdminUserDto, term: string): boolean => {
   return user.name.toLowerCase().includes(lower) || user.email.toLowerCase().includes(lower);
 };
 
-type SortKey = 'createdAt' | 'lastActiveAt';
+type SortKey = 'createdAt' | 'lastActiveAt' | 'totalTransactions';
 type SortDirection = 'asc' | 'desc';
 
 const getSortValue = (user: AdminUserDto, key: SortKey): number => {
+  if (key === 'totalTransactions') {
+    return user.totalTransactions;
+  }
+
   const iso = user[key];
 
   if (!iso) {
@@ -145,7 +149,18 @@ const UsersTable = () => {
                   {t('allUsers.registered')}
                 </TableSortLabel>
               </TableCell>
-              <TableCell align="center">{t('allUsers.transactions')}</TableCell>
+              <TableCell
+                align="center"
+                sortDirection={sortKey === 'totalTransactions' ? sortDirection : false}
+              >
+                <TableSortLabel
+                  active={sortKey === 'totalTransactions'}
+                  direction={sortKey === 'totalTransactions' ? sortDirection : 'desc'}
+                  onClick={() => toggleSort('totalTransactions')}
+                >
+                  {t('allUsers.transactions')}
+                </TableSortLabel>
+              </TableCell>
               <TableCell sortDirection={sortKey === 'lastActiveAt' ? sortDirection : false}>
                 <TableSortLabel
                   active={sortKey === 'lastActiveAt'}

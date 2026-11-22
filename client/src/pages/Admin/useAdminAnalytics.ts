@@ -64,7 +64,7 @@ export const useAdminAnalytics = () => {
       return 1;
     }
 
-    return Math.max(funnel[0].value, 1);
+    return Math.max(...funnel.map(step => step.value), 1);
   }, [funnel]);
 
   return {

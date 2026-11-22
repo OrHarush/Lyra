@@ -10,7 +10,7 @@ interface FunnelBarProps {
 }
 
 const FunnelBar = ({ label, value, max, color }: FunnelBarProps) => {
-  const pct = max > 0 ? (value / max) * 100 : 0;
+  const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
 
   return (
     <Row alignItems="center" spacing={1.5}>

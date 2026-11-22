@@ -16,7 +16,7 @@ const TransactionsFilters = () => {
   } = useTransactionPageData();
 
   return (
-    <Row spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ flex: 1, minWidth: 0 }}>
+    <Row spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ flex: '0 1 auto', minWidth: 0 }}>
       <TransactionFilterChips
         selectedCategoryIds={selectedCategoryIds}
         selectedAccountIds={selectedAccountIds}

@@ -4,18 +4,22 @@ import Column from '@/components/shared/layout/containers/Column';
 
 interface PageLayoutProps {
   children: ReactNode;
+  hasNaturalHeight?: boolean;
+  spacing?: number;
 }
 
 const PAGE_MAX_WIDTH = 1600;
 
-const PageLayout = ({ children }: PageLayoutProps) => (
+// Pages that fill the viewport (dashboard, tables) need a fixed 100% height; long scrolling pages
+// must grow with their content, otherwise flex children shrink and cards collapse.
+const PageLayout = ({ children, hasNaturalHeight = false, spacing = 2 }: PageLayoutProps) => (
   <Column
-    height="100%"
+    height={hasNaturalHeight ? undefined : '100%'}
     width="100%"
     maxWidth={PAGE_MAX_WIDTH}
-    spacing={2}
+    spacing={spacing}
     alignSelf="center"
-    sx={{ px: { xs: 1.5, sm: 2, md: 3, lg: 4 }, py: 2 }}
+    sx={{ px: { xs: 2, sm: 3, md: 4, lg: 5 }, py: 2, flexShrink: 0 }}
   >
     {children}
   </Column>

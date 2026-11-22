@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { usePageHeader } from '@/components/shared/layout/PageHeaderContext';
 import PageLayout from '@/components/shared/layout/page/PageLayout';
+import { usePageHeader } from '@/components/shared/layout/PageHeaderContext';
 import { useReviewList } from '@/hooks/entities/useTransactionReview';
 
 import ReviewEmptyState from './ReviewEmptyState';
@@ -35,7 +35,7 @@ const TransactionsReview = () => {
   }
 
   return (
-    <PageLayout>{content}</PageLayout>
+    <PageLayout hasNaturalHeight>{content}</PageLayout>
   );
 };
 

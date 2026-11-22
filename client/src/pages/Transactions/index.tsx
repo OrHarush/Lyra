@@ -4,6 +4,7 @@ import { FormProvider, useForm, useFormContext, useWatch } from 'react-hook-form
 import Column from '@/components/shared/layout/containers/Column';
 import PageLayout from '@/components/shared/layout/page/PageLayout';
 import { usePrimaryAction } from '@/components/shared/layout/PageHeaderContext';
+import { useIsSmallScreen } from '@/hooks/common/useIsSmallScreen';
 import { useOpen } from '@/hooks/common/useOpen';
 import { useGhosts } from '@/hooks/entities/useGoals';
 import { useTransactions } from '@/hooks/entities/useTransactions';
@@ -13,6 +14,7 @@ import {
 } from '@/pages/Transactions/TransactionPageDataProvider';
 import TransactionDialogs from '@/pages/Transactions/TransactionsDialogs';
 import TransactionsEmptyState from '@/pages/Transactions/TransactionsEmptyState';
+import MobileTransactionsFilters from '@/pages/Transactions/TransactionsFilters/MobileTransactionsFilters';
 import TransactionsHeader from '@/pages/Transactions/TransactionsHeader';
 import TransactionsPreview from '@/pages/Transactions/TransactionsPreview';
 import TransactionsToolbar from '@/pages/Transactions/TransactionsToolbar';
@@ -23,6 +25,7 @@ interface TransactionsBodyProps {
 }
 
 const TransactionsBody = ({ openCreateDialog }: TransactionsBodyProps) => {
+  const isSmallScreen = useIsSmallScreen();
   const {
     selectedMonth,
     selectedCategoryIds,
@@ -59,11 +62,28 @@ const TransactionsBody = ({ openCreateDialog }: TransactionsBodyProps) => {
     );
   }
 
+  if (isSmallScreen) {
+    return (
+      <Column height={'100%'} minHeight={0} spacing={2}>
+        <TransactionsHeader />
+        <MobileTransactionsFilters />
+        <TransactionsPreview />
+      </Column>
+    );
+  }
+
   return (
     <>
       <TransactionsHeader />
       <Paper
-        sx={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          flex: 1,
+          minHeight: 0,
+          overflow: 'hidden',
+          borderRadius: '24px',
+        }}
       >
         <TransactionsToolbar openCreateDialog={openCreateDialog} />
         <Column flex={1} minHeight={0} sx={{ overflow: 'auto' }}>

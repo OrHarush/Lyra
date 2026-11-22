@@ -12,6 +12,7 @@ import {
   SortableColumn,
   SortOrder,
   TransactionDto,
+  TransactionTotalsDto,
 } from '@/types/Transaction';
 import { PAYMENT_TYPE_LOCALE_KEY } from '@/utils/entities/paymentMethod';
 
@@ -173,3 +174,21 @@ export const groupTransactionsByDay = (
 
   return [...groups].map(([date, dayTransactions]) => ({ date, transactions: dayTransactions }));
 };
+
+export const sumLoadedTransactions = (transactions: TransactionDto[]): TransactionTotalsDto =>
+  transactions.reduce(
+    (totals, tx) => {
+      if (tx.type === 'Income') {
+        totals.income += tx.amount;
+        totals.net += tx.amount;
+      }
+
+      if (tx.type === 'Expense') {
+        totals.expenses += tx.amount;
+        totals.net -= tx.amount;
+      }
+
+      return totals;
+    },
+    { income: 0, expenses: 0, net: 0 }
+  );

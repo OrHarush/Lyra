@@ -4,26 +4,33 @@ import { useFetch } from '@/hooks/common/useFetch';
 import { useAuth } from '@/providers/AuthProvider';
 import { TransactionDto, TransactionTotalsDto, TransactionTypeFilter } from '@/types/Transaction';
 
-export const useTransactions = (
-  year?: number,
-  month?: number,
-  search?: string,
-  categoryIds?: string[],
-  accountIds?: string[],
-  paymentMethodIds?: string[],
-  page: number = 1,
-  limit?: number,
-  type: TransactionTypeFilter = 'All'
-) => {
-  const { user } = useAuth();
+export interface TransactionsFilters {
+  year: number;
+  month: number;
+  search?: string;
+  categoryIds?: string[];
+  accountIds?: string[];
+  paymentMethodIds?: string[];
+  type?: TransactionTypeFilter;
+}
 
-  const today = new Date();
-  const selectedYear = year ?? today.getFullYear();
-  const selectedMonth = month ?? today.getMonth();
+export interface TransactionsPageResponse {
+  data: TransactionDto[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+  totals: TransactionTotalsDto;
+}
+
+export const buildTransactionsUrl = (filters: TransactionsFilters, page: number, limit?: number) => {
+  const { year, month, search, categoryIds, accountIds, paymentMethodIds, type = 'All' } = filters;
 
   const params = new URLSearchParams({
-    year: selectedYear.toString(),
-    month: (selectedMonth + 1).toString(),
+    year: year.toString(),
+    month: (month + 1).toString(),
     page: page.toString(),
   });
 
@@ -51,18 +58,42 @@ export const useTransactions = (
     params.append('search', search.trim());
   }
 
-  const url = `${API_ROUTES.TRANSACTIONS}?${params.toString()}`;
+  return `${API_ROUTES.TRANSACTIONS}?${params.toString()}`;
+};
 
-  const query = useFetch<{
-    data: TransactionDto[];
-    pagination: {
-      total: number;
-      page: number;
-      limit: number;
-      totalPages: number;
-    };
-    totals: TransactionTotalsDto;
-  }>({
+export const useTransactions = (
+  year?: number,
+  month?: number,
+  search?: string,
+  categoryIds?: string[],
+  accountIds?: string[],
+  paymentMethodIds?: string[],
+  page: number = 1,
+  limit?: number,
+  type: TransactionTypeFilter = 'All',
+  isEnabled: boolean = true
+) => {
+  const { user } = useAuth();
+
+  const today = new Date();
+  const selectedYear = year ?? today.getFullYear();
+  const selectedMonth = month ?? today.getMonth();
+
+  const url = buildTransactionsUrl(
+    {
+      year: selectedYear,
+      month: selectedMonth,
+      search,
+      categoryIds,
+      accountIds,
+      paymentMethodIds,
+      type,
+    },
+    page,
+    limit
+  );
+
+  const query = useFetch<TransactionsPageResponse>({
     url,
     queryKey: queryKeys.transactions({
       year: selectedYear,
@@ -75,7 +106,7 @@ export const useTransactions = (
       search,
       type: type === 'All' ? undefined : type,
     }),
-    enabled: !!user,
+    enabled: !!user && isEnabled,
   });
 
   return {

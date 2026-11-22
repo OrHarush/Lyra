@@ -1,5 +1,5 @@
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import { Box, Pagination } from '@mui/material';
+import { Box, CircularProgress, Pagination } from '@mui/material';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,9 +9,12 @@ import CreateTransactionDialog from '@/components/features/transactions/CreateTr
 import Column from '@/components/shared/layout/containers/Column';
 import ScrollableColumn from '@/components/shared/layout/containers/ScrollableColumn';
 import UndoSnackbar from '@/components/shared/ui/UndoSnackbar';
+import { useInViewTrigger } from '@/hooks/common/useInViewTrigger';
+import { useIsSmallScreen } from '@/hooks/common/useIsSmallScreen';
 import { useCategories } from '@/hooks/entities/useCategories';
 import { useGhosts } from '@/hooks/entities/useGoals';
 import { formatGoalAmount } from '@/pages/Goals/utils/goalFormatters';
+import MobileTransactionsTotals from '@/pages/Transactions/components/MobileTransactionsTotals';
 import { useTransactionPageData } from '@/pages/Transactions/TransactionPageDataProvider';
 import GhostTransactionCard from '@/pages/Transactions/TransactionsPreview/GhostTransactionCard';
 import SwipeToDeleteHint from '@/pages/Transactions/TransactionsPreview/SwipeToDeleteHint';
@@ -19,9 +22,9 @@ import TransactionCard from '@/pages/Transactions/TransactionsPreview/Transactio
 import TransactionDayHeader from '@/pages/Transactions/TransactionsPreview/TransactionsCardsView/TransactionDayHeader';
 import TransactionsCardsSkeleton from '@/pages/Transactions/TransactionsPreview/TransactionsCardsView/TransactionsCardsSkeleton';
 import { useGhostQuickContribute } from '@/pages/Transactions/TransactionsPreview/useGhostQuickContribute';
-import { useTransactionsPageQuery } from '@/pages/Transactions/useTransactionsPageQuery';
+import { useTransactionsFeed } from '@/pages/Transactions/useTransactionsFeed';
 import type { GhostContributionDto } from '@/types/Goal';
-import { groupTransactionsByDay } from '@/utils/entities/transaction';
+import { groupTransactionsByDay, sumLoadedTransactions } from '@/utils/entities/transaction';
 
 const FALLBACK_GOAL_COLOR = '#9ca3af';
 
@@ -32,7 +35,21 @@ const TransactionsCardsView = () => {
   const { selectedMonth, page, setPage } = useTransactionPageData();
   const selectedYearMonth = useMemo(() => selectedMonth.format('YYYY-MM'), [selectedMonth]);
 
-  const { transactions, pagination, isLoading, error, refetch } = useTransactionsPageQuery();
+  const isSmallScreen = useIsSmallScreen();
+  const {
+    transactions,
+    pagination,
+    isLoading,
+    error,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useTransactionsFeed();
+  const loadMoreRef = useInViewTrigger(
+    () => fetchNextPage?.(),
+    isSmallScreen && !!hasNextPage && !isFetchingNextPage
+  );
   const dayGroups = useMemo(() => groupTransactionsByDay(transactions), [transactions]);
 
   const { ghosts } = useGhosts(selectedYearMonth);
@@ -129,10 +146,14 @@ const TransactionsCardsView = () => {
 
   return (
     <Column spacing={1} overflow={'hidden'}>
+      {isSmallScreen && <MobileTransactionsTotals totals={sumLoadedTransactions(transactions)} />}
       <SwipeToDeleteHint />
       <ScrollableColumn flex={1} sx={{ pr: 0.5 }}>
         {renderGhostCards(pendingGhosts)}
-        {dayGroups.map(group => (
+        {isSmallScreen &&
+          transactions.map(tx => <TransactionCard key={tx._id} transaction={tx} />)}
+        {!isSmallScreen &&
+          dayGroups.map(group => (
           <Column key={group.date}>
             <TransactionDayHeader date={group.date} />
             {group.transactions.map(tx => (
@@ -140,8 +161,13 @@ const TransactionsCardsView = () => {
             ))}
           </Column>
         ))}
+        {isSmallScreen && hasNextPage && (
+          <Box ref={loadMoreRef} display="flex" justifyContent="center" py={2}>
+            <CircularProgress size={24} />
+          </Box>
+        )}
       </ScrollableColumn>
-      {!!pagination?.total && (
+      {!isSmallScreen && !!pagination?.total && (
         <Box display="flex" justifyContent="center" py={2} sx={{ flexShrink: 0 }}>
           <Pagination
             count={pagination.totalPages}

@@ -1,7 +1,7 @@
 import { useTransactions } from '@/hooks/entities/useTransactions';
 import { useTransactionPageData } from '@/pages/Transactions/TransactionPageDataProvider';
 
-export const useTransactionsPageQuery = () => {
+export const useTransactionsPageQuery = (isEnabled: boolean = true) => {
   const {
     selectedMonth,
     selectedCategoryIds,
@@ -22,6 +22,7 @@ export const useTransactionsPageQuery = () => {
     selectedPaymentMethodIds,
     page,
     pageSize,
-    selectedType
+    selectedType,
+    isEnabled
   );
 };

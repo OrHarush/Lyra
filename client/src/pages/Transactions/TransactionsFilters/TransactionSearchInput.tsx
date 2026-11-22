@@ -19,7 +19,10 @@ const TransactionSearchInput = () => {
       placeholder={t('actions.search')}
       value={searchValue}
       size="small"
-      sx={{ width: { xs: 'auto', md: 280 }, flex: { xs: 1, md: 'none' }, minWidth: 0 }}
+      sx={{
+        width: { xs: '100%', md: 240 },
+        '& .MuiOutlinedInput-root': { borderRadius: { md: '999px' } },
+      }}
       slotProps={{
         input: {
           startAdornment: (
