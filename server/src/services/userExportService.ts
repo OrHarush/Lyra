@@ -6,6 +6,7 @@ import * as accountRepository from '../repositories/accountRepository';
 import * as budgetRepository from '../repositories/budgetRepository';
 import * as categoryRepository from '../repositories/categoryRepository';
 import * as goalRepository from '../repositories/goalRepository';
+import * as investmentPurchaseRepository from '../repositories/investmentPurchaseRepository';
 import * as paymentMethodRepository from '../repositories/paymentMethodRepository';
 import * as recurringTemplateRepository from '../repositories/recurringTemplateRepository';
 import * as transactionRepository from '../repositories/transactionRepository';
@@ -44,6 +45,7 @@ export interface UserExport {
   recurringTemplates: unknown[];
   budgets: unknown[];
   goals: unknown[];
+  investmentPurchases: unknown[];
 }
 
 const pickExportedUserFields = (user: IUser): ExportedUser => ({
@@ -79,6 +81,7 @@ export const buildExport = async (userId: string): Promise<UserExport> => {
     recurringTemplates,
     budgets,
     goals,
+    investmentPurchases,
   ] = await Promise.all([
     userRepository.findById(userId),
     accountRepository.findMany(workspaceId),
@@ -88,6 +91,7 @@ export const buildExport = async (userId: string): Promise<UserExport> => {
     recurringTemplateRepository.findMany(workspaceId),
     budgetRepository.findAllByWorkspace(workspaceId),
     goalRepository.findMany(workspaceId),
+    investmentPurchaseRepository.findAllByUser(userId),
   ]);
 
   if (!user) {
@@ -107,6 +111,7 @@ export const buildExport = async (userId: string): Promise<UserExport> => {
     recurringTemplates: recurringTemplates.map(stripOpsFields),
     budgets: budgets.map(stripOpsFields),
     goals: goals.map(stripOpsFields),
+    investmentPurchases: investmentPurchases.map(stripOpsFields),
   };
 };
 

@@ -33,6 +33,10 @@ export class ApiError extends Error {
     return new ApiError(403, message);
   }
 
+  static serviceUnavailable(message = 'Service unavailable') {
+    return new ApiError(503, message);
+  }
+
   static tooManyRequests(message = 'Too many requests') {
     return new ApiError(429, message);
   }

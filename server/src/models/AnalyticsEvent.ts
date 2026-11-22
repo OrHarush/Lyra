@@ -21,6 +21,9 @@ export const ANALYTICS_EVENT_TYPES = [
   'workspace_created',
   'invitation_sent',
   'invitation_accepted',
+  'investment_purchase_created',
+  'investment_purchase_deleted',
+  'investments_page_viewed',
 ] as const;
 
 export type AnalyticsEventType = (typeof ANALYTICS_EVENT_TYPES)[number];

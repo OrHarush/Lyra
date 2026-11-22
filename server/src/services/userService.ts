@@ -18,6 +18,7 @@ import * as dailyActivityRepository from '../repositories/dailyActivityRepositor
 import { deleteMany as deleteDebugSnapshots } from '../repositories/debugSnapshotRepository';
 import * as deletionFeedbackRepository from '../repositories/deletionFeedbackRepository';
 import * as feedbackRepository from '../repositories/feedbackRepository';
+import * as investmentPurchaseRepository from '../repositories/investmentPurchaseRepository';
 import * as paymentMethodRepository from '../repositories/paymentMethodRepository';
 import { countByUser } from '../repositories/transactionRepository';
 import * as userActivityRepository from '../repositories/userActivityRepository';
@@ -217,6 +218,7 @@ export const deleteUserCompletely = async (userId: string, feedback?: DeletionFe
       }
     }
 
+    await investmentPurchaseRepository.deleteAllByUser(userId, session);
     await deleteDebugSnapshots({ userId }, session);
     await userActivityRepository.anonymizeByUser(userId, session);
     await analyticsEventRepository.anonymizeByUserName(user.name, session);
