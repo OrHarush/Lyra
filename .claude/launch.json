@@ -4,7 +4,7 @@
     {
       "name": "Client (Vite)",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["../node_modules/vite/bin/vite.js"],
+      "runtimeArgs": ["../node_modules/vite/bin/vite.js", "--mode", "claude", "--port", "3001"],
       "cwd": "client",
       "envFile": ".env.claude",
       "autoPort": false,
@@ -13,7 +13,7 @@
     {
       "name": "Server (Express)",
       "runtimeExecutable": "npm.cmd",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": ["run", "dev:claude"],
       "cwd": "server",
       "envFile": ".env.claude",
       "autoPort": false,
