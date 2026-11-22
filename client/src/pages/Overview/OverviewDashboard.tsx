@@ -12,6 +12,7 @@ import MoneyCalendar from '@/pages/Overview/MoneyCalendar';
 import MonthlyFinancialOverview from '@/pages/Overview/MonthlyFinancialOverview';
 import { useOverviewFilters } from '@/pages/Overview/OverviewFiltersProvider';
 import OverviewHeader from '@/pages/Overview/OverviewHeader';
+import RecentTransactions from '@/pages/Overview/RecentTransactions';
 import RecurringSetupBanner from '@/pages/Overview/RecurringSetupBanner';
 import ReviewTransactionsBanner from '@/pages/Overview/ReviewTransactionsBanner';
 import TopSpendingCategories from '@/pages/Overview/TopSpendingCategories';
@@ -48,6 +49,7 @@ const OverviewDashboard = () => {
         >
           <BudgetsOverview />
           <TopSpendingCategories />
+          <RecentTransactions onAddTransaction={openCreateTransaction} />
         </Grid>
       </Column>
       {!isSmallScreen && <ActionFab onClick={openCreateTransaction} />}

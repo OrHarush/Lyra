@@ -189,7 +189,15 @@ export const sortAndPaginate = (
   const sorted = [...data].sort((a, b) => {
     const aDate = new Date(a.date).getTime();
     const bDate = new Date(b.date).getTime();
-    return sort === 'asc' ? aDate - bDate : bDate - aDate;
+
+    if (aDate !== bDate) {
+      return sort === 'asc' ? aDate - bDate : bDate - aDate;
+    }
+
+    const aCreated = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const bCreated = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+
+    return sort === 'asc' ? aCreated - bCreated : bCreated - aCreated;
   });
 
   const total = sorted.length;

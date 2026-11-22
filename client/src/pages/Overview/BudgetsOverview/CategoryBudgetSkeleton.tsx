@@ -8,7 +8,7 @@ const CategoriesBudgetSkeleton = () => {
   const { t } = useTranslation('overview');
 
   return (
-    <Grid size={{ xs: 12, lg: 6 }}>
+    <Grid size={{ xs: 12, md: 6, lg: 4 }}>
       <Card sx={{ height: '100%', p: 2 }}>
         <CardContent sx={{ height: '100%' }}>
           <Column spacing={2}>

@@ -42,6 +42,8 @@ export const API_ROUTES = {
   MONTHLY_REPORT_SEEN: '/api/monthly-report/seen',
 
   TRANSACTIONS: '/api/transactions',
+  TRANSACTIONS_RECENT: (accountId: string, limit: number) =>
+    `/api/transactions?${new URLSearchParams({ accountIds: accountId, page: '1', limit: String(limit), sort: 'desc' })}`,
   TRANSACTIONS_EXPORT: (month: string) => `/api/transactions/export?month=${month}`,
   TRANSACTION_QUICK_CHIPS: '/api/transactions/quick-chips',
   TRANSACTIONS_REVIEW: '/api/transactions/review',

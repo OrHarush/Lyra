@@ -146,5 +146,19 @@
       "expense": "Expense",
       "cardBill": "Card bill"
     }
+  },
+  "recentTransactions": {
+    "title": "Recent transactions",
+    "seeAll": "See all",
+    "addTransaction": "Add transaction",
+    "empty": {
+      "title": "No transactions yet",
+      "body": "Transactions you add show up here, so you can confirm every entry landed."
+    },
+    "error": {
+      "message": "Couldn't load recent transactions",
+      "retry": "Retry"
+    },
+    "transfer": "Transfer"
   }
 }

@@ -146,3 +146,11 @@ export const compareTransactions = (
 
   return 0;
 };
+
+export const getTransactionAmountColor = (tx: TransactionDto): 'error.main' | 'success.main' => {
+  if (tx.type === 'Transfer') {
+    return tx.account?._id === tx.fromAccount?._id ? 'error.main' : 'success.main';
+  }
+
+  return tx.type === 'Expense' ? 'error.main' : 'success.main';
+};

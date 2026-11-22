@@ -4,6 +4,7 @@ import Column from '@/components/shared/layout/containers/Column';
 import CategoriesBudgetSkeleton from '@/pages/Overview/BudgetsOverview/CategoryBudgetSkeleton';
 import MoneyCalendarSkeleton from '@/pages/Overview/MoneyCalendar/MoneyCalendarSkeleton';
 import MonthlyFinancialOverviewSkeleton from '@/pages/Overview/MonthlyFinancialOverview/MonthlyFinancialOverviewSkeleton';
+import RecentTransactionsSkeleton from '@/pages/Overview/RecentTransactions/RecentTransactionsSkeleton';
 import TopCategoriesChartSkeleton from '@/pages/Overview/TopSpendingCategories/TopCategoriesChartSkeleton';
 
 const OverviewDashboardSkeleton = () => (
@@ -22,6 +23,7 @@ const OverviewDashboardSkeleton = () => (
       >
         <CategoriesBudgetSkeleton />
         <TopCategoriesChartSkeleton />
+        <RecentTransactionsSkeleton rows={5} />
       </Grid>
     </Column>
   </Column>

@@ -9,7 +9,7 @@ const EmptyCategoriesChart = () => {
   const { t } = useTranslation('overview');
 
   return (
-    <Grid size={{ xs: 12, lg: 6 }} sx={{ display: 'flex', minHeight: 0 }}>
+    <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ display: 'flex', minHeight: 0 }}>
       <Card
         sx={{
           height: '100%',

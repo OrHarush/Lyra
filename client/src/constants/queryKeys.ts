@@ -25,6 +25,12 @@ export const queryKeys = {
     to,
     accountId,
   ],
+  recentTransactions: (accountId: string, limit: number) => [
+    'transactions',
+    'recent',
+    accountId,
+    limit,
+  ],
   transactionsCount: () => ['transactions', 'count'],
   transactionsReviewCount: () => ['transactions', 'reviewCount'],
   transactionsReview: () => ['transactions', 'review'],
