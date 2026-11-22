@@ -15,4 +15,8 @@ export * from './types/defaultPaymentMethods';
 export * from './types/FeedbackCommands';
 export * from './types/quickChips';
 export * from './types/Role';
+export * from './utils/calculators/compoundInterest';
+export * from './utils/calculators/creditPoints';
+export * from './utils/calculators/israelTax2026';
+export * from './utils/calculators/netSalary';
 export * from './utils/money';

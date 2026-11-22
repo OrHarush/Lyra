@@ -14,6 +14,7 @@ export const ROUTES = {
   BUDGETS_URL: '/budget',
   GOALS_URL: '/goals',
   GOAL_DETAIL_URL: '/goals/:id',
+  CALCULATORS_URL: '/calculators',
   ACCOUNTS_URL: '/accounts',
   ADMIN_KPIS_URL: '/admin/kpis',
   ADMIN_DEBUG_URL: '/admin/debug',

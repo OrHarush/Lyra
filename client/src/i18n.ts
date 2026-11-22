@@ -10,6 +10,7 @@ import enAccessibility from '@/locales/en/accessibility.json';
 import enAccounts from '@/locales/en/accounts.json';
 import enAdmin from '@/locales/en/admin.json';
 import enBudgets from '@/locales/en/budgets.json';
+import enCalculators from '@/locales/en/calculators.json';
 import enCategories from '@/locales/en/categories.json';
 import enChat from '@/locales/en/chat.json';
 import enCommon from '@/locales/en/common.json';
@@ -30,6 +31,7 @@ import heAccessibility from '@/locales/he/accessibility.json';
 import heAccounts from '@/locales/he/accounts.json';
 import heAdmin from '@/locales/he/admin.json';
 import heBudgets from '@/locales/he/budgets.json';
+import heCalculators from '@/locales/he/calculators.json';
 import heCategories from '@/locales/he/categories.json';
 import heChat from '@/locales/he/chat.json';
 import heCommon from '@/locales/he/common.json';
@@ -73,6 +75,7 @@ i18n
         budgets: enBudgets,
         chat: enChat,
         goals: enGoals,
+        calculators: enCalculators,
       },
       he: {
         admin: heAdmin,
@@ -95,6 +98,7 @@ i18n
         budgets: heBudgets,
         chat: heChat,
         goals: heGoals,
+        calculators: heCalculators,
       },
     },
     fallbackLng: 'he',

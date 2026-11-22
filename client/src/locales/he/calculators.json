@@ -1,0 +1,124 @@
+{
+  "page": {
+    "title": "מחשבונים"
+  },
+  "tabs": {
+    "compoundInterest": "ריבית דריבית",
+    "netSalary": "שכר נטו"
+  },
+  "compoundInterest": {
+    "formTitle": "ההשקעה שלך",
+    "initialAmount": "סכום התחלתי",
+    "monthlyDeposit": "הפקדה חודשית",
+    "annualReturnPct": "תשואה שנתית צפויה (%)",
+    "annualFeePct": "דמי ניהול שנתיים (%)",
+    "years": "מספר שנים",
+    "finalBalance": "שווי אחרי {{years}} שנים",
+    "totalDeposited": "סך ההפקדות",
+    "totalInterest": "רווח מריבית",
+    "chartTitle": "צמיחה לאורך זמן",
+    "chartDeposited": "הפקדות",
+    "chartInterest": "ריבית",
+    "yearLabel": "שנה {{year}}",
+    "disclaimer": "הערכה גסה בהנחת תשואה קבועה וצבירה חודשית. בפועל התשואה משתנה משנה לשנה."
+  },
+  "netSalary": {
+    "salaryTitle": "השכר שלך",
+    "studyFundTitle": "קרן השתלמות",
+    "pensionTitle": "פנסיה",
+    "grossSalary": "שכר ברוטו חודשי",
+    "sex": "מין",
+    "male": "גבר",
+    "female": "אישה",
+    "creditPointsChip": "{{points}} נקודות זיכוי",
+    "creditPointsAdvanced": "מתקדם: ילדים, שירות, תואר, מילואים",
+    "childLabel": "ילד {{number}}",
+    "addChild": "הוספת ילד",
+    "removeChild": "הסרת ילד",
+    "childAge": {
+      "birthYear": "שנת לידה (+{{points}})",
+      "age1to2": "גיל 1–2 (+{{points}})",
+      "age3": "גיל 3 (+{{points}})",
+      "age4to5": "גיל 4–5 (+{{points}})",
+      "age6to17": "גיל 6–17 (+{{points}})",
+      "age18": "גיל 18 (+{{points}})"
+    },
+    "singleParent": "הורה יחיד (+1)",
+    "disabledChildrenCount": "ילדים עם גמלת ילד נכה (+2 לכל ילד)",
+    "serviceType": "שירות צבאי / לאומי",
+    "service": {
+      "none": "ללא",
+      "full": "שירות מלא (+{{points}})",
+      "short": "שירות קצר (+{{points}})"
+    },
+    "immigrationPeriod": "עולה חדש",
+    "immigration": {
+      "none": "לא",
+      "first18Months": "18 חודשים ראשונים (+{{points}})",
+      "next12Months": "12 חודשים הבאים (+{{points}})",
+      "last12Months": "12 חודשים אחרונים (+{{points}})"
+    },
+    "degreeType": "תואר אקדמי",
+    "degree": {
+      "none": "ללא",
+      "bachelor": "תואר ראשון (+{{points}} לשנה)",
+      "master": "תואר שני (+{{points}} לשנה)"
+    },
+    "degreeYears": "שנות לימוד",
+    "reserveDays": "ימי מילואים בשנה שעברה",
+    "manualCreditPoints": "נקודות ידניות (תיאום מס)",
+    "studyFundEnabled": "קרן השתלמות פעילה או כבויה",
+    "studyFundEmployeePct": "עובד (%)",
+    "studyFundEmployerPct": "מעסיק (%)",
+    "studyFundAdvanced": "מתקדם: חלק מהשכר המבוטח ותקרה",
+    "studyFundInsuredShare": "חלק מהשכר שמבוטח בקרן (%)",
+    "studyFundInsuredSalary": "שכר מבוטח",
+    "studyFundCeiling": "תקרה פטורה ממס",
+    "studyFundTaxableBenefit": "הפרשת מעסיק החייבת במס",
+    "studyFundAboveCeilingNote": "הפרשת המעסיק על שכר שמעל התקרה נחשבת להכנסה חייבת.",
+    "studyFundBelowCeilingNote": "השכר המבוטח מתחת לתקרה, ולכן הפרשת המעסיק אינה חייבת במס.",
+    "employeePensionPct": "עובד (%)",
+    "employerPensionPct": "מעסיק (%)",
+    "pensionAdvanced": "מתקדם: פיצויים והטבות נוספות",
+    "severanceTrack": "מסלול פיצויים",
+    "severance": {
+      "regular": "רגיל (6%)",
+      "section14": "סעיף 14 (8.33%)"
+    },
+    "annualDonations": "תרומות בשנה",
+    "otherBenefitsNote": "זיכוי יישוב מזכה ונכות עדיין לא נכללים.",
+    "netLabel": "נטו חודשי משוער",
+    "netShareOfGross": "{{pct}}% מהברוטו",
+    "employerCost": "עלות מעסיק",
+    "legend": {
+      "net": "נטו",
+      "incomeTax": "מס הכנסה",
+      "nationalInsurance": "ביטוח לאומי",
+      "savings": "פנסיה והשתלמות"
+    },
+    "breakdownTitle": "מברוטו לנטו",
+    "gross": "שכר ברוטו",
+    "employeePension": "פנסיה (עובד)",
+    "employeeStudyFund": "קרן השתלמות (עובד)",
+    "nationalInsurance": "ביטוח לאומי ובריאות",
+    "incomeTax": "מס הכנסה",
+    "taxBeforeCredits": "מס לפי מדרגות",
+    "creditPoints": "{{points}} נקודות זיכוי",
+    "pensionTaxCredit": "זיכוי מס על פנסיה (35%)",
+    "donationsCredit": "זיכוי על תרומות (35%)",
+    "net": "שכר נטו",
+    "disclaimer": "הערכה לפי נתוני 2026 לשכיר תושב ישראל. לא מחליפה תלוש שכר, תיאום מס או ייעוץ מקצועי.",
+    "copy": {
+      "action": "העתקת החישוב",
+      "copied": "הועתק",
+      "failed": "ההעתקה נכשלה",
+      "title": "חישוב שכר נטו (נתוני 2026)",
+      "formula": "נטו = ברוטו − פנסיה − קרן השתלמות − ביטוח לאומי ובריאות − מס הכנסה",
+      "deductionsTitle": "ניכויים",
+      "assumptionsTitle": "הנחות",
+      "pensionAssumption": "פנסיה: עובד {{employee}}%, מעסיק {{employer}}%",
+      "studyFundAssumption": "קרן השתלמות: עובד {{employee}}%, מעסיק {{employer}}%, על {{share}}% מהשכר",
+      "studyFundOff": "קרן השתלמות: אין"
+    }
+  }
+}

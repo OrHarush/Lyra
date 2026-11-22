@@ -5,7 +5,8 @@ import { Button, Tooltip } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { copyToClipboard } from './copyToClipboard';
+import { copyToClipboard } from '@/utils/copyToClipboard';
+
 import { fetchAdminSnapshot } from './fetchAdminSnapshot';
 
 type CopyStatus = 'idle' | 'copied' | 'fetchError' | 'copyError';

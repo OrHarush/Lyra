@@ -1,0 +1,124 @@
+{
+  "page": {
+    "title": "Calculators"
+  },
+  "tabs": {
+    "compoundInterest": "Compound interest",
+    "netSalary": "Net salary"
+  },
+  "compoundInterest": {
+    "formTitle": "Your investment",
+    "initialAmount": "Starting amount",
+    "monthlyDeposit": "Monthly deposit",
+    "annualReturnPct": "Expected yearly return (%)",
+    "annualFeePct": "Yearly management fee (%)",
+    "years": "Years",
+    "finalBalance": "Value after {{years}} years",
+    "totalDeposited": "You deposited",
+    "totalInterest": "Interest earned",
+    "chartTitle": "Growth over time",
+    "chartDeposited": "Deposits",
+    "chartInterest": "Interest",
+    "yearLabel": "Year {{year}}",
+    "disclaimer": "A rough estimate assuming a fixed return, compounded monthly. Real returns change from year to year."
+  },
+  "netSalary": {
+    "salaryTitle": "Your salary",
+    "studyFundTitle": "Keren hishtalmut",
+    "pensionTitle": "Pension",
+    "grossSalary": "Monthly gross salary",
+    "sex": "Sex",
+    "male": "Male",
+    "female": "Female",
+    "creditPointsChip": "{{points}} credit points",
+    "creditPointsAdvanced": "Advanced: children, service, degree, reserve duty",
+    "childLabel": "Child {{number}}",
+    "addChild": "Add a child",
+    "removeChild": "Remove child",
+    "childAge": {
+      "birthYear": "Year of birth (+{{points}})",
+      "age1to2": "Age 1–2 (+{{points}})",
+      "age3": "Age 3 (+{{points}})",
+      "age4to5": "Age 4–5 (+{{points}})",
+      "age6to17": "Age 6–17 (+{{points}})",
+      "age18": "Age 18 (+{{points}})"
+    },
+    "singleParent": "Single parent (+1)",
+    "disabledChildrenCount": "Children with a disability allowance (+2 each)",
+    "serviceType": "Military / national service",
+    "service": {
+      "none": "None",
+      "full": "Full service (+{{points}})",
+      "short": "Short service (+{{points}})"
+    },
+    "immigrationPeriod": "New immigrant",
+    "immigration": {
+      "none": "No",
+      "first18Months": "First 18 months (+{{points}})",
+      "next12Months": "Next 12 months (+{{points}})",
+      "last12Months": "Last 12 months (+{{points}})"
+    },
+    "degreeType": "Academic degree",
+    "degree": {
+      "none": "None",
+      "bachelor": "Bachelor's (+{{points}} per year)",
+      "master": "Master's (+{{points}} per year)"
+    },
+    "degreeYears": "Years of study",
+    "reserveDays": "Reserve days last year",
+    "manualCreditPoints": "Manual points (tax coordination)",
+    "studyFundEnabled": "Keren hishtalmut on or off",
+    "studyFundEmployeePct": "You (%)",
+    "studyFundEmployerPct": "Employer (%)",
+    "studyFundAdvanced": "Advanced: insured share of salary and ceiling",
+    "studyFundInsuredShare": "Share of salary insured (%)",
+    "studyFundInsuredSalary": "Insured salary",
+    "studyFundCeiling": "Tax-free ceiling",
+    "studyFundTaxableBenefit": "Taxable employer deposit",
+    "studyFundAboveCeilingNote": "The employer's deposit on salary above the ceiling counts as taxable income.",
+    "studyFundBelowCeilingNote": "The insured salary is under the ceiling, so the employer's deposit isn't taxed.",
+    "employeePensionPct": "You (%)",
+    "employerPensionPct": "Employer (%)",
+    "pensionAdvanced": "Advanced: severance and other benefits",
+    "severanceTrack": "Severance track",
+    "severance": {
+      "regular": "Regular (6%)",
+      "section14": "Section 14 (8.33%)"
+    },
+    "annualDonations": "Donations per year",
+    "otherBenefitsNote": "Eligible-locality and disability credits aren't included yet.",
+    "netLabel": "Estimated monthly net",
+    "netShareOfGross": "{{pct}}% of gross",
+    "employerCost": "Employer cost",
+    "legend": {
+      "net": "Net",
+      "incomeTax": "Income tax",
+      "nationalInsurance": "National insurance",
+      "savings": "Pension & fund"
+    },
+    "breakdownTitle": "From gross to net",
+    "gross": "Gross salary",
+    "employeePension": "Pension (you)",
+    "employeeStudyFund": "Keren hishtalmut (you)",
+    "nationalInsurance": "National insurance & health tax",
+    "incomeTax": "Income tax",
+    "taxBeforeCredits": "Tax by brackets",
+    "creditPoints": "{{points}} credit points",
+    "pensionTaxCredit": "Pension tax credit (35%)",
+    "donationsCredit": "Donations credit (35%)",
+    "net": "Net salary",
+    "disclaimer": "An estimate based on 2026 rates for an Israeli resident employee. It doesn't replace your payslip, a tax coordination or professional advice.",
+    "copy": {
+      "action": "Copy calculation",
+      "copied": "Copied",
+      "failed": "Couldn't copy",
+      "title": "Net salary calculation (2026 rates)",
+      "formula": "Net = gross − pension − keren hishtalmut − national insurance & health − income tax",
+      "deductionsTitle": "Deductions",
+      "assumptionsTitle": "Assumptions",
+      "pensionAssumption": "Pension: you {{employee}}%, employer {{employer}}%",
+      "studyFundAssumption": "Keren hishtalmut: you {{employee}}%, employer {{employer}}%, on {{share}}% of salary",
+      "studyFundOff": "Keren hishtalmut: none"
+    }
+  }
+}

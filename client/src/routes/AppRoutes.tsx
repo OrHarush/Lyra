@@ -15,6 +15,7 @@ import BlogIndex from '@/pages/Blog';
 import CashflowGuide from '@/pages/Blog/CashflowGuide';
 import RiseUpReview from '@/pages/Blog/RiseUpReview';
 import Budgets from '@/pages/Budgets';
+import Calculators from '@/pages/Calculators';
 import Categories from '@/pages/Categories';
 import Chat from '@/pages/Chat';
 import Goals from '@/pages/Goals';
@@ -127,6 +128,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.BUDGETS_URL} element={<Budgets />} />
             <Route path={ROUTES.GOALS_URL} element={<Goals />} />
             <Route path={ROUTES.GOAL_DETAIL_URL} element={<GoalDetail />} />
+            <Route path={ROUTES.CALCULATORS_URL} element={<Calculators />} />
             <Route
               path={ROUTES.CHAT_URL}
               element={

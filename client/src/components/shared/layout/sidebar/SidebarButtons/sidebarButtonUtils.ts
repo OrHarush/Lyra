@@ -1,6 +1,7 @@
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import BugReportIcon from '@mui/icons-material/BugReport';
+import CalculateIcon from '@mui/icons-material/Calculate';
 import CategoryIcon from '@mui/icons-material/Category';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -27,6 +28,12 @@ export const goalsButton: SidebarButtonConfig = {
   titleKey: 'goals',
   icon: TrackChangesIcon,
   route: ROUTES.GOALS_URL,
+};
+
+export const calculatorsButton: SidebarButtonConfig = {
+  titleKey: 'calculators',
+  icon: CalculateIcon,
+  route: ROUTES.CALCULATORS_URL,
 };
 
 export const manageNavigation: SidebarButtonConfig[] = [

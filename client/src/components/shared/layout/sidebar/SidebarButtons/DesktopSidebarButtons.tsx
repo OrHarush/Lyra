@@ -8,6 +8,7 @@ import ManagementButtonsNavigation from '@/components/shared/layout/sidebar/Side
 import {
   budgetButton,
   buildAdminNavigationButtons,
+  calculatorsButton,
   goalsButton,
   manageNavigation,
   primaryNavigation,
@@ -19,6 +20,8 @@ import { ROUTES } from '@/constants/Routes';
 import { useReviewCount } from '@/hooks/entities/useTransactionReview';
 import { useAuth } from '@/providers/AuthProvider';
 import { isAdmin } from '@/utils/env';
+
+const standaloneNavigation = [budgetButton, goalsButton, calculatorsButton];
 
 const DesktopSidebarButtons = () => {
   const { t } = useTranslation('sidebar');
@@ -42,14 +45,17 @@ const DesktopSidebarButtons = () => {
 
   const routeRows = [
     ...primaryNavWithBadge,
-    budgetButton,
-    goalsButton,
+    ...standaloneNavigation,
     ...(showManageItems ? manageNavigation : []),
     ...adminNavigation,
   ];
 
+  // When expanded, the "Manage" toggle row sits between the standalone buttons and the manage
+  // items, so the highlight pill must skip one extra slot for everything rendered after it.
+  const manageToggleIndex = primaryNavWithBadge.length + standaloneNavigation.length;
   const activeRouteIndex = routeRows.findIndex(button => location.pathname === button.route);
-  const activeIndex = expanded && activeRouteIndex >= 4 ? activeRouteIndex + 1 : activeRouteIndex;
+  const activeIndex =
+    expanded && activeRouteIndex >= manageToggleIndex ? activeRouteIndex + 1 : activeRouteIndex;
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -63,16 +69,14 @@ const DesktopSidebarButtons = () => {
             title={t(button.titleKey)}
           />
         ))}
-        <SidebarNavigationButton
-          button={budgetButton}
-          isActive={location.pathname === budgetButton.route}
-          title={t(budgetButton.titleKey)}
-        />
-        <SidebarNavigationButton
-          button={goalsButton}
-          isActive={location.pathname === goalsButton.route}
-          title={t(goalsButton.titleKey)}
-        />
+        {standaloneNavigation.map(button => (
+          <SidebarNavigationButton
+            key={button.titleKey}
+            button={button}
+            isActive={location.pathname === button.route}
+            title={t(button.titleKey)}
+          />
+        ))}
         <ManagementButtonsNavigation
           manageNavigation={manageNavigation}
           isManageExpanded={isManageExpanded}
