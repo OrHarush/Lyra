@@ -7,6 +7,7 @@ import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import CurrencyText from '@/components/shared/ui/CurrencyText';
 import { categoryIconMap } from '@/constants/categoryIconMap';
+import { FIT_ROW_ATTRIBUTE } from '@/hooks/common/useFittingRowCount';
 import { ExpandedTransactionDto } from '@/types/Transaction';
 import { getAccountDisplayName } from '@/utils/entities/account';
 import {
@@ -31,6 +32,7 @@ const RecentTransactionRow = ({ transaction, onSelect }: RecentTransactionRowPro
 
   return (
     <ButtonBase
+      {...{ [FIT_ROW_ATTRIBUTE]: true }}
       onClick={() => onSelect(transaction)}
       sx={{
         width: '100%',

@@ -9,7 +9,15 @@ interface RecentTransactionsCardProps {
 
 const RecentTransactionsCard = ({ children }: RecentTransactionsCardProps) => (
   <Grid size={{ xs: 12, md: 12, lg: 4 }} sx={{ display: 'flex', minHeight: 0 }}>
-    <Card sx={{ width: '100%', p: { xs: 2, sm: 2.5 }, display: 'flex', minHeight: 0 }}>
+    <Card
+      sx={{
+        width: '100%',
+        p: { xs: 2, sm: 2.5 },
+        pb: { xs: 3, sm: 3.5 },
+        display: 'flex',
+        minHeight: 0,
+      }}
+    >
       <Column spacing={1} sx={{ flex: 1, minWidth: 0 }}>
         {children}
       </Column>
