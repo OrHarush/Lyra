@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import { usePageHeader } from '@/components/shared/layout/PageHeaderContext';
+import PageLayout from '@/components/shared/layout/page/PageLayout';
 
 import ActivityFeed from './ActivityFeed';
 import AdminDashboardSkeleton from './AdminDashboardSkeleton';
@@ -35,17 +36,19 @@ export const AdminDashboard = () => {
 
   if (isLoading || !data) {
     return (
-      <Column sx={{ p: 3, maxWidth: 1200, width: '100%', alignSelf: 'center' }}>
+      <PageLayout>
         <AdminDashboardSkeleton />
-      </Column>
+      </PageLayout>
     );
   }
 
   if (isError) {
     return (
-      <Column sx={{ p: 3, alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
-        <Typography color="error">Failed to load analytics</Typography>
-      </Column>
+      <PageLayout>
+        <Column sx={{ alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
+          <Typography color="error">Failed to load analytics</Typography>
+        </Column>
+      </PageLayout>
     );
   }
 
@@ -58,7 +61,7 @@ export const AdminDashboard = () => {
     data.totalUsers > 0 ? `${Math.round((data.activatedUsers / data.totalUsers) * 100)}%` : '0%';
 
   return (
-    <Column sx={{ p: 3, maxWidth: 1200, width: '100%', alignSelf: 'center' }} spacing={3}>
+    <PageLayout>
       {isDesktop ? (
         <Column spacing={1}>
           <Typography variant="caption" sx={{ fontWeight: 700, letterSpacing: 1.5 }}>
@@ -294,7 +297,7 @@ export const AdminDashboard = () => {
           <ActivityFeed />
         </CollapsibleSection>
       )}
-    </Column>
+    </PageLayout>
   );
 };
 

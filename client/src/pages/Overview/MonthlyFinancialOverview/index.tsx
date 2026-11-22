@@ -104,7 +104,7 @@ const MonthlyFinancialOverview = () => {
   );
 
   return (
-    <Grid size={{ xs: 12, md: 6, xl: 5 }}>
+    <Grid size={{ xs: 12, md: 6, lg: 5, xl: 4 }}>
       <Card sx={{ p: 3, height: '100%' }}>
         <Column height={'100%'} justifyContent={'center'} spacing={2}>
           <TextField

@@ -41,7 +41,7 @@ const AuthenticatedLayout = () => {
             sidebarExpanded={sidebarExpanded}
             onToggleSidebar={toggleSidebar}
           />
-          <Column flex={1} minHeight={0} overflow={'auto'} padding={'16px'}>
+          <Column flex={1} minHeight={0} overflow={'auto'}>
             <Outlet />
           </Column>
           <BottomNav />

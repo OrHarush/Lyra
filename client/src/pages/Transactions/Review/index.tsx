@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Column from '@/components/shared/layout/containers/Column';
 import { usePageHeader } from '@/components/shared/layout/PageHeaderContext';
+import PageLayout from '@/components/shared/layout/page/PageLayout';
 import { useReviewList } from '@/hooks/entities/useTransactionReview';
 
 import ReviewEmptyState from './ReviewEmptyState';
@@ -35,9 +35,7 @@ const TransactionsReview = () => {
   }
 
   return (
-    <Column sx={{ p: { xs: 2, sm: 3, md: 4 }, width: '100%', maxWidth: 1100, mx: 'auto' }}>
-      {content}
-    </Column>
+    <PageLayout>{content}</PageLayout>
   );
 };
 

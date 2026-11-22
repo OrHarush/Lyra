@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 
 import Column from '@/components/shared/layout/containers/Column';
 import { usePageHeader } from '@/components/shared/layout/PageHeaderContext';
+import PageLayout from '@/components/shared/layout/page/PageLayout';
 
 import BalanceBreakdownCard from './BalanceBreakdownCard';
 import RunCard from './RunCard';
@@ -15,7 +16,7 @@ export const AdminDebugPage = () => {
   const list = snapshots ?? [];
 
   return (
-    <Column sx={{ p: 3, maxWidth: 900, width: '100%', alignSelf: 'center' }} spacing={3}>
+    <PageLayout>
       <Column spacing={0.5}>
         <Typography variant="h5" sx={{ fontWeight: 700 }}>
           דיבוג
@@ -28,7 +29,7 @@ export const AdminDebugPage = () => {
       <RunCard snapshots={list} />
       <BalanceBreakdownCard />
       <SnapshotHistoryCard snapshots={list} isLoading={isLoading} />
-    </Column>
+    </PageLayout>
   );
 };
 

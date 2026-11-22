@@ -6,7 +6,7 @@ interface MoneyCalendarCardProps {
 }
 
 const MoneyCalendarCard = ({ children }: MoneyCalendarCardProps) => (
-  <Grid size={{ xs: 12, md: 6, xl: 7 }}>
+  <Grid size={{ xs: 12, md: 6, lg: 7, xl: 8 }}>
     <Card sx={{ p: { xs: 2, sm: 2.5 }, height: '100%', width: '100%' }}>{children}</Card>
   </Grid>
 );
