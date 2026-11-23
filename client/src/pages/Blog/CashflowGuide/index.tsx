@@ -15,6 +15,8 @@ import KeyFactsStrip from '@/pages/Blog/CashflowGuide/KeyFactsStrip';
 import LyraCapabilitiesTable from '@/pages/Blog/CashflowGuide/LyraCapabilitiesTable';
 import MethodCards from '@/pages/Blog/CashflowGuide/MethodCards';
 import MethodsComparisonTable from '@/pages/Blog/CashflowGuide/MethodsComparisonTable';
+import ArticleFurtherReading from '@/pages/Blog/shared/ArticleFurtherReading';
+import { buildBreadcrumbSchema } from '@/pages/Blog/shared/articleSchemas';
 import FaqAccordion from '@/pages/Home/FaqSection/FaqAccordion';
 import CtaButton from '@/pages/Home/HeroSection/HeroContent/CtaButton';
 import LandingNavbar from '@/pages/Home/LandingNavbar';
@@ -37,6 +39,7 @@ const bodyTextSx = { color: 'text.secondary', lineHeight: 1.8 } as const;
 const headingSx = { fontWeight: 700, color: 'text.primary' } as const;
 
 const CashflowGuide = () => {
+  const { t: tBlog } = useTranslation('blog');
   const { t, i18n } = useTranslation('cashflowGuide');
 
   const title = t('title');
@@ -89,6 +92,15 @@ const CashflowGuide = () => {
       <PageSeo title={t('seo.title')} description={seoDescription} canonical={CANONICAL_URL} ogType="article" />
       <JsonLd id="cashflow-article-jsonld" schema={articleSchema} />
       <JsonLd id="cashflow-faq-jsonld" schema={faqSchema} />
+      <JsonLd
+        id="cashflow-breadcrumb-jsonld"
+        schema={buildBreadcrumbSchema({
+          homeLabel: tBlog('breadcrumbs.home'),
+          blogLabel: tBlog('breadcrumbs.blog'),
+          articleTitle: title,
+          canonical: CANONICAL_URL,
+        })}
+      />
       <LandingNavbar />
       <ScrollableColumn component="main" alignItems="center" sx={{ px: { xs: 2, sm: 3, md: 4 }, py: { xs: 4, md: 6 }, flex: 1 }}>
         <Column component="article" spacing={3} sx={{ width: '100%', maxWidth: 760, textAlign: 'start' }}>
@@ -220,6 +232,8 @@ const CashflowGuide = () => {
               <FaqAccordion key={item.q} question={item.q} answer={item.a} />
             ))}
           </Column>
+
+          <ArticleFurtherReading />
 
           <Column component="section" alignItems="center" spacing={2} sx={{ py: { xs: 3, md: 5 } }}>
             <Typography variant="body1" sx={{ ...bodyTextSx, textAlign: 'center' }}>

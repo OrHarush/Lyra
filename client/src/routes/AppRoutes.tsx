@@ -13,6 +13,9 @@ import { AdminDashboard } from '@/pages/Admin';
 import AdminDebugPage from '@/pages/Admin/Debug';
 import BlogIndex from '@/pages/Blog';
 import CashflowGuide from '@/pages/Blog/CashflowGuide';
+import CouplesMoney from '@/pages/Blog/CouplesMoney';
+import CreditCardBillingCycle from '@/pages/Blog/CreditCardBillingCycle';
+import FreeExpenseApps from '@/pages/Blog/FreeExpenseApps';
 import RiseUpReview from '@/pages/Blog/RiseUpReview';
 import Budgets from '@/pages/Budgets';
 import Calculators from '@/pages/Calculators';
@@ -86,6 +89,9 @@ const AppRoutes = () => {
             <Route path={ROUTES.BLOG_URL} element={<BlogIndex />} />
             <Route path={ROUTES.BLOG_RISEUP_REVIEW_URL} element={<RiseUpReview />} />
             <Route path={ROUTES.BLOG_CASHFLOW_GUIDE_URL} element={<CashflowGuide />} />
+            <Route path={ROUTES.BLOG_FREE_EXPENSE_APPS_URL} element={<FreeExpenseApps />} />
+            <Route path={ROUTES.BLOG_CREDIT_CARD_BILLING_CYCLE_URL} element={<CreditCardBillingCycle />} />
+            <Route path={ROUTES.BLOG_COUPLES_MONEY_URL} element={<CouplesMoney />} />
             <Route path={ROUTES.CALCULATORS_URL} element={<CalculatorsHubRoute />} />
             <Route
               path={ROUTES.CALCULATORS_NET_SALARY_URL}

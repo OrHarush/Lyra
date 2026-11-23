@@ -10,6 +10,9 @@ import enAccessibility from '@/locales/en/accessibility.json';
 import enAccounts from '@/locales/en/accounts.json';
 import enAdmin from '@/locales/en/admin.json';
 import enBlog from '@/locales/en/blog.json';
+import enBlogCouplesMoney from '@/locales/en/blogCouplesMoney.json';
+import enBlogCreditCardBillingCycle from '@/locales/en/blogCreditCardBillingCycle.json';
+import enBlogFreeExpenseApps from '@/locales/en/blogFreeExpenseApps.json';
 import enBudgets from '@/locales/en/budgets.json';
 import enCalculators from '@/locales/en/calculators.json';
 import enCashflowGuide from '@/locales/en/cashflowGuide.json';
@@ -33,6 +36,9 @@ import heAccessibility from '@/locales/he/accessibility.json';
 import heAccounts from '@/locales/he/accounts.json';
 import heAdmin from '@/locales/he/admin.json';
 import heBlog from '@/locales/he/blog.json';
+import heBlogCouplesMoney from '@/locales/he/blogCouplesMoney.json';
+import heBlogCreditCardBillingCycle from '@/locales/he/blogCreditCardBillingCycle.json';
+import heBlogFreeExpenseApps from '@/locales/he/blogFreeExpenseApps.json';
 import heBudgets from '@/locales/he/budgets.json';
 import heCalculators from '@/locales/he/calculators.json';
 import heCashflowGuide from '@/locales/he/cashflowGuide.json';
@@ -67,6 +73,9 @@ i18n
         user: enUser,
         privacyPolicy: enPrivacyPolicy,
         blog: enBlog,
+        blogFreeExpenseApps: enBlogFreeExpenseApps,
+        blogCreditCardBillingCycle: enBlogCreditCardBillingCycle,
+        blogCouplesMoney: enBlogCouplesMoney,
         cashflowGuide: enCashflowGuide,
         riseupReview: enRiseupReview,
         termsOfService: enTermsOfService,
@@ -92,6 +101,9 @@ i18n
         user: heUser,
         privacyPolicy: hePrivacyPolicy,
         blog: heBlog,
+        blogFreeExpenseApps: heBlogFreeExpenseApps,
+        blogCreditCardBillingCycle: heBlogCreditCardBillingCycle,
+        blogCouplesMoney: heBlogCouplesMoney,
         cashflowGuide: heCashflowGuide,
         riseupReview: heRiseupReview,
         termsOfService: heTermsOfService,
