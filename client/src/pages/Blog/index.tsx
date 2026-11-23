@@ -19,9 +19,37 @@ interface Article {
   publishedDate: string;
   href: string;
   heroImage?: string;
+  heroAltKey?: string;
 }
 
 const ARTICLES: Article[] = [
+  {
+    titleKey: 'articles.couplesMoney.title',
+    descKey: 'articles.couplesMoney.description',
+    readMinutes: 8,
+    publishedDate: '24 בנובמבר 2026',
+    href: ROUTES.BLOG_COUPLES_MONEY_URL,
+    heroImage: '/couples-money-hero.webp',
+    heroAltKey: 'articles.couplesMoney.heroAlt',
+  },
+  {
+    titleKey: 'articles.creditCardBillingCycle.title',
+    descKey: 'articles.creditCardBillingCycle.description',
+    readMinutes: 8,
+    publishedDate: '24 בנובמבר 2026',
+    href: ROUTES.BLOG_CREDIT_CARD_BILLING_CYCLE_URL,
+    heroImage: '/credit-card-billing-cycle-hero.webp',
+    heroAltKey: 'articles.creditCardBillingCycle.heroAlt',
+  },
+  {
+    titleKey: 'articles.freeExpenseApps.title',
+    descKey: 'articles.freeExpenseApps.description',
+    readMinutes: 9,
+    publishedDate: '24 בנובמבר 2026',
+    href: ROUTES.BLOG_FREE_EXPENSE_APPS_URL,
+    heroImage: '/free-expense-apps-hero.webp',
+    heroAltKey: 'articles.freeExpenseApps.heroAlt',
+  },
   {
     titleKey: 'articles.cashflowGuide.title',
     descKey: 'articles.cashflowGuide.description',
@@ -108,7 +136,7 @@ const BlogIndex = () => {
                     <Box
                       component="img"
                       src={article.heroImage}
-                      alt=""
+                      alt={article.heroAltKey ? t(article.heroAltKey) : ''}
                       sx={{
                         width: { xs: 96, sm: 120 },
                         alignSelf: 'stretch',

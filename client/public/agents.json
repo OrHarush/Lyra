@@ -44,6 +44,21 @@
           "url": "https://lyra-il.com/blog/riseup-review"
         },
         {
+          "id": "read-free-expense-apps-comparison",
+          "description": "Read an honest comparison of 8 Israeli expense apps (RiseUp, FamilyBiz, MyFinanda, Moneytor, Paamonim, Sakem Li, HaChayim BePlus and Lyra): verified prices as of November 2026, bank connection, and which are really free.",
+          "url": "https://lyra-il.com/blog/free-expense-apps-comparison"
+        },
+        {
+          "id": "read-credit-card-billing-cycle",
+          "description": "Read why the bank balance misleads: billing cycle vs billing date, a full worked month with two cards and standing orders, the cost of overdraft interest, and how to compute the real end of month balance.",
+          "url": "https://lyra-il.com/blog/credit-card-billing-cycle"
+        },
+        {
+          "id": "read-couples-money",
+          "description": "Read about managing money as a couple: joint, separate or hybrid accounts, the Common Cents randomized study, income proportional splits, joint account facts in Israel, and Lyra's shared household workspace.",
+          "url": "https://lyra-il.com/blog/couples-money"
+        },
+        {
           "id": "use-net-salary-calculator",
           "description": "Open the free net salary calculator for Israeli employees. It estimates net pay from gross using the tax year shown on the page (income tax, national insurance, pension, keren hishtalmut, credit points), lists its sources and the date they were checked, and runs entirely in the browser.",
           "url": "https://lyra-il.com/calculators/net-salary"

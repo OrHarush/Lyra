@@ -14,6 +14,8 @@ import IntroWithCashflowLink from '@/pages/Blog/RiseUpReview/IntroWithCashflowLi
 import ProsConsCards from '@/pages/Blog/RiseUpReview/ProsConsCards';
 import QuickVerdict from '@/pages/Blog/RiseUpReview/QuickVerdict';
 import VsComparisonTable from '@/pages/Blog/RiseUpReview/VsComparisonTable';
+import ArticleFurtherReading from '@/pages/Blog/shared/ArticleFurtherReading';
+import { buildBreadcrumbSchema } from '@/pages/Blog/shared/articleSchemas';
 import ClarityCards from '@/pages/Home/DashboardClaritySection/ClarityCards';
 import FaqAccordion from '@/pages/Home/FaqSection/FaqAccordion';
 import CtaButton from '@/pages/Home/HeroSection/HeroContent/CtaButton';
@@ -33,6 +35,7 @@ const bodyTextSx = { color: 'text.secondary', lineHeight: 1.8 } as const;
 const headingSx = { fontWeight: 700, color: 'text.primary' } as const;
 
 const RiseUpReview = () => {
+  const { t: tBlog } = useTranslation('blog');
   const { t, i18n } = useTranslation('riseupReview');
 
   const title = t('title');
@@ -76,6 +79,15 @@ const RiseUpReview = () => {
       <PageSeo title={t('seo.title')} description={seoDescription} canonical={CANONICAL_URL} ogType="article" />
       <JsonLd id="article-jsonld" schema={articleSchema} />
       <JsonLd id="article-faq-jsonld" schema={faqSchema} />
+      <JsonLd
+        id="article-breadcrumb-jsonld"
+        schema={buildBreadcrumbSchema({
+          homeLabel: tBlog('breadcrumbs.home'),
+          blogLabel: tBlog('breadcrumbs.blog'),
+          articleTitle: title,
+          canonical: CANONICAL_URL,
+        })}
+      />
       <LandingNavbar />
       <ScrollableColumn component="main" alignItems="center" sx={{ px: { xs: 2, sm: 3, md: 4 }, py: { xs: 4, md: 6 }, flex: 1 }}>
         <Column component="article" spacing={3} sx={{ width: '100%', maxWidth: 760, textAlign: 'start' }}>
@@ -155,6 +167,8 @@ const RiseUpReview = () => {
               <FaqAccordion key={item.q} question={item.q} answer={item.a} />
             ))}
           </Column>
+
+          <ArticleFurtherReading />
 
           <Column component="section" alignItems="center" spacing={2} sx={{ py: { xs: 3, md: 5 } }}>
             <Typography variant="body1" sx={{ ...bodyTextSx, textAlign: 'center' }}>
