@@ -1,10 +1,8 @@
-import SavingsIcon from '@mui/icons-material/Savings';
-
-import EntityEmpty from '@/components/entities/EntityEmpty';
 import EntityError from '@/components/entities/EntityError';
 import { useBudgets } from '@/hooks/entities/useBudgets';
 import { useCategories } from '@/hooks/entities/useCategories';
 import { useTransactions } from '@/hooks/entities/useTransactions';
+import BudgetsEmptyState from '@/pages/Budgets/components/BudgetsEmptyState';
 import BudgetsList from '@/pages/Budgets/components/BudgetsList';
 import BudgetsSkeleton from '@/pages/Budgets/components/BudgetsSkeleton';
 import { BudgetDto } from '@/types/Budget';
@@ -17,7 +15,12 @@ interface BudgetsPageContentProps {
   onCreateBudget: () => void;
 }
 
-const BudgetsPageContent = ({ year, month, onSetBudget }: BudgetsPageContentProps) => {
+const BudgetsPageContent = ({
+  year,
+  month,
+  onSetBudget,
+  onCreateBudget,
+}: BudgetsPageContentProps) => {
   const { isLoading: isCategoriesLoading, error, refetch } = useCategories();
   const { isLoading: isTransactionsLoading } = useTransactions(year, month);
   const { budgets, isLoading: isBudgetsLoading } = useBudgets(year, month);
@@ -33,7 +36,7 @@ const BudgetsPageContent = ({ year, month, onSetBudget }: BudgetsPageContentProp
   }
 
   if (!budgets.length) {
-    return <EntityEmpty entityName={'budgets'} icon={SavingsIcon} />;
+    return <BudgetsEmptyState onCreateBudget={onCreateBudget} />;
   }
 
   return <BudgetsList year={year} month={month} onSetBudget={onSetBudget} />;

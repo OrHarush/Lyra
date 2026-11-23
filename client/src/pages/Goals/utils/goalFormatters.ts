@@ -1,6 +1,7 @@
-import dayjs from 'dayjs';
 import 'dayjs/locale/he';
 import 'dayjs/locale/en';
+
+import dayjs from 'dayjs';
 
 const numberFormatter = new Intl.NumberFormat('he-IL', { maximumFractionDigits: 0 });
 

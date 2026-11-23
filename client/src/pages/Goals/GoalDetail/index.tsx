@@ -2,19 +2,19 @@ import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import PageLayout from '@/components/shared/layout/page/PageLayout';
 import Column from '@/components/shared/layout/containers/Column';
+import PageLayout from '@/components/shared/layout/page/PageLayout';
 import { useOpen } from '@/hooks/common/useOpen';
-import { useGoal, useGoalProjection } from '@/hooks/entities/useGoals';
 import { useUpdateGoal } from '@/hooks/entities/useGoalMutations';
+import { useGoal, useGoalProjection } from '@/hooks/entities/useGoals';
+import DeleteGoalDialog from '@/pages/Goals/components/dialogs/DeleteGoalDialog';
+import EditGoalDialog from '@/pages/Goals/components/dialogs/EditGoalDialog';
 import ContributionsList from '@/pages/Goals/GoalDetail/ContributionsList';
 import GoalDetailHeader from '@/pages/Goals/GoalDetail/GoalDetailHeader';
 import GoalDetailSkeleton from '@/pages/Goals/GoalDetail/GoalDetailSkeleton';
 import GoalNumbersStrip from '@/pages/Goals/GoalDetail/GoalNumbersStrip';
 import NarrativeHeadline from '@/pages/Goals/GoalDetail/NarrativeHeadline';
 import ProjectionChart from '@/pages/Goals/GoalDetail/ProjectionChart';
-import DeleteGoalDialog from '@/pages/Goals/components/dialogs/DeleteGoalDialog';
-import EditGoalDialog from '@/pages/Goals/components/dialogs/EditGoalDialog';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 
 const FALLBACK_COLOR = '#9ca3af';

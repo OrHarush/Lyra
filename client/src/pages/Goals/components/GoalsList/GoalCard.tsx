@@ -1,8 +1,8 @@
 import { Box, Card, CardActionArea, CardContent, Chip, LinearProgress, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import type { TFunction } from 'i18next';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import CategoryIconFrame from '@/components/features/categories/CategoryIconFrame';
 import Column from '@/components/shared/layout/containers/Column';

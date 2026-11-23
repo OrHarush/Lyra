@@ -1,5 +1,5 @@
-import { CreateGoalDTO, CreateGoalSchema } from '@lyra/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CreateGoalDTO, CreateGoalSchema } from '@lyra/shared';
 import axios from 'axios';
 import type { Resolver } from 'react-hook-form';
 
