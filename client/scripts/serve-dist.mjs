@@ -55,6 +55,10 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (tryServe(path.join(distDir, 'app.html'), res)) {
+    return;
+  }
+
   tryServe(path.join(distDir, 'index.html'), res);
 });
 

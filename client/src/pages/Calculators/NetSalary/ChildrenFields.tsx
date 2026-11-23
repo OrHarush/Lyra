@@ -1,4 +1,9 @@
-import { CHILD_CREDIT_POINTS, ChildAgeBracket, getChildCreditPoints } from '@lyra/shared';
+import {
+  ChildAgeBracket,
+  getChildCreditPoints,
+  getLatestRates,
+  NetSalaryFormValues,
+} from '@lyra/shared';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, IconButton } from '@mui/material';
@@ -8,9 +13,8 @@ import { useTranslation } from 'react-i18next';
 import RHFSelect from '@/components/shared/inputs/RHFSelect';
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
-import { NetSalaryFormValues } from '@/pages/Calculators/NetSalary/formValues';
 
-const CHILD_AGE_BRACKETS = Object.keys(CHILD_CREDIT_POINTS) as ChildAgeBracket[];
+const CHILD_AGE_BRACKETS = Object.keys(getLatestRates().creditPoints.child) as ChildAgeBracket[];
 const DEFAULT_NEW_CHILD_BRACKET: ChildAgeBracket = 'age6to17';
 
 const ChildrenFields = () => {

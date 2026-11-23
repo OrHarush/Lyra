@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+import { DEFAULT_OG_IMAGE_URL } from '@/constants/Site';
+
 interface PageSeoProps {
   title: string;
   description: string;
@@ -8,7 +10,7 @@ interface PageSeoProps {
   image?: string;
 }
 
-const DEFAULT_IMAGE = '/og-image.png';
+const DEFAULT_IMAGE = DEFAULT_OG_IMAGE_URL;
 
 const upsertByName = (name: string, content: string) => {
   let tag = document.head.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);

@@ -1,19 +1,14 @@
+import { getLatestRates } from './rates';
 import {
-  BASE_CREDIT_POINTS,
-  CHILD_CREDIT_POINTS,
   ChildAgeBracket,
-  DEGREE_CREDIT_POINTS,
-  DISABLED_CHILD_CREDIT_POINTS,
-  IMMIGRATION_CREDIT_POINTS,
-  RESERVE_CREDIT_POINTS,
-  SERVICE_CREDIT_POINTS,
-  SINGLE_PARENT_CREDIT_POINTS,
-} from './israelTax2026';
+  DegreeType,
+  ImmigrationPeriod,
+  IsraelTaxRates,
+  ServiceType,
+  Sex,
+} from './rates/types';
 
-export type Sex = keyof typeof BASE_CREDIT_POINTS;
-export type ServiceType = keyof typeof SERVICE_CREDIT_POINTS;
-export type ImmigrationPeriod = keyof typeof IMMIGRATION_CREDIT_POINTS;
-export type DegreeType = keyof typeof DEGREE_CREDIT_POINTS;
+export type { ChildAgeBracket, DegreeType, ImmigrationPeriod, ServiceType, Sex };
 
 export interface CreditPointsInput {
   sex: Sex;
@@ -23,27 +18,41 @@ export interface CreditPointsInput {
   serviceType: ServiceType;
   immigrationPeriod: ImmigrationPeriod;
   degreeType: DegreeType;
-  degreeYears: number;
+  degreeGraduationYear: number;
   reserveDays: number;
   manualPoints: number;
 }
 
-export const calculateCreditPoints = (input: CreditPointsInput): number =>
-  BASE_CREDIT_POINTS[input.sex] +
-  sumChildPoints(input.childAgeBrackets, input.sex) +
-  (input.isSingleParent ? SINGLE_PARENT_CREDIT_POINTS : 0) +
-  Math.max(Math.floor(input.disabledChildrenCount), 0) * DISABLED_CHILD_CREDIT_POINTS +
-  SERVICE_CREDIT_POINTS[input.serviceType] +
-  IMMIGRATION_CREDIT_POINTS[input.immigrationPeriod] +
-  calculateDegreePoints(input.degreeType, input.degreeYears) +
-  calculateReserveCreditPoints(input.reserveDays) +
-  input.manualPoints;
+export const calculateCreditPoints = (
+  input: CreditPointsInput,
+  rates: IsraelTaxRates = getLatestRates()
+): number => {
+  const points = rates.creditPoints;
 
-export const getChildCreditPoints = (bracket: ChildAgeBracket, sex: Sex): number =>
-  CHILD_CREDIT_POINTS[bracket][sex];
+  return (
+    points.base[input.sex] +
+    sumChildPoints(input.childAgeBrackets, input.sex, rates) +
+    (input.isSingleParent ? points.singleParent : 0) +
+    Math.max(Math.floor(input.disabledChildrenCount), 0) * points.disabledChild +
+    points.service[input.serviceType] +
+    points.immigration[input.immigrationPeriod] +
+    calculateDegreePoints(input.degreeType, input.degreeGraduationYear, rates) +
+    calculateReserveCreditPoints(input.reserveDays, rates) +
+    input.manualPoints
+  );
+};
 
-export const calculateReserveCreditPoints = (reserveDays: number): number => {
-  const { tiers, extraDaysStep, extraPointsPerStep, maxPoints } = RESERVE_CREDIT_POINTS;
+export const getChildCreditPoints = (
+  bracket: ChildAgeBracket,
+  sex: Sex,
+  rates: IsraelTaxRates = getLatestRates()
+): number => rates.creditPoints.child[bracket][sex];
+
+export const calculateReserveCreditPoints = (
+  reserveDays: number,
+  rates: IsraelTaxRates = getLatestRates()
+): number => {
+  const { tiers, extraDaysStep, extraPointsPerStep, maxPoints } = rates.creditPoints.reserve;
   const days = Math.floor(reserveDays);
   const lastTier = tiers[tiers.length - 1];
 
@@ -60,12 +69,41 @@ export const calculateReserveCreditPoints = (reserveDays: number): number => {
   return Math.min(lastTier.points + extraSteps * extraPointsPerStep, maxPoints);
 };
 
-const sumChildPoints = (brackets: ChildAgeBracket[], sex: Sex): number =>
-  brackets.reduce((total, bracket) => total + getChildCreditPoints(bracket, sex), 0);
+// Points are earned per tax year, starting the year after graduation. Graduates from 2023 get them
+// for several years; earlier graduates (from 2014) get one year's worth, claimed in either of the
+// first years after graduating.
+export const calculateDegreePoints = (
+  degreeType: DegreeType,
+  graduationYear: number,
+  rates: IsraelTaxRates = getLatestRates()
+): number => {
+  if (degreeType === 'none' || !Number.isFinite(graduationYear)) {
+    return 0;
+  }
 
-const calculateDegreePoints = (degreeType: DegreeType, degreeYears: number): number => {
-  const { pointsPerYear, maxYears } = DEGREE_CREDIT_POINTS[degreeType];
-  const countedYears = Math.min(Math.max(Math.floor(degreeYears), 0), maxYears);
+  const { degree } = rates.creditPoints;
+  const rule = degree[degreeType];
+  const yearsSinceGraduation = rates.ratesYear - Math.floor(graduationYear);
 
-  return countedYears * pointsPerYear;
+  if (yearsSinceGraduation < 1) {
+    return 0;
+  }
+
+  if (graduationYear >= degree.currentRuleFromGraduationYear) {
+    return yearsSinceGraduation <= rule.maxYears ? rule.pointsPerYear : 0;
+  }
+
+  if (graduationYear >= degree.legacyRuleFromGraduationYear) {
+    return yearsSinceGraduation <= degree.legacyClaimWindowYears ? rule.pointsPerYear : 0;
+  }
+
+  return 0;
 };
+
+export const getDefaultGraduationYear = (
+  degreeType: DegreeType,
+  rates: IsraelTaxRates = getLatestRates()
+): number => (degreeType === 'none' ? 0 : rates.ratesYear - 1);
+
+const sumChildPoints = (brackets: ChildAgeBracket[], sex: Sex, rates: IsraelTaxRates): number =>
+  brackets.reduce((total, bracket) => total + getChildCreditPoints(bracket, sex, rates), 0);

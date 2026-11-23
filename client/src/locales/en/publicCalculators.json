@@ -1,0 +1,159 @@
+{
+  "common": {
+    "breadcrumbHome": "Home",
+    "breadcrumbCalculators": "Calculators",
+    "ratesAsOf": "{{year}} figures · last checked {{verifiedOn}}",
+    "sourcesTitle": "Sources",
+    "sourceOfficial": "Official source",
+    "sourceSecondary": "Secondary source",
+    "sourceNote": "Secondary sources summarise official figures. Check with the official body before a financial decision.",
+    "privacyNote": "The calculation runs on your device only. What you enter is not sent to a server, not stored and not shown in the page address.",
+    "ctaLine": "Want to know where your money actually goes? Lyra tracks expenses and income for free, with no bank connection.",
+    "otherCalculator": "Another calculator",
+    "notIncludedTitle": "What the calculation leaves out",
+    "faqTitle": "FAQ",
+    "howTitle": "How it is calculated",
+    "exampleTitle": "Worked example"
+  },
+  "hub": {
+    "seo": {
+      "title": "Financial calculators: net salary and compound interest | Lyra",
+      "description": "A net salary calculator updated to {{year}} figures and a compound interest calculator. Runs in your browser, no sign-up, nothing sent to a server."
+    },
+    "h1": "Financial calculators for Israelis",
+    "intro": "Two free calculators that run in your browser: net salary from gross using {{year}} figures, and compound interest for savings and investing. No sign-up, and nothing you enter is sent to a server.",
+    "cards": {
+      "netSalary": {
+        "title": "Net salary calculator {{year}}",
+        "description": "Enter gross pay and your credit points to estimate net pay, income tax, national insurance and employer cost.",
+        "cta": "Open the net salary calculator"
+      },
+      "compoundInterest": {
+        "title": "Compound interest calculator",
+        "description": "See what a starting amount and monthly deposit grow to after years of returns and fees, with a chart and yearly table.",
+        "cta": "Open the compound interest calculator"
+      }
+    },
+    "note": "Results are estimates for illustration only and aren't tax or investment advice."
+  },
+  "netSalary": {
+    "seo": {
+      "title": "Net salary calculator {{year}}: gross to net | Lyra",
+      "description": "Net salary calculator for Israeli employees using {{year}} figures: income tax, national insurance, pension, keren hishtalmut and credit points. Runs in your browser."
+    },
+    "h1": "Net salary calculator {{year}}: gross to net",
+    "breadcrumb": "Net salary",
+    "answer": "Net salary is what is left after pension, keren hishtalmut, national insurance and health tax, and income tax. For example, a gross of {{gross}} with {{points}} credit points, {{pension}}% pension and a standard keren hishtalmut comes to about {{net}} net a month. Enter your details below for an instant estimate.",
+    "calculatorHeading": "Calculate your net salary",
+    "how": [
+      "Start from the monthly gross salary. Take off your pension and keren hishtalmut deposits (if any), then national insurance and health tax.",
+      "Income tax is worked out in brackets on all taxable pay. Credit points are then taken off the tax, each worth {{pointValue}} a month. Your pension deposit also earns a {{pensionCreditPct}}% credit up to a cap, and so do donations.",
+      "Employer deposits for pension, severance and keren hishtalmut don't come out of your pay, so they don't change your net. They are part of the employer cost shown.",
+      "Credit points depend on sex, children, military or national service, an academic degree, immigration and reserve duty. You can enter them under \"Advanced\" in the salary card."
+    ],
+    "ratesTitle": "Figures used",
+    "rates": {
+      "bracketsHeading": "Monthly income tax brackets",
+      "colUpTo": "Up to monthly income of",
+      "colRate": "Tax rate",
+      "bracketTop": "Above {{from}}",
+      "otherHeading": "Other figures",
+      "creditPointValue": "Value of one credit point per month",
+      "niReduced": "National insurance and health, reduced rate up to {{ceiling}}",
+      "niFull": "National insurance and health, full rate up to {{max}}",
+      "pensionCredit": "Credit on your pension deposit",
+      "pensionCreditValue": "{{rate}}% of the deposit, up to {{cap}} a month (and no more than {{share}}% of salary)",
+      "studyFundCeiling": "Salary ceiling for tax-free keren hishtalmut",
+      "donationCredit": "Donations credit"
+    },
+    "example": "Gross salary {{gross}}, a man with no children ({{points}} credit points), {{pension}}% pension and {{fundEmployee}}% keren hishtalmut from the employee. Deductions: pension {{pensionAmount}}, keren hishtalmut {{fundAmount}}, national insurance and health {{ni}}, income tax {{tax}}. Net: {{net}}.",
+    "notIncluded": [
+      "Eligible-locality and disability credits",
+      "Tax coordination, other employers and other income",
+      "The cumulative yearly settlement (refund or charge in the annual return)",
+      "National insurance on the keren hishtalmut taxable benefit",
+      "Employer national insurance",
+      "Benefits in kind such as a company car"
+    ],
+    "faq": [
+      {
+        "q": "What is the difference between gross and net salary?",
+        "a": "Gross is the pay agreed with your employer before deductions. Net is what reaches your account after pension, keren hishtalmut, national insurance and health tax, and income tax."
+      },
+      {
+        "q": "How many credit points am I entitled to?",
+        "a": "In this calculator a man starts with {{male}} points and a woman with {{female}}. More points are added for children, military or national service, an academic degree, immigration and reserve duty. Your exact amount is set by form 101 and your payslip."
+      },
+      {
+        "q": "Do employer deposits reduce my net pay?",
+        "a": "No. Employer deposits for pension, severance and keren hishtalmut are paid on top of gross pay. They only appear here as part of the employer cost."
+      },
+      {
+        "q": "Will the result match my payslip?",
+        "a": "Not necessarily. It is an estimate for a resident employee with one job. Your payslip can also reflect benefits, tax coordination, variable pay and yearly settlement."
+      },
+      {
+        "q": "Is what I enter saved?",
+        "a": "No. The calculation runs in your browser, nothing is sent to a server or stored, and nothing appears in the page address."
+      }
+    ]
+  },
+  "compoundInterest": {
+    "seo": {
+      "title": "Compound interest calculator: what will your savings grow to | Lyra",
+      "description": "A compound interest calculator with monthly deposits, yearly return and management fee. Chart and yearly table, runs in your browser, no sign-up."
+    },
+    "h1": "Compound interest calculator",
+    "breadcrumb": "Compound interest",
+    "answer": "With compound interest, each period's gain joins the principal and earns gains of its own. For example, {{initial}} to start plus {{monthly}} a month, at {{returnPct}}% a year and a {{feePct}}% fee, grows in {{years}} years to about {{final}}: {{deposited}} deposited and {{interest}} gained.",
+    "calculatorHeading": "Calculate what your savings could grow to",
+    "how": [
+      "Each month the balance grows by the net yearly return (return minus fee) divided by 12, and then the monthly deposit is added.",
+      "New balance = previous balance × (1 + (yearly return − fee) ÷ 12) + monthly deposit.",
+      "The longer the period, the larger the share of gains in the final amount. Even a small difference in fees matters a lot over decades."
+    ],
+    "assumptionsHeading": "Assumptions",
+    "assumptions": {
+      "colName": "Assumption",
+      "colValue": "Value",
+      "compounding": "Compounding",
+      "compoundingValue": "Monthly",
+      "returnRate": "Return",
+      "returnRateValue": "Constant for the whole period",
+      "deposit": "Deposit",
+      "depositValue": "At the end of each month, after compounding",
+      "maxYears": "Longest period",
+      "maxYearsValue": "{{years}} years"
+    },
+    "example": "{{initial}} to start plus {{monthly}} a month, {{returnPct}}% return and {{feePct}}% fee. After {{years}} years: total {{final}}, deposits {{deposited}}, gains {{interest}}.",
+    "notIncluded": [
+      "Capital gains tax on the gains",
+      "Inflation: money is worth less in the future than today",
+      "Returns that change from year to year, including losing years",
+      "Deposits that change over time",
+      "Buying and selling fees"
+    ],
+    "faq": [
+      {
+        "q": "What is compound interest?",
+        "a": "Interest calculated on the gains already earned, not only on the original amount. Growth speeds up as time passes."
+      },
+      {
+        "q": "Is the return I enter guaranteed?",
+        "a": "No. The calculation assumes a constant return for illustration. Real returns vary from year to year and can be negative."
+      },
+      {
+        "q": "How do fees affect the result?",
+        "a": "Fees lower the net return every year and the gap compounds. Try 0.5% against 1.5% on the same deposits."
+      },
+      {
+        "q": "Does the result include tax?",
+        "a": "No. It is before capital gains tax and inflation, so it is higher than what you would actually keep."
+      },
+      {
+        "q": "Is what I enter saved?",
+        "a": "No. The calculation runs in your browser and nothing is sent to a server or stored."
+      }
+    ]
+  }
+}

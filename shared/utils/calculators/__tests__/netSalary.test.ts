@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 
-import { INCOME_TAX_BRACKETS_2026 } from '../israelTax2026';
 import {
   calculateBracketTax,
   calculateNationalInsurance,
@@ -9,6 +8,7 @@ import {
   NetSalaryInput,
   StudyFundInput,
 } from '../netSalary';
+import { ISRAEL_TAX_RATES_2026 } from '../rates';
 
 const standardStudyFund: StudyFundInput = {
   isEnabled: true,
@@ -172,17 +172,17 @@ describe('calculateNetSalary — study fund', () => {
 
 describe('calculateBracketTax', () => {
   it('returns 0 for no income', () => {
-    expect(calculateBracketTax(0, INCOME_TAX_BRACKETS_2026)).toBe(0);
+    expect(calculateBracketTax(0, ISRAEL_TAX_RATES_2026.incomeTaxBrackets)).toBe(0);
   });
 
   it('taxes only within the first bracket for low income', () => {
-    expect(calculateBracketTax(7_010, INCOME_TAX_BRACKETS_2026)).toBeCloseTo(701);
+    expect(calculateBracketTax(7_010, ISRAEL_TAX_RATES_2026.incomeTaxBrackets)).toBeCloseTo(701);
   });
 
   it('applies 50% above the top bracket', () => {
-    const atTop = calculateBracketTax(60_130, INCOME_TAX_BRACKETS_2026);
+    const atTop = calculateBracketTax(60_130, ISRAEL_TAX_RATES_2026.incomeTaxBrackets);
 
-    expect(calculateBracketTax(70_130, INCOME_TAX_BRACKETS_2026) - atTop).toBeCloseTo(5_000);
+    expect(calculateBracketTax(70_130, ISRAEL_TAX_RATES_2026.incomeTaxBrackets) - atTop).toBeCloseTo(5_000);
   });
 });
 

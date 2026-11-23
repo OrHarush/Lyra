@@ -1,17 +1,21 @@
-import { calculateCompoundInterest } from '@lyra/shared';
+import {
+  calculateCompoundInterest,
+  COMPOUND_INTEREST_DEFAULTS,
+  CompoundInterestFormValues,
+  toCompoundInterestInput,
+} from '@lyra/shared';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import Column from '@/components/shared/layout/containers/Column';
 import CompoundInterestForm from '@/pages/Calculators/CompoundInterest/CompoundInterestForm';
 import CompoundInterestResults from '@/pages/Calculators/CompoundInterest/CompoundInterestResults';
-import {
-  COMPOUND_INTEREST_DEFAULTS,
-  CompoundInterestFormValues,
-  toCompoundInterestInput,
-} from '@/pages/Calculators/CompoundInterest/formValues';
 import { getCalculatorLayoutStyle } from '@/pages/Calculators/styles';
 
-const CompoundInterestCalculator = () => {
+interface CompoundInterestCalculatorProps {
+  showYearlyTable?: boolean;
+}
+
+const CompoundInterestCalculator = ({ showYearlyTable = false }: CompoundInterestCalculatorProps) => {
   const methods = useForm<CompoundInterestFormValues>({
     defaultValues: COMPOUND_INTEREST_DEFAULTS,
     mode: 'onChange',
@@ -25,7 +29,7 @@ const CompoundInterestCalculator = () => {
     <FormProvider {...methods}>
       <Column sx={getCalculatorLayoutStyle()}>
         <CompoundInterestForm />
-        <CompoundInterestResults result={result} years={input.years} />
+        <CompoundInterestResults result={result} years={input.years} showYearlyTable={showYearlyTable} />
       </Column>
     </FormProvider>
   );

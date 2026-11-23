@@ -21,6 +21,9 @@ const ROUTES = [
   '/blog',
   '/blog/riseup-review',
   '/blog/cashflow-guide',
+  '/calculators',
+  '/calculators/net-salary',
+  '/calculators/compound-interest',
 ];
 
 const MIME = {
@@ -210,6 +213,32 @@ const prerenderRoute = async (launchOptions, baseUrl, route) => {
   }
 };
 
+const PRISTINE_SHELL_MARKER = '<div id="root"></div>';
+
+// Everything that is not prerendered falls back to this shell. It must not be indexable, or each
+// unknown URL would be served as a duplicate of the homepage with index, follow.
+const writeAppShell = async () => {
+  const appShellPath = path.join(distDir, 'app.html');
+  const indexHtml = readFileSync(path.join(distDir, 'index.html'), 'utf-8');
+
+  if (!indexHtml.includes(PRISTINE_SHELL_MARKER)) {
+    if (existsSync(appShellPath)) {
+      console.log('[prerender] dist/index.html is already prerendered, keeping existing app.html');
+      return;
+    }
+
+    throw new Error('dist/index.html is not a clean build and app.html does not exist. Run "vite build".');
+  }
+
+  const appShell = indexHtml
+    .replace(/<meta name="robots"[^>]*>/, '<meta name="robots" content="noindex, follow" />')
+    .replace(/<meta name="googlebot"[^>]*>/, '<meta name="googlebot" content="noindex, follow" />')
+    .replace(/<link rel="canonical"[^>]*>\s*/, '');
+
+  await fs.writeFile(appShellPath, appShell, 'utf-8');
+  console.log('[prerender] wrote dist/app.html (noindex fallback shell)');
+};
+
 const resolveLaunchOptions = async () => {
   if (process.env.VERCEL) {
     const sparticuz = (await import('@sparticuz/chromium')).default;
@@ -227,6 +256,8 @@ const main = async () => {
   if (!existsSync(distDir)) {
     throw new Error(`dist directory not found at ${distDir}. Run "vite build" first.`);
   }
+
+  await writeAppShell();
 
   console.log('[prerender] starting static server + chromium');
   const { server, port } = await startServer();

@@ -1,9 +1,9 @@
+import { MAX_COMPOUND_YEARS } from '@lyra/shared';
 import { Card, CardContent, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import TextInput from '@/components/shared/inputs/TextInput';
 import Column from '@/components/shared/layout/containers/Column';
-import { MAX_YEARS } from '@/pages/Calculators/CompoundInterest/formValues';
 import { getCalculatorFormCardStyle } from '@/pages/Calculators/styles';
 
 const PERCENT_STEP = { htmlInput: { step: 0.1, min: 0, inputMode: 'decimal' as const } };
@@ -49,7 +49,7 @@ const CompoundInterestForm = () => {
             label={t('compoundInterest.years')}
             type="number"
             min={1}
-            max={MAX_YEARS}
+            max={MAX_COMPOUND_YEARS}
           />
         </Column>
       </CardContent>

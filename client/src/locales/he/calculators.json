@@ -20,7 +20,10 @@
     "chartDeposited": "הפקדות",
     "chartInterest": "ריבית",
     "yearLabel": "שנה {{year}}",
-    "disclaimer": "הערכה גסה בהנחת תשואה קבועה וצבירה חודשית. בפועל התשואה משתנה משנה לשנה."
+    "disclaimer": "המחשה בהנחת תשואה קבועה וצבירה חודשית, לפני מס רווחי הון ואינפלציה. בפועל התשואה משתנה משנה לשנה, ואפשר גם להפסיד. אינה תחזית או ייעוץ השקעות.",
+    "tableTitle": "טבלת צמיחה לפי שנה",
+    "tableYear": "שנה",
+    "tableBalance": "שווי"
   },
   "netSalary": {
     "salaryTitle": "השכר שלך",
@@ -43,28 +46,28 @@
       "age6to17": "גיל 6–17 (+{{points}})",
       "age18": "גיל 18 (+{{points}})"
     },
-    "singleParent": "הורה יחיד (+1)",
-    "disabledChildrenCount": "ילדים עם גמלת ילד נכה (+2 לכל ילד)",
+    "singleParent": "הורה יחיד (+{{points}})",
+    "disabledChildrenCount": "ילדים עם גמלת ילד נכה (+{{points}} לכל ילד)",
     "serviceType": "שירות צבאי / לאומי",
     "service": {
       "none": "ללא",
       "full": "שירות מלא (+{{points}})",
       "short": "שירות קצר (+{{points}})"
     },
-    "immigrationPeriod": "עולה חדש",
+    "immigrationPeriod": "עולה חדש (עלייה מ-2022: 54 חודשים)",
     "immigration": {
       "none": "לא",
-      "first18Months": "18 חודשים ראשונים (+{{points}})",
-      "next12Months": "12 חודשים הבאים (+{{points}})",
-      "last12Months": "12 חודשים אחרונים (+{{points}})"
+      "first12Months": "12 החודשים הראשונים (+{{points}})",
+      "next18Months": "18 החודשים הבאים (+{{points}})",
+      "next12Months": "12 החודשים הבאים (+{{points}})",
+      "last12Months": "12 החודשים האחרונים (+{{points}})"
     },
     "degreeType": "תואר אקדמי",
     "degree": {
       "none": "ללא",
-      "bachelor": "תואר ראשון (+{{points}} לשנה)",
-      "master": "תואר שני (+{{points}} לשנה)"
+      "bachelor": "תואר ראשון (+{{points}} בשנה)",
+      "master": "תואר שני (+{{points}} בשנה)"
     },
-    "degreeYears": "שנות לימוד",
     "reserveDays": "ימי מילואים בשנה שעברה",
     "manualCreditPoints": "נקודות ידניות (תיאום מס)",
     "studyFundEnabled": "קרן השתלמות פעילה או כבויה",
@@ -82,8 +85,8 @@
     "pensionAdvanced": "מתקדם: פיצויים והטבות נוספות",
     "severanceTrack": "מסלול פיצויים",
     "severance": {
-      "regular": "רגיל (6%)",
-      "section14": "סעיף 14 (8.33%)"
+      "regular": "רגיל ({{pct}}%)",
+      "section14": "סעיף 14 ({{pct}}%)"
     },
     "annualDonations": "תרומות בשנה",
     "otherBenefitsNote": "זיכוי יישוב מזכה ונכות עדיין לא נכללים.",
@@ -104,21 +107,24 @@
     "incomeTax": "מס הכנסה",
     "taxBeforeCredits": "מס לפי מדרגות",
     "creditPoints": "{{points}} נקודות זיכוי",
-    "pensionTaxCredit": "זיכוי מס על פנסיה (35%)",
-    "donationsCredit": "זיכוי על תרומות (35%)",
+    "pensionTaxCredit": "זיכוי מס על פנסיה ({{pct}}%)",
+    "donationsCredit": "זיכוי על תרומות ({{pct}}%)",
     "net": "שכר נטו",
-    "disclaimer": "הערכה לפי נתוני 2026 לשכיר תושב ישראל. לא מחליפה תלוש שכר, תיאום מס או ייעוץ מקצועי.",
+    "disclaimer": "הערכה לפי נתוני {{year}} לשכיר תושב ישראל. לא מחליפה תלוש שכר, תיאום מס או ייעוץ מקצועי.",
     "copy": {
       "action": "העתקת החישוב",
       "copied": "הועתק",
       "failed": "ההעתקה נכשלה",
-      "title": "חישוב שכר נטו (נתוני 2026)",
+      "title": "חישוב שכר נטו (נתוני {{year}})",
       "formula": "נטו = ברוטו − פנסיה − קרן השתלמות − ביטוח לאומי ובריאות − מס הכנסה",
       "deductionsTitle": "ניכויים",
       "assumptionsTitle": "הנחות",
       "pensionAssumption": "פנסיה: עובד {{employee}}%, מעסיק {{employer}}%",
       "studyFundAssumption": "קרן השתלמות: עובד {{employee}}%, מעסיק {{employer}}%, על {{share}}% מהשכר",
       "studyFundOff": "קרן השתלמות: אין"
-    }
-  }
+    },
+    "degreeGraduationYear": "שנת סיום התואר",
+    "degreeHint": "הנקודות ניתנות מהשנה שאחרי סיום הלימודים, ולמספר שנים מוגבל."
+  },
+  "outdatedRates": "הנתונים כאן מבוססים על {{year}} ועדיין לא עודכנו לשנה הנוכחית. התוצאה עלולה להיות שונה."
 }

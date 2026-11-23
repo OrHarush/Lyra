@@ -1,4 +1,4 @@
-import type { NetSalaryBreakdown } from '@lyra/shared';
+import { getLatestRates, NetSalaryBreakdown, toPercent } from '@lyra/shared';
 import { Card, CardContent, Divider, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +11,7 @@ interface BreakdownCardProps {
 }
 
 const SALARY_CURRENCY = 'ILS';
+const { ratesYear, pensionTaxCredit, donationTaxCreditRate } = getLatestRates();
 
 const BreakdownCard = ({ breakdown }: BreakdownCardProps) => {
   const { t } = useTranslation('calculators');
@@ -35,9 +36,9 @@ const BreakdownCard = ({ breakdown }: BreakdownCardProps) => {
       value: -breakdown.creditPointsValue,
       isShown: true,
     },
-    { label: t('netSalary.pensionTaxCredit'), value: -breakdown.pensionTaxCredit, isShown: true },
+    { label: t('netSalary.pensionTaxCredit', { pct: toPercent(pensionTaxCredit.rate) }), value: -breakdown.pensionTaxCredit, isShown: true },
     {
-      label: t('netSalary.donationsCredit'),
+      label: t('netSalary.donationsCredit', { pct: toPercent(donationTaxCreditRate) }),
       value: -breakdown.donationsTaxCredit,
       isShown: breakdown.donationsTaxCredit > 0,
     },
@@ -81,7 +82,7 @@ const BreakdownCard = ({ breakdown }: BreakdownCardProps) => {
             isTotal
           />
           <Typography variant="caption" color="text.secondary" sx={{ mt: 1.5 }}>
-            {t('netSalary.disclaimer')}
+            {t('netSalary.disclaimer', { year: ratesYear })}
           </Typography>
         </Column>
       </CardContent>

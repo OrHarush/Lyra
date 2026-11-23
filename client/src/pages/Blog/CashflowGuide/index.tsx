@@ -9,6 +9,7 @@ import Row from '@/components/shared/layout/containers/Row';
 import ScrollableColumn from '@/components/shared/layout/containers/ScrollableColumn';
 import Footer from '@/components/shared/layout/Footer';
 import { ROUTES } from '@/constants/Routes';
+import CalculatorsCrossLink from '@/pages/Blog/CalculatorsCrossLink';
 import IsraelCallout from '@/pages/Blog/CashflowGuide/IsraelCallout';
 import KeyFactsStrip from '@/pages/Blog/CashflowGuide/KeyFactsStrip';
 import LyraCapabilitiesTable from '@/pages/Blog/CashflowGuide/LyraCapabilitiesTable';
@@ -206,6 +207,8 @@ const CashflowGuide = () => {
             </Link>
             {t('sections.lyra.crossLinkAfter')}
           </Typography>
+
+          <CalculatorsCrossLink />
 
           <LyraCapabilitiesTable />
 

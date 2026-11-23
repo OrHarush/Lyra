@@ -9,6 +9,7 @@ import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import ScrollableColumn from '@/components/shared/layout/containers/ScrollableColumn';
 import Footer from '@/components/shared/layout/Footer';
+import CalculatorsCrossLink from '@/pages/Blog/CalculatorsCrossLink';
 import IntroWithCashflowLink from '@/pages/Blog/RiseUpReview/IntroWithCashflowLink';
 import ProsConsCards from '@/pages/Blog/RiseUpReview/ProsConsCards';
 import QuickVerdict from '@/pages/Blog/RiseUpReview/QuickVerdict';
@@ -143,6 +144,8 @@ const RiseUpReview = () => {
               </Fragment>
             ))}
           </Column>
+
+          <CalculatorsCrossLink />
 
           <Column component="section" spacing={1.5}>
             <Typography component="h2" variant="h5" sx={headingSx}>

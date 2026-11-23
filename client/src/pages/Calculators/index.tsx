@@ -1,41 +1,47 @@
 import { Tab, Tabs } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Column from '@/components/shared/layout/containers/Column';
 import ScrollableColumn from '@/components/shared/layout/containers/ScrollableColumn';
 import PageLayout from '@/components/shared/layout/page/PageLayout';
 import { usePageHeader } from '@/components/shared/layout/PageHeaderContext';
+import { ROUTES } from '@/constants/Routes';
 import { useIsSmallScreen } from '@/hooks/common/useIsSmallScreen';
+import OutdatedRatesNotice from '@/pages/Calculators/components/OutdatedRatesNotice';
 import CompoundInterestCalculator from '@/pages/Calculators/CompoundInterest';
 import NetSalaryCalculator from '@/pages/Calculators/NetSalary';
 import { getCalculatorContentStyle } from '@/pages/Calculators/styles';
 
 const CALCULATOR_TABS = [
-  { key: 'net-salary', labelKey: 'tabs.netSalary' },
-  { key: 'compound-interest', labelKey: 'tabs.compoundInterest' },
+  { key: 'net-salary', labelKey: 'tabs.netSalary', route: ROUTES.TOOLS_NET_SALARY_URL },
+  {
+    key: 'compound-interest',
+    labelKey: 'tabs.compoundInterest',
+    route: ROUTES.TOOLS_COMPOUND_INTEREST_URL,
+  },
 ] as const;
 
 type CalculatorTab = (typeof CALCULATOR_TABS)[number]['key'];
 
-const TAB_PARAM = 'tab';
-
-const isCalculatorTab = (value: string | null): value is CalculatorTab =>
-  CALCULATOR_TABS.some(tab => tab.key === value);
+const findTabByPath = (pathname: string): CalculatorTab =>
+  CALCULATOR_TABS.find(tab => tab.route === pathname)?.key ?? 'net-salary';
 
 const Calculators = () => {
   const { t } = useTranslation('calculators');
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const isSmallScreen = useIsSmallScreen();
 
   usePageHeader(t('page.title'));
 
-  const tabParam = searchParams.get(TAB_PARAM);
-  const activeTab: CalculatorTab = isCalculatorTab(tabParam) ? tabParam : 'net-salary';
+  const activeTab = findTabByPath(pathname);
 
   const selectTab = (tab: CalculatorTab) => {
-    setSearchParams({ [TAB_PARAM]: tab }, { replace: true });
+    const target = CALCULATOR_TABS.find(item => item.key === tab);
+
+    navigate(target?.route ?? ROUTES.TOOLS_NET_SALARY_URL, { replace: true });
   };
 
   return (
@@ -51,6 +57,7 @@ const Calculators = () => {
           <Tab key={tab.key} value={tab.key} label={t(tab.labelKey)} />
         ))}
       </Tabs>
+      {activeTab === 'net-salary' && <OutdatedRatesNotice />}
       {activeTab === 'compound-interest' && (
         <ScrollableColumn sx={getCalculatorContentStyle()}>
           <CompoundInterestCalculator />

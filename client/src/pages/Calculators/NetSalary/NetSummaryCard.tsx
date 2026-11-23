@@ -1,4 +1,4 @@
-import type { NetSalaryBreakdown } from '@lyra/shared';
+import { calculateShareOfGross, NetSalaryBreakdown } from '@lyra/shared';
 import { Card, CardContent, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -15,9 +15,6 @@ interface NetSummaryCardProps {
 }
 
 const SALARY_CURRENCY = 'ILS';
-
-const toShareOfGross = (breakdown: NetSalaryBreakdown) =>
-  breakdown.grossSalary > 0 ? Math.round((breakdown.netSalary / breakdown.grossSalary) * 100) : 0;
 
 const NetSummaryCard = ({ breakdown, getSummaryText }: NetSummaryCardProps) => {
   const { t } = useTranslation('calculators');
@@ -42,7 +39,7 @@ const NetSummaryCard = ({ breakdown, getSummaryText }: NetSummaryCardProps) => {
             />
             <Row sx={{ flexWrap: 'wrap', columnGap: 1, alignItems: 'baseline' }}>
               <Typography variant="caption" color="text.secondary">
-                {t('netSalary.netShareOfGross', { pct: toShareOfGross(breakdown) })}
+                {t('netSalary.netShareOfGross', { pct: calculateShareOfGross(breakdown) })}
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 ·

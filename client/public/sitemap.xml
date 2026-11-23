@@ -30,6 +30,27 @@
     </url>
 
     <url>
+        <loc>https://lyra-il.com/calculators</loc>
+        <lastmod>2026-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://lyra-il.com/calculators/net-salary</loc>
+        <lastmod>2026-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://lyra-il.com/calculators/compound-interest</loc>
+        <lastmod>2026-11-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>https://lyra-il.com/privacy-policy</loc>
         <lastmod>2026-05-04</lastmod>
         <changefreq>yearly</changefreq>

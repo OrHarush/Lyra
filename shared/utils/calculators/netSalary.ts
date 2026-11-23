@@ -1,16 +1,8 @@
 import { fromCents, toCents } from '../money';
-import {
-  CREDIT_POINT_VALUE_2026,
-  DONATION_TAX_CREDIT_RATE,
-  INCOME_TAX_BRACKETS_2026,
-  NATIONAL_INSURANCE_2026,
-  PENSION_DEFAULTS,
-  PENSION_TAX_CREDIT_2026,
-  STUDY_FUND_2026,
-  TaxBracket,
-} from './israelTax2026';
+import { getLatestRates } from './rates';
+import { IsraelTaxRates, SeveranceTrack, TaxBracket } from './rates/types';
 
-export type SeveranceTrack = keyof typeof PENSION_DEFAULTS.severanceRate;
+export type { SeveranceTrack, TaxBracket };
 
 const MONTHS_IN_YEAR = 12;
 
@@ -59,18 +51,21 @@ export interface NetSalaryBreakdown {
   employerCost: number;
 }
 
-export const calculateNetSalary = (input: NetSalaryInput): NetSalaryBreakdown => {
+export const calculateNetSalary = (
+  input: NetSalaryInput,
+  rates: IsraelTaxRates = getLatestRates()
+): NetSalaryBreakdown => {
   const grossSalary = Math.max(input.grossSalary, 0);
 
   const employeePension = roundMoney(grossSalary * input.employeePensionRate);
-  const studyFund = calculateStudyFund(grossSalary, input.studyFund);
+  const studyFund = calculateStudyFund(grossSalary, input.studyFund, rates);
 
   const taxableIncome = grossSalary + studyFund.taxableEmployerBenefit;
-  const incomeTaxBeforeCredits = roundMoney(calculateBracketTax(taxableIncome, INCOME_TAX_BRACKETS_2026));
+  const incomeTaxBeforeCredits = roundMoney(calculateBracketTax(taxableIncome, rates.incomeTaxBrackets));
   const creditPoints = Math.max(input.creditPoints, 0);
-  const creditPointsValue = roundMoney(creditPoints * CREDIT_POINT_VALUE_2026);
-  const pensionTaxCredit = calculatePensionTaxCredit(employeePension, grossSalary);
-  const donationsTaxCredit = calculateMonthlyDonationsCredit(input.annualDonations);
+  const creditPointsValue = roundMoney(creditPoints * rates.creditPointValue);
+  const pensionTaxCredit = calculatePensionTaxCredit(employeePension, grossSalary, rates);
+  const donationsTaxCredit = calculateMonthlyDonationsCredit(input.annualDonations, rates);
   const incomeTax = roundMoney(
     Math.max(
       0,
@@ -78,7 +73,7 @@ export const calculateNetSalary = (input: NetSalaryInput): NetSalaryBreakdown =>
     )
   );
 
-  const nationalInsurance = calculateNationalInsurance(grossSalary);
+  const nationalInsurance = calculateNationalInsurance(grossSalary, rates);
 
   const netSalary = roundMoney(
     grossSalary - employeePension - studyFund.employee - nationalInsurance - incomeTax
@@ -86,7 +81,7 @@ export const calculateNetSalary = (input: NetSalaryInput): NetSalaryBreakdown =>
 
   const employerPension = roundMoney(grossSalary * input.employerPensionRate);
   const employerSeverance = roundMoney(
-    grossSalary * PENSION_DEFAULTS.severanceRate[input.severanceTrack]
+    grossSalary * rates.pensionDefaults.severanceRate[input.severanceTrack]
   );
   const employerCost = roundMoney(
     grossSalary + employerPension + employerSeverance + studyFund.employer
@@ -118,14 +113,15 @@ export const calculateNetSalary = (input: NetSalaryInput): NetSalaryBreakdown =>
 // employer's deposit is tax-free, so the excess is added to the employee's taxable income.
 export const calculateStudyFund = (
   grossSalary: number,
-  studyFund: StudyFundInput
+  studyFund: StudyFundInput,
+  rates: IsraelTaxRates = getLatestRates()
 ): StudyFundContributions => {
   if (!studyFund.isEnabled) {
     return { insuredSalary: 0, employee: 0, employer: 0, taxableEmployerBenefit: 0 };
   }
 
   const insuredSalary = grossSalary * studyFund.insuredSalaryShare;
-  const salaryAboveCeiling = Math.max(0, insuredSalary - STUDY_FUND_2026.salaryCeiling);
+  const salaryAboveCeiling = Math.max(0, insuredSalary - rates.studyFund.salaryCeiling);
 
   return {
     insuredSalary: roundMoney(insuredSalary),
@@ -152,18 +148,22 @@ export const calculateBracketTax = (taxableIncome: number, brackets: TaxBracket[
   return tax;
 };
 
-export const calculatePensionTaxCredit = (employeePension: number, pensionSalary: number): number => {
-  const creditBase = Math.min(
-    employeePension,
-    pensionSalary * PENSION_TAX_CREDIT_2026.maxSalaryShare,
-    PENSION_TAX_CREDIT_2026.monthlyCap
-  );
+export const calculatePensionTaxCredit = (
+  employeePension: number,
+  pensionSalary: number,
+  rates: IsraelTaxRates = getLatestRates()
+): number => {
+  const { maxSalaryShare, monthlyCap, rate } = rates.pensionTaxCredit;
+  const creditBase = Math.min(employeePension, pensionSalary * maxSalaryShare, monthlyCap);
 
-  return roundMoney(creditBase * PENSION_TAX_CREDIT_2026.rate);
+  return roundMoney(creditBase * rate);
 };
 
-export const calculateNationalInsurance = (insurableIncome: number): number => {
-  const { reducedBandCeiling, maxInsurableIncome, reducedRate, fullRate } = NATIONAL_INSURANCE_2026;
+export const calculateNationalInsurance = (
+  insurableIncome: number,
+  rates: IsraelTaxRates = getLatestRates()
+): number => {
+  const { reducedBandCeiling, maxInsurableIncome, reducedRate, fullRate } = rates.nationalInsurance;
   const cappedIncome = Math.min(Math.max(insurableIncome, 0), maxInsurableIncome);
   const reducedPortion = Math.min(cappedIncome, reducedBandCeiling);
   const fullPortion = Math.max(0, cappedIncome - reducedBandCeiling);
@@ -171,7 +171,10 @@ export const calculateNationalInsurance = (insurableIncome: number): number => {
   return roundMoney(reducedPortion * reducedRate + fullPortion * fullRate);
 };
 
-const calculateMonthlyDonationsCredit = (annualDonations: number): number =>
-  roundMoney((Math.max(annualDonations, 0) * DONATION_TAX_CREDIT_RATE) / MONTHS_IN_YEAR);
+const calculateMonthlyDonationsCredit = (annualDonations: number, rates: IsraelTaxRates): number =>
+  roundMoney((Math.max(annualDonations, 0) * rates.donationTaxCreditRate) / MONTHS_IN_YEAR);
+
+export const calculateShareOfGross = (breakdown: NetSalaryBreakdown): number =>
+  breakdown.grossSalary > 0 ? Math.round((breakdown.netSalary / breakdown.grossSalary) * 100) : 0;
 
 const roundMoney = (amount: number): number => fromCents(toCents(amount));

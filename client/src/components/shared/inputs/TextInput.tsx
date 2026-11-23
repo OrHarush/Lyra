@@ -1,4 +1,5 @@
 import { TextField, TextFieldProps } from '@mui/material';
+import { useState } from 'react';
 import { RegisterOptions, useController, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -16,7 +17,8 @@ interface TextInputProps extends Omit<TextFieldProps, 'name' | 'required'> {
   thousandSeparators?: boolean;
 }
 
-const thousandsFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+const thousandsFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
+const integerFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 
 const formatWithCommas = (value: unknown): string => {
   if (value === null || value === undefined || value === '') {
@@ -32,14 +34,34 @@ const formatWithCommas = (value: unknown): string => {
   return thousandsFormatter.format(num);
 };
 
-const parseCommaNumber = (raw: string): number | null => {
-  const digitsOnly = raw.replace(/[^\d-]/g, '');
+// Keeps digits, one leading minus and one decimal point, so typing "15000.50" is not read as 1,500,050.
+const sanitizeDecimalInput = (raw: string): string => {
+  const isNegative = raw.trim().startsWith('-');
+  const cleaned = raw.replace(/[^\d.]/g, '');
+  const [integerPart, ...decimalParts] = cleaned.split('.');
+  const decimals = decimalParts.join('').slice(0, 2);
+  const hasDecimalPoint = decimalParts.length > 0;
+  const body = hasDecimalPoint ? `${integerPart}.${decimals}` : integerPart;
 
-  if (digitsOnly === '' || digitsOnly === '-') {
+  return isNegative ? `-${body}` : body;
+};
+
+const formatDraftWithCommas = (draft: string): string => {
+  const isNegative = draft.startsWith('-');
+  const unsigned = isNegative ? draft.slice(1) : draft;
+  const [integerPart, decimalPart] = unsigned.split('.');
+  const formattedInteger = integerPart ? integerFormatter.format(Number(integerPart)) : '';
+  const withDecimals = decimalPart === undefined ? formattedInteger : `${formattedInteger || '0'}.${decimalPart}`;
+
+  return isNegative ? `-${withDecimals}` : withDecimals;
+};
+
+const parseDraftNumber = (draft: string): number | null => {
+  if (draft === '' || draft === '-' || draft === '.' || draft === '-.') {
     return null;
   }
 
-  const num = Number(digitsOnly);
+  const num = Number(draft);
 
   return Number.isFinite(num) ? num : null;
 };
@@ -60,6 +82,7 @@ const TextInput = ({
 }: TextInputProps) => {
   const { t } = useTranslation('common');
   const { control } = useFormContext();
+  const [draft, setDraft] = useState<string | null>(null);
 
   let baseRules: RegisterOptions;
 
@@ -112,7 +135,10 @@ const TextInput = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (type === 'number' && thousandSeparators) {
-      field.onChange(parseCommaNumber(event.target.value));
+      const sanitized = sanitizeDecimalInput(event.target.value);
+
+      setDraft(sanitized);
+      field.onChange(parseDraftNumber(sanitized));
       return;
     }
 
@@ -132,7 +158,17 @@ const TextInput = ({
   };
 
   const useTextDisplay = type === 'number' && thousandSeparators;
-  const displayValue = useTextDisplay ? formatWithCommas(field.value) : field.value ?? '';
+  const displayValue = useTextDisplay
+    ? draft !== null
+      ? formatDraftWithCommas(draft)
+      : formatWithCommas(field.value)
+    : field.value ?? '';
+
+  const finishEditing = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setDraft(null);
+    field.onBlur();
+    rest.onBlur?.(event);
+  };
   const inputType = useTextDisplay ? 'text' : type;
 
   return (
@@ -148,13 +184,14 @@ const TextInput = ({
         type={inputType}
         slotProps={{
           htmlInput: {
-            ...(useTextDisplay ? { inputMode: 'numeric' as const } : {}),
+            ...(useTextDisplay ? { inputMode: 'decimal' as const } : {}),
             ...(min !== undefined ? { min: String(min) } : {}),
             ...(max !== undefined ? { max: String(max) } : {}),
           },
         }}
         error={!!fieldError}
         {...rest}
+        onBlur={finishEditing}
       />
     </Column>
   );

@@ -9,6 +9,7 @@ export interface SidebarButtonConfig {
   icon: SvgIconComponent;
   route: string;
   badge?: string;
+  activePathPrefix?: string;
 }
 
 interface SidebarNavigationButtonProps {

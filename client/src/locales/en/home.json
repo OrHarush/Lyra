@@ -231,6 +231,15 @@
           "q": "Does Lyra work on mobile?",
           "a": "Yes. Lyra is built as a PWA, a web app that runs in any browser, mobile included. You can add it to your home screen on iOS or Android and get an app-like experience without installing from the app store."
         },
+        "calculators": {
+          "q": "Does Lyra have financial calculators?",
+          "a": "Yes. There is an up-to-date net salary calculator and a compound interest calculator, free and without signing up. The calculation runs in your browser and what you enter is not sent to a server.",
+          "readMore": {
+            "prefix": "Both calculators: ",
+            "linkText": "financial calculators",
+            "suffix": ", no sign-up"
+          }
+        },
         "couples": {
           "q": "Can I manage money together with my partner?",
           "a": "Yes. You can open a shared household and invite your partner by email. Each of you logs in with your own account, and you both see a single shared cash flow in real time. What's personal stays personal, only the shared household is shared. No password sharing."

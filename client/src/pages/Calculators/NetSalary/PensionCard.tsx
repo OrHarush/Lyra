@@ -1,4 +1,4 @@
-import { SeveranceTrack } from '@lyra/shared';
+import { getLatestRates, SeveranceTrack, toPercent } from '@lyra/shared';
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
 import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,9 @@ const PensionCard = () => {
 
   const severanceOptions = SEVERANCE_TRACKS.map(track => ({
     value: track,
-    label: t(`netSalary.severance.${track}`),
+    label: t(`netSalary.severance.${track}`, {
+      pct: toPercent(getLatestRates().pensionDefaults.severanceRate[track]),
+    }),
   }));
 
   return (

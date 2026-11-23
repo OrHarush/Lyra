@@ -1,6 +1,6 @@
 import { Analytics } from '@vercel/analytics/react';
 import { Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import LoadingScreen from '@/components/shared/feedback/LoadingScreen';
 import AuthenticatedLayout from '@/components/shared/layout/AuthenticatedLayout';
@@ -29,6 +29,10 @@ import LoginPage from '@/pages/Login';
 import NotFoundPage from '@/pages/NotFoundPage';
 import Overview from '@/pages/Overview';
 import PaymentMethods from '@/pages/PaymentMethods';
+import CalculatorsHubRoute from '@/pages/PublicCalculators/CalculatorsHubRoute';
+import CompoundInterestPublicPage from '@/pages/PublicCalculators/CompoundInterestPublicPage';
+import NetSalaryPublicPage from '@/pages/PublicCalculators/NetSalaryPublicPage';
+import PublicCalculatorRoute from '@/pages/PublicCalculators/PublicCalculatorRoute';
 import ShortcutAuthPage from '@/pages/ShortcutAuth';
 import { Transactions } from '@/pages/Transactions';
 import TransactionsReview from '@/pages/Transactions/Review';
@@ -82,6 +86,23 @@ const AppRoutes = () => {
             <Route path={ROUTES.BLOG_URL} element={<BlogIndex />} />
             <Route path={ROUTES.BLOG_RISEUP_REVIEW_URL} element={<RiseUpReview />} />
             <Route path={ROUTES.BLOG_CASHFLOW_GUIDE_URL} element={<CashflowGuide />} />
+            <Route path={ROUTES.CALCULATORS_URL} element={<CalculatorsHubRoute />} />
+            <Route
+              path={ROUTES.CALCULATORS_NET_SALARY_URL}
+              element={
+                <PublicCalculatorRoute toolsRoute={ROUTES.TOOLS_NET_SALARY_URL}>
+                  <NetSalaryPublicPage />
+                </PublicCalculatorRoute>
+              }
+            />
+            <Route
+              path={ROUTES.CALCULATORS_COMPOUND_INTEREST_URL}
+              element={
+                <PublicCalculatorRoute toolsRoute={ROUTES.TOOLS_COMPOUND_INTEREST_URL}>
+                  <CompoundInterestPublicPage />
+                </PublicCalculatorRoute>
+              }
+            />
             <Route path={ROUTES.INVITATION_URL} element={<InvitationLandingPage />} />
             <Route path={ROUTES.SHORTCUT_AUTH_URL} element={<ShortcutAuthPage />} />
           </Route>
@@ -130,7 +151,9 @@ const AppRoutes = () => {
             <Route path={ROUTES.GOALS_URL} element={<Goals />} />
             <Route path={ROUTES.GOAL_DETAIL_URL} element={<GoalDetail />} />
             <Route path={ROUTES.INVESTMENTS_URL} element={<Investments />} />
-            <Route path={ROUTES.CALCULATORS_URL} element={<Calculators />} />
+            <Route path={ROUTES.TOOLS_URL} element={<Navigate to={ROUTES.TOOLS_NET_SALARY_URL} replace />} />
+            <Route path={ROUTES.TOOLS_NET_SALARY_URL} element={<Calculators />} />
+            <Route path={ROUTES.TOOLS_COMPOUND_INTEREST_URL} element={<Calculators />} />
             <Route
               path={ROUTES.CHAT_URL}
               element={

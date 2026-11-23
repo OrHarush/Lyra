@@ -1,4 +1,4 @@
-import type { CompoundInterestInput } from '@lyra/shared';
+import { CompoundInterestInput } from './compoundInterest';
 
 export interface CompoundInterestFormValues {
   initialAmount: number | null;
@@ -16,7 +16,7 @@ export const COMPOUND_INTEREST_DEFAULTS: CompoundInterestFormValues = {
   years: 20,
 };
 
-export const MAX_YEARS = 60;
+export const MAX_COMPOUND_YEARS = 60;
 
 export const toCompoundInterestInput = (
   values: Partial<CompoundInterestFormValues>
@@ -25,5 +25,5 @@ export const toCompoundInterestInput = (
   monthlyDeposit: values.monthlyDeposit ?? 0,
   annualReturnPct: values.annualReturnPct ?? 0,
   annualFeePct: values.annualFeePct ?? 0,
-  years: Math.min(values.years ?? 0, MAX_YEARS),
+  years: Math.min(Math.max(values.years ?? 0, 0), MAX_COMPOUND_YEARS),
 });
