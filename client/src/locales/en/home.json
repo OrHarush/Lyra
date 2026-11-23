@@ -54,10 +54,22 @@
         "description": "Salary, rent, gym, Netflix. Everything that repeats.",
         "fixedTitle": "Recurring cash flow",
         "items": {
-          "salary": { "name": "Salary", "billing": "1st of the month" },
-          "rent": { "name": "Rent", "billing": "5th of the month" },
-          "gym": { "name": "Gym", "billing": "10th of the month" },
-          "netflix": { "name": "Netflix", "billing": "15th of the month" }
+          "salary": {
+            "name": "Salary",
+            "billing": "1st of the month"
+          },
+          "rent": {
+            "name": "Rent",
+            "billing": "5th of the month"
+          },
+          "gym": {
+            "name": "Gym",
+            "billing": "10th of the month"
+          },
+          "netflix": {
+            "name": "Netflix",
+            "billing": "15th of the month"
+          }
         }
       },
       "step02": {
@@ -200,7 +212,12 @@
       "items": {
         "free": {
           "q": "Is Lyra really free?",
-          "a": "Yes, Lyra is completely free. No subscription, no premium tier, no surprises. Development is still early and it matters to me to build a product people love before thinking about a business model. If advanced capabilities are added in the future, the core will stay free."
+          "a": "Yes, Lyra is completely free. No subscription, no premium tier, no surprises. Development is still early and it matters to me to build a product people love before thinking about a business model. If advanced capabilities are added in the future, the core will stay free.",
+          "readMore": {
+            "prefix": "Read more: ",
+            "linkText": "Free expense apps, an honest comparison",
+            "suffix": " what is really free and what is not"
+          }
         },
         "security": {
           "q": "Is my data secure?",
@@ -221,7 +238,12 @@
         },
         "billingCycle": {
           "q": "How does the per-card billing cycle work?",
-          "a": "Every Israeli credit card bills on a different day: some on the 2nd, some on the 15th, some on the 22nd. Lyra lets you set the billing day for each card separately, so every expense lands in the correct cycle. That means the dashboard shows a real month-end projection, not a mash-up of different months."
+          "a": "Every Israeli credit card bills on a different day: some on the 2nd, some on the 15th, some on the 22nd. Lyra lets you set the billing day for each card separately, so every expense lands in the correct cycle. That means the dashboard shows a real month-end projection, not a mash-up of different months.",
+          "readMore": {
+            "prefix": "Read more: ",
+            "linkText": "Why your bank balance lies",
+            "suffix": " a full example with two cards"
+          }
         },
         "import": {
           "q": "Can I import data from Excel or Cal/Max?",
@@ -242,7 +264,12 @@
         },
         "couples": {
           "q": "Can I manage money together with my partner?",
-          "a": "Yes. You can open a shared household and invite your partner by email. Each of you logs in with your own account, and you both see a single shared cash flow in real time. What's personal stays personal, only the shared household is shared. No password sharing."
+          "a": "Yes. You can open a shared household and invite your partner by email. Each of you logs in with your own account, and you both see a single shared cash flow in real time. What's personal stays personal, only the shared household is shared. No password sharing.",
+          "readMore": {
+            "prefix": "Read more: ",
+            "linkText": "Money in a relationship",
+            "suffix": " joint, separate or hybrid accounts"
+          }
         }
       }
     }
