@@ -22,6 +22,9 @@ const FAQ_ITEM_KEYS = [
 
 const READ_MORE_HREFS: Partial<Record<(typeof FAQ_ITEM_KEYS)[number], string>> = {
   vsRiseUp: ROUTES.BLOG_RISEUP_REVIEW_URL,
+  free: ROUTES.BLOG_FREE_EXPENSE_APPS_URL,
+  billingCycle: ROUTES.BLOG_CREDIT_CARD_BILLING_CYCLE_URL,
+  couples: ROUTES.BLOG_COUPLES_MONEY_URL,
   calculators: ROUTES.CALCULATORS_URL,
 };
 
