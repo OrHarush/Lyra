@@ -8,6 +8,7 @@ import Row from '@/components/shared/layout/containers/Row';
 import { useIsSmallScreen } from '@/hooks/common/useIsSmallScreen';
 import { useInvestmentHistory } from '@/hooks/entities/useInvestments';
 import ChartLegend from '@/pages/Investments/ChartLegend';
+import { CHART_HEIGHT } from '@/pages/Investments/chartModel';
 import FundFilterDropdown from '@/pages/Investments/FundFilterDropdown';
 import PortfolioChartBody from '@/pages/Investments/PortfolioChartBody';
 import PortfolioChartSkeleton from '@/pages/Investments/PortfolioChartSkeleton';
@@ -30,9 +31,6 @@ interface PortfolioChartProps {
   onAddPurchase: () => void;
 }
 
-const MOBILE_HEIGHT = 180;
-const DESKTOP_HEIGHT = 260;
-
 const PortfolioChart = ({
   funds,
   purchaseViews,
@@ -49,7 +47,7 @@ const PortfolioChart = ({
   const { t, i18n } = useTranslation('investments');
   const isSmallScreen = useIsSmallScreen();
   const { history, isLoading, isError, refetch } = useInvestmentHistory(range, symbolsForQuery);
-  const height = isSmallScreen ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
+  const height = isSmallScreen ? CHART_HEIGHT.mobile : CHART_HEIGHT.desktop;
   const startDate = history?.series[0]?.date;
   const visibleFunds = funds.filter(fund => selectedSymbols.includes(fund.yahooSymbol));
 

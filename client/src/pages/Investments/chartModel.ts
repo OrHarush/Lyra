@@ -9,6 +9,9 @@ export interface ChartPurchase extends InvestmentPurchaseMarkerDto {
   valueTodayIls: number | null;
 }
 
+// Shared with the loading skeleton so the placeholder occupies exactly the space of the real chart.
+export const CHART_HEIGHT = { mobile: 180, desktop: 260 } as const;
+
 export const DENSE_DOTS_THRESHOLD = 30;
 const REGULAR_DOT_RADIUS = 6;
 const DENSE_DOT_RADIUS = 4;
