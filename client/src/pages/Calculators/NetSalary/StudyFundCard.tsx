@@ -1,4 +1,4 @@
-import { NetSalaryBreakdown, STUDY_FUND_2026 } from '@lyra/shared';
+import { getLatestRates, NetSalaryBreakdown, NetSalaryFormValues } from '@lyra/shared';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import { Typography } from '@mui/material';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -11,9 +11,9 @@ import CalculatorCard from '@/pages/Calculators/components/CalculatorCard';
 import FieldGrid from '@/pages/Calculators/components/FieldGrid';
 import PercentInput from '@/pages/Calculators/components/PercentInput';
 import SwitchField from '@/pages/Calculators/components/SwitchField';
-import { NetSalaryFormValues } from '@/pages/Calculators/NetSalary/formValues';
 
 const SALARY_CURRENCY = 'ILS';
+const STUDY_FUND_CEILING = getLatestRates().studyFund.salaryCeiling;
 
 interface StudyFundCardProps {
   breakdown: NetSalaryBreakdown;
@@ -59,7 +59,7 @@ const StudyFundCard = ({ breakdown }: StudyFundCardProps) => {
             />
             <BreakdownRow
               label={t('netSalary.studyFundCeiling')}
-              value={STUDY_FUND_2026.salaryCeiling}
+              value={STUDY_FUND_CEILING}
               currency={SALARY_CURRENCY}
             />
             {hasTaxableBenefit && (

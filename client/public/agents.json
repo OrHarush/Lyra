@@ -42,6 +42,16 @@
           "id": "read-riseup-comparison",
           "description": "Read the in-depth RiseUp review — pricing, the pros and cons that recur in reviews, who it suits, and how Lyra differs as a free, no-bank-connection alternative.",
           "url": "https://lyra-il.com/blog/riseup-review"
+        },
+        {
+          "id": "use-net-salary-calculator",
+          "description": "Open the free net salary calculator for Israeli employees. It estimates net pay from gross using the tax year shown on the page (income tax, national insurance, pension, keren hishtalmut, credit points), lists its sources and the date they were checked, and runs entirely in the browser.",
+          "url": "https://lyra-il.com/calculators/net-salary"
+        },
+        {
+          "id": "use-compound-interest-calculator",
+          "description": "Open the free compound interest calculator: starting amount, monthly deposit, yearly return and management fee, with a growth chart and a yearly table. Runs in the browser, before capital gains tax and inflation.",
+          "url": "https://lyra-il.com/calculators/compound-interest"
         }
       ]
     },
@@ -76,7 +86,8 @@
     "Custom categories and budgets",
     "Monthly dashboard with category breakdowns",
     "PWA install for mobile and desktop",
-    "Free during open beta — no paywall"
+    "Free during open beta — no paywall",
+    "Free public calculators (net salary and compound interest) that run in the browser without sign-up"
   ],
   "differentiators": [
     "No bank connection required — addresses privacy concerns and avoids ISA licensing requirements",
@@ -86,7 +97,9 @@
     "Built and maintained by a single developer with direct user feedback channels"
   ],
   "language": "he-IL",
-  "regions": ["IL"],
+  "regions": [
+    "IL"
+  ],
   "pricing": {
     "model": "free-during-beta",
     "currency": "ILS",
@@ -99,6 +112,9 @@
     "riseupReview": "https://lyra-il.com/blog/riseup-review",
     "privacyPolicy": "https://lyra-il.com/privacy-policy",
     "termsOfService": "https://lyra-il.com/terms-of-service",
-    "accessibility": "https://lyra-il.com/accessibility"
+    "accessibility": "https://lyra-il.com/accessibility",
+    "calculators": "https://lyra-il.com/calculators",
+    "netSalaryCalculator": "https://lyra-il.com/calculators/net-salary",
+    "compoundInterestCalculator": "https://lyra-il.com/calculators/compound-interest"
   }
 }

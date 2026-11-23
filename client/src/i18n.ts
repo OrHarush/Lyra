@@ -23,6 +23,7 @@ import enLogin from '@/locales/en/login.json';
 import enOverview from '@/locales/en/overview.json';
 import enPaymentMethods from '@/locales/en/paymentMethods.json';
 import enPrivacyPolicy from '@/locales/en/privacyPolicy.json';
+import enPublicCalculators from '@/locales/en/publicCalculators.json';
 import enRiseupReview from '@/locales/en/riseupReview.json';
 import enSidebar from '@/locales/en/sidebar.json';
 import enTermsOfService from '@/locales/en/termsOfService.json';
@@ -45,6 +46,7 @@ import heLogin from '@/locales/he/login.json';
 import heOverview from '@/locales/he/overview.json';
 import hePaymentMethods from '@/locales/he/paymentMethods.json';
 import hePrivacyPolicy from '@/locales/he/privacyPolicy.json';
+import hePublicCalculators from '@/locales/he/publicCalculators.json';
 import heRiseupReview from '@/locales/he/riseupReview.json';
 import heSidebar from '@/locales/he/sidebar.json';
 import heTermsOfService from '@/locales/he/termsOfService.json';
@@ -78,6 +80,7 @@ i18n
         chat: enChat,
         goals: enGoals,
         calculators: enCalculators,
+        publicCalculators: enPublicCalculators,
         investments: enInvestments,
       },
       he: {
@@ -102,6 +105,7 @@ i18n
         chat: heChat,
         goals: heGoals,
         calculators: heCalculators,
+        publicCalculators: hePublicCalculators,
         investments: heInvestments,
       },
     },

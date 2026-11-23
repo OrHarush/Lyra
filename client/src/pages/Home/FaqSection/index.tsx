@@ -16,8 +16,14 @@ const FAQ_ITEM_KEYS = [
   'billingCycle',
   'import',
   'mobile',
+  'calculators',
   'couples',
 ] as const;
+
+const READ_MORE_HREFS: Partial<Record<(typeof FAQ_ITEM_KEYS)[number], string>> = {
+  vsRiseUp: ROUTES.BLOG_RISEUP_REVIEW_URL,
+  calculators: ROUTES.CALCULATORS_URL,
+};
 
 const FaqSection = () => {
   const { t } = useTranslation('home');
@@ -27,15 +33,14 @@ const FaqSection = () => {
   const items = FAQ_ITEM_KEYS.map(key => ({
     q: t(`landing.faq.items.${key}.q`),
     a: t(`landing.faq.items.${key}.a`),
-    readMore:
-      key === 'vsRiseUp'
-        ? {
-            prefix: t('landing.faq.items.vsRiseUp.readMore.prefix'),
-            linkText: t('landing.faq.items.vsRiseUp.readMore.linkText'),
-            suffix: t('landing.faq.items.vsRiseUp.readMore.suffix'),
-            href: ROUTES.BLOG_RISEUP_REVIEW_URL,
-          }
-        : undefined,
+    readMore: READ_MORE_HREFS[key]
+      ? {
+          prefix: t(`landing.faq.items.${key}.readMore.prefix`),
+          linkText: t(`landing.faq.items.${key}.readMore.linkText`),
+          suffix: t(`landing.faq.items.${key}.readMore.suffix`),
+          href: READ_MORE_HREFS[key],
+        }
+      : undefined,
   }));
 
   return (

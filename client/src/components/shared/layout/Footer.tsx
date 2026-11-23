@@ -46,6 +46,10 @@ const Footer = () => {
       href: ROUTES.BLOG_URL,
     },
     {
+      label: t('common:nav.calculators'),
+      href: ROUTES.CALCULATORS_URL,
+    },
+    {
       label: t('common:legal.termsOfService'),
       href: ROUTES.TERMS_OF_SERVICE_URL,
       newTab: true,

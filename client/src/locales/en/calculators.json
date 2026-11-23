@@ -20,7 +20,10 @@
     "chartDeposited": "Deposits",
     "chartInterest": "Interest",
     "yearLabel": "Year {{year}}",
-    "disclaimer": "A rough estimate assuming a fixed return, compounded monthly. Real returns change from year to year."
+    "disclaimer": "An illustration assuming a fixed return compounded monthly, before capital gains tax and inflation. Real returns vary and you can lose money. Not a forecast or investment advice.",
+    "tableTitle": "Growth by year",
+    "tableYear": "Year",
+    "tableBalance": "Value"
   },
   "netSalary": {
     "salaryTitle": "Your salary",
@@ -43,28 +46,28 @@
       "age6to17": "Age 6–17 (+{{points}})",
       "age18": "Age 18 (+{{points}})"
     },
-    "singleParent": "Single parent (+1)",
-    "disabledChildrenCount": "Children with a disability allowance (+2 each)",
+    "singleParent": "Single parent (+{{points}})",
+    "disabledChildrenCount": "Children with a disability allowance (+{{points}} each)",
     "serviceType": "Military / national service",
     "service": {
       "none": "None",
       "full": "Full service (+{{points}})",
       "short": "Short service (+{{points}})"
     },
-    "immigrationPeriod": "New immigrant",
+    "immigrationPeriod": "New immigrant (aliyah from 2022: 54 months)",
     "immigration": {
       "none": "No",
-      "first18Months": "First 18 months (+{{points}})",
+      "first12Months": "First 12 months (+{{points}})",
+      "next18Months": "Next 18 months (+{{points}})",
       "next12Months": "Next 12 months (+{{points}})",
       "last12Months": "Last 12 months (+{{points}})"
     },
     "degreeType": "Academic degree",
     "degree": {
       "none": "None",
-      "bachelor": "Bachelor's (+{{points}} per year)",
-      "master": "Master's (+{{points}} per year)"
+      "bachelor": "Bachelor's (+{{points}} per tax year)",
+      "master": "Master's (+{{points}} per tax year)"
     },
-    "degreeYears": "Years of study",
     "reserveDays": "Reserve days last year",
     "manualCreditPoints": "Manual points (tax coordination)",
     "studyFundEnabled": "Keren hishtalmut on or off",
@@ -82,8 +85,8 @@
     "pensionAdvanced": "Advanced: severance and other benefits",
     "severanceTrack": "Severance track",
     "severance": {
-      "regular": "Regular (6%)",
-      "section14": "Section 14 (8.33%)"
+      "regular": "Regular ({{pct}}%)",
+      "section14": "Section 14 ({{pct}}%)"
     },
     "annualDonations": "Donations per year",
     "otherBenefitsNote": "Eligible-locality and disability credits aren't included yet.",
@@ -104,21 +107,24 @@
     "incomeTax": "Income tax",
     "taxBeforeCredits": "Tax by brackets",
     "creditPoints": "{{points}} credit points",
-    "pensionTaxCredit": "Pension tax credit (35%)",
-    "donationsCredit": "Donations credit (35%)",
+    "pensionTaxCredit": "Pension tax credit ({{pct}}%)",
+    "donationsCredit": "Donations credit ({{pct}}%)",
     "net": "Net salary",
-    "disclaimer": "An estimate based on 2026 rates for an Israeli resident employee. It doesn't replace your payslip, a tax coordination or professional advice.",
+    "disclaimer": "An estimate based on {{year}} rates for an Israeli resident employee. It doesn't replace your payslip, a tax coordination or professional advice.",
     "copy": {
       "action": "Copy calculation",
       "copied": "Copied",
       "failed": "Couldn't copy",
-      "title": "Net salary calculation (2026 rates)",
+      "title": "Net salary calculation ({{year}} rates)",
       "formula": "Net = gross − pension − keren hishtalmut − national insurance & health − income tax",
       "deductionsTitle": "Deductions",
       "assumptionsTitle": "Assumptions",
       "pensionAssumption": "Pension: you {{employee}}%, employer {{employer}}%",
       "studyFundAssumption": "Keren hishtalmut: you {{employee}}%, employer {{employer}}%, on {{share}}% of salary",
       "studyFundOff": "Keren hishtalmut: none"
-    }
-  }
+    },
+    "degreeGraduationYear": "Year you finished the degree",
+    "degreeHint": "Points start the year after you finish, and last a limited number of years."
+  },
+  "outdatedRates": "These figures are based on {{year}} and haven't been updated for the current year yet. The result may differ."
 }

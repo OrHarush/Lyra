@@ -1,14 +1,8 @@
-import { calculateCreditPoints, calculateNetSalary } from '@lyra/shared';
+import { calculateNetSalaryFromForm, NET_SALARY_DEFAULTS, NetSalaryFormValues } from '@lyra/shared';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import Column from '@/components/shared/layout/containers/Column';
 import ScrollableColumn from '@/components/shared/layout/containers/ScrollableColumn';
-import {
-  NET_SALARY_DEFAULTS,
-  NetSalaryFormValues,
-  toCreditPointsInput,
-  toNetSalaryInput,
-} from '@/pages/Calculators/NetSalary/formValues';
 import NetSalaryResults from '@/pages/Calculators/NetSalary/NetSalaryResults';
 import PensionCard from '@/pages/Calculators/NetSalary/PensionCard';
 import SalaryCard from '@/pages/Calculators/NetSalary/SalaryCard';
@@ -22,9 +16,7 @@ const NetSalaryCalculator = () => {
   });
   const values = useWatch({ control: methods.control });
 
-  const creditPoints = calculateCreditPoints(toCreditPointsInput(values));
-  const netSalaryInput = toNetSalaryInput(values, creditPoints);
-  const breakdown = calculateNetSalary(netSalaryInput);
+  const { creditPoints, input: netSalaryInput, breakdown } = calculateNetSalaryFromForm(values);
 
   return (
     <FormProvider {...methods}>

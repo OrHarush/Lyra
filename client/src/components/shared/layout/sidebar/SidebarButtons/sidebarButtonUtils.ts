@@ -14,6 +14,11 @@ import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import { SidebarButtonConfig } from '@/components/shared/layout/sidebar/SidebarButtons/SidebarNavigationButton';
 import { ROUTES } from '@/constants/Routes';
 
+export const isSidebarButtonActive = (button: SidebarButtonConfig, pathname: string) =>
+  button.activePathPrefix
+    ? pathname === button.activePathPrefix || pathname.startsWith(`${button.activePathPrefix}/`)
+    : pathname === button.route;
+
 export const primaryNavigation: SidebarButtonConfig[] = [
   { titleKey: 'overview', icon: DashboardIcon, route: ROUTES.OVERVIEW_URL },
   { titleKey: 'transactions', icon: RequestQuoteIcon, route: ROUTES.TRANSACTIONS_URL },
@@ -40,7 +45,8 @@ export const investmentsButton: SidebarButtonConfig = {
 export const calculatorsButton: SidebarButtonConfig = {
   titleKey: 'calculators',
   icon: CalculateIcon,
-  route: ROUTES.CALCULATORS_URL,
+  route: ROUTES.TOOLS_NET_SALARY_URL,
+  activePathPrefix: ROUTES.TOOLS_URL,
 };
 
 export const manageNavigation: SidebarButtonConfig[] = [

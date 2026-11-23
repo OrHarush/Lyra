@@ -1,11 +1,10 @@
-import type { Sex } from '@lyra/shared';
+import type { NetSalaryFormValues, Sex } from '@lyra/shared';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { NetSalaryFormValues } from '@/pages/Calculators/NetSalary/formValues';
 
 const SEX_OPTIONS: Sex[] = ['male', 'female'];
 

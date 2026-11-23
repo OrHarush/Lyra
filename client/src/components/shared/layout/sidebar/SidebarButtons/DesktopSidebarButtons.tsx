@@ -11,6 +11,7 @@ import {
   calculatorsButton,
   goalsButton,
   investmentsButton,
+  isSidebarButtonActive,
   manageNavigation,
   primaryNavigation,
 } from '@/components/shared/layout/sidebar/SidebarButtons/sidebarButtonUtils';
@@ -58,7 +59,7 @@ const DesktopSidebarButtons = () => {
   // When expanded, the "Manage" toggle row sits between the standalone buttons and the manage
   // items, so the highlight pill must skip one extra slot for everything rendered after it.
   const manageToggleIndex = primaryNavWithBadge.length + standaloneNavigation.length;
-  const activeRouteIndex = routeRows.findIndex(button => location.pathname === button.route);
+  const activeRouteIndex = routeRows.findIndex(button => isSidebarButtonActive(button, location.pathname));
   const activeIndex =
     expanded && activeRouteIndex >= manageToggleIndex ? activeRouteIndex + 1 : activeRouteIndex;
 
@@ -70,7 +71,7 @@ const DesktopSidebarButtons = () => {
           <SidebarNavigationButton
             key={button.titleKey}
             button={button}
-            isActive={location.pathname === button.route}
+            isActive={isSidebarButtonActive(button, location.pathname)}
             title={t(button.titleKey)}
           />
         ))}
@@ -78,7 +79,7 @@ const DesktopSidebarButtons = () => {
           <SidebarNavigationButton
             key={button.titleKey}
             button={button}
-            isActive={location.pathname === button.route}
+            isActive={isSidebarButtonActive(button, location.pathname)}
             title={t(button.titleKey)}
           />
         ))}

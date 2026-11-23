@@ -1,4 +1,10 @@
-import type { NetSalaryBreakdown, NetSalaryInput } from '@lyra/shared';
+import {
+  calculateShareOfGross,
+  getLatestRates,
+  NetSalaryBreakdown,
+  NetSalaryInput,
+  toPercent,
+} from '@lyra/shared';
 import type { TFunction } from 'i18next';
 
 import { formatCurrency } from '@/utils/currency';
@@ -15,12 +21,11 @@ const DETAIL_BULLET = '   ◦';
 
 const toMoney = (value: number) => formatCurrency(Math.round(value), SALARY_CURRENCY);
 const toDeduction = (value: number) => `-${toMoney(value)}`;
-const toPercent = (rate: number) => Number((rate * 100).toFixed(2));
 
 export const buildNetSalarySummaryText = ({ breakdown, input, t }: BuildNetSalarySummaryTextParams) => {
   const tn = (key: string, options?: Record<string, unknown>) => t(`netSalary.${key}`, options);
-  const shareOfGross =
-    breakdown.grossSalary > 0 ? Math.round((breakdown.netSalary / breakdown.grossSalary) * 100) : 0;
+  const { ratesYear, pensionTaxCredit, donationTaxCreditRate } = getLatestRates();
+  const shareOfGross = calculateShareOfGross(breakdown);
 
   const deductions = [
     `${TOP_BULLET} ${tn('employeePension')}: ${toDeduction(breakdown.employeePension)}`,
@@ -32,9 +37,9 @@ export const buildNetSalarySummaryText = ({ breakdown, input, t }: BuildNetSalar
     breakdown.studyFundTaxableBenefit > 0 &&
       `${DETAIL_BULLET} ${tn('studyFundTaxableBenefit')}: ${toMoney(breakdown.studyFundTaxableBenefit)}`,
     `${DETAIL_BULLET} ${tn('creditPoints', { points: Number(breakdown.creditPoints.toFixed(2)) })}: ${toDeduction(breakdown.creditPointsValue)}`,
-    `${DETAIL_BULLET} ${tn('pensionTaxCredit')}: ${toDeduction(breakdown.pensionTaxCredit)}`,
+    `${DETAIL_BULLET} ${tn('pensionTaxCredit', { pct: toPercent(pensionTaxCredit.rate) })}: ${toDeduction(breakdown.pensionTaxCredit)}`,
     breakdown.donationsTaxCredit > 0 &&
-      `${DETAIL_BULLET} ${tn('donationsCredit')}: ${toDeduction(breakdown.donationsTaxCredit)}`,
+      `${DETAIL_BULLET} ${tn('donationsCredit', { pct: toPercent(donationTaxCreditRate) })}: ${toDeduction(breakdown.donationsTaxCredit)}`,
   ];
 
   const { studyFund } = input;
@@ -56,7 +61,7 @@ export const buildNetSalarySummaryText = ({ breakdown, input, t }: BuildNetSalar
   ];
 
   return [
-    tn('copy.title'),
+    tn('copy.title', { year: ratesYear }),
     '',
     `${tn('gross')}: ${toMoney(breakdown.grossSalary)}`,
     '',
@@ -70,6 +75,6 @@ export const buildNetSalarySummaryText = ({ breakdown, input, t }: BuildNetSalar
     `${tn('copy.assumptionsTitle')}:`,
     ...assumptions.map(line => `${TOP_BULLET} ${line}`),
     '',
-    tn('disclaimer'),
+    tn('disclaimer', { year: ratesYear }),
   ].join('\n');
 };

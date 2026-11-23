@@ -6,6 +6,13 @@
   "heading": "בלוג",
   "subtitle": "מדריכים פיננסיים לשוק הישראלי",
   "readingTime": "{{minutes}} min read",
+  "calculatorsCrossLink": {
+    "before": "Before you start tracking, it helps to know what you actually take home each month with the ",
+    "netSalary": "net salary calculator",
+    "between": " and how much you can build up with the ",
+    "compoundInterest": "compound interest calculator",
+    "after": ". Both are free, run in your browser and need no sign-up."
+  },
   "articles": {
     "cashflowGuide": {
       "title": "ניהול תזרים מזומנים אישי: המדריך המלא לשנת 2026",

@@ -7,6 +7,7 @@ import {
   buildAdminNavigationButtons,
   calculatorsButton,
   investmentsButton,
+  isSidebarButtonActive,
   manageNavigation,
 } from '@/components/shared/layout/sidebar/SidebarButtons/sidebarButtonUtils';
 import SidebarNavigationButton from '@/components/shared/layout/sidebar/SidebarButtons/SidebarNavigationButton';
@@ -26,7 +27,7 @@ const MobileSidebarButtons = () => {
 
   const adminNavigation = buildAdminNavigationButtons(isAdmin(user));
   const rows = [...mobileNavigation, ...adminNavigation];
-  const activeIndex = rows.findIndex(button => location.pathname === button.route);
+  const activeIndex = rows.findIndex(button => isSidebarButtonActive(button, location.pathname));
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -36,7 +37,7 @@ const MobileSidebarButtons = () => {
           <SidebarNavigationButton
             key={button.titleKey}
             button={button}
-            isActive={location.pathname === button.route}
+            isActive={isSidebarButtonActive(button, location.pathname)}
             title={t(button.titleKey)}
           />
         ))}
