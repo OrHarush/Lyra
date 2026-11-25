@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 
 import api from '@/api/axios';
 import { queryKeys } from '@/constants/queryKeys';
@@ -17,7 +17,13 @@ export const useCategoryTransactions = (
   const { user } = useAuth();
   const [year, monthNumber] = month.split('-').map(Number);
 
-  const query = useInfiniteQuery({
+  const query = useInfiniteQuery<
+    TransactionsPageResponse,
+    Error,
+    InfiniteData<TransactionsPageResponse>,
+    unknown[],
+    number
+  >({
     queryKey: queryKeys.categoryTransactions(categoryId ?? '', month, sort),
     initialPageParam: 1,
     enabled: !!user && !!categoryId,
