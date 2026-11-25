@@ -1,0 +1,77 @@
+{
+  "consent": {
+    "title": "{{clientName}} wants read-only access to your Lyra data",
+    "accessIntro": "It will be able to view your:",
+    "scopes": {
+      "transactions": "Transactions",
+      "accounts": "Accounts",
+      "categories": "Categories",
+      "budgets": "Budgets"
+    },
+    "readOnlyBadge": "View only",
+    "cannotChange": "It can't add, edit or delete anything in Lyra.",
+    "workspaceLabel": "Which household should it see?",
+    "workspaceHelper": "{{clientName}} will only see data from the household you choose.",
+    "workspaceTypes": {
+      "personal": "Personal",
+      "shared": "Shared household"
+    },
+    "signedInAs": "Signed in as",
+    "redirectNotice": "After you decide, you'll be sent back to {{host}}.",
+    "allow": "Allow",
+    "deny": "Deny",
+    "actionError": "Something went wrong. Please try again.",
+    "expiredTitle": "This request is no longer valid",
+    "expiredBody": "The connection request has expired or was already used. Go back to the app and try connecting again.",
+    "loadErrorTitle": "Couldn't load this request",
+    "loadErrorBody": "Check your connection and try again.",
+    "retry": "Try again"
+  },
+  "connectedApps": {
+    "title": "Connected apps",
+    "description": "Apps and tokens that can view your Lyra data. They can only read, never change anything.",
+    "generateToken": "Generate token",
+    "loadError": "Couldn't load your connected apps.",
+    "retry": "Try again",
+    "empty": {
+      "title": "No connected apps yet",
+      "body": "When you connect an AI app like Claude or generate a personal token, it will show up here."
+    },
+    "kind": {
+      "oauth": "AI app",
+      "personal": "Personal token"
+    },
+    "connectedOn": "Connected {{date}}",
+    "lastUsed": "Last used {{time}}",
+    "neverUsed": "Never used",
+    "expiresOn": "Expires {{date}}",
+    "revoke": "Revoke",
+    "revokeDialog": {
+      "title": "Revoke access for {{name}}?",
+      "body": "{{name}} will lose access to your Lyra data right away. You can always connect it again later.",
+      "cancel": "Cancel",
+      "confirm": "Revoke access",
+      "success": "Access revoked",
+      "error": "Couldn't revoke access. Please try again."
+    }
+  },
+  "personalToken": {
+    "dialogTitle": "Generate a personal token",
+    "description": "Use a personal token to connect an app that doesn't support signing in with Lyra.",
+    "nameLabel": "Token name",
+    "namePlaceholder": "e.g. My laptop",
+    "workspaceLabel": "Household",
+    "workspaceHelper": "The token will only see data from this household.",
+    "cancel": "Cancel",
+    "create": "Generate",
+    "createError": "Couldn't generate a token. Please try again.",
+    "readyTitle": "Your token is ready",
+    "warning": "Copy this token now. For your security, it won't be shown again.",
+    "tokenLabel": "Token",
+    "mcpUrlLabel": "MCP server URL",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyError": "Couldn't copy. Please copy it manually.",
+    "done": "Done"
+  }
+}

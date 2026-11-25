@@ -14,6 +14,7 @@ import feedbackRoutes from './feedbackRoutes';
 import goalRoutes from './goalRoutes';
 import importRoutes from './importRoutes';
 import investmentRoutes from './investmentRoutes';
+import mcpRoutes from './mcpRoutes';
 import monthlyReportRoutes from './monthlyReportRoutes';
 import paymentMethodRoutes from './paymentMethodsRoutes';
 import recurringTemplateRoutes from './recurringTemplateRoutes';
@@ -42,5 +43,6 @@ protectedRoutes.use('/analytics', analyticsRoutes);
 protectedRoutes.use('/chat', chatRoutes);
 protectedRoutes.use('/import', importRoutes);
 protectedRoutes.use('/investments', investmentRoutes);
+protectedRoutes.use('/mcp', mcpRoutes);
 
 export default protectedRoutes;

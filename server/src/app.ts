@@ -9,7 +9,7 @@ import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 
 import { corsConfig } from './config/security';
-import { mcpMiddleware } from './mcp/mcpServer';
+import { mcpRouter } from './mcp/mcpHttp';
 import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware';
 import { notFoundMiddleware } from './middlewares/notFoundMiddleware';
 import { requestIdMiddleware } from './middlewares/requestIdMiddleware';
@@ -24,6 +24,10 @@ app.use(
   })
 );
 
+// Mounted ahead of the web CORS allowlist: MCP clients are not browser origins of the web app,
+// and the SDK's OAuth handlers apply their own CORS policy.
+app.use(mcpRouter);
+
 app.use(corsConfig);
 
 app.use(express.json({ limit: '200kb' }));
@@ -35,8 +39,6 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api', apiRouter);
-
-app.post('/mcp', mcpMiddleware);
 
 app.get('/', (_req: Request, res: Response) => {
   res.send('Lyra server is running');

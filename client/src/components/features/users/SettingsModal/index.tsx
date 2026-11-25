@@ -1,5 +1,6 @@
 import { SvgIconComponent } from '@mui/icons-material';
 import HomeWorkOutlinedIcon from '@mui/icons-material/HomeWorkOutlined';
+import HubOutlinedIcon from '@mui/icons-material/HubOutlined';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -10,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import LyraDialog, { BaseDialogProps } from '@/components/dialogs/LyraDialog';
 import ApplePayShortcutSection from '@/components/features/users/SettingsModal/ApplePayShortcutSection';
+import ConnectedAppsSection from '@/components/features/users/SettingsModal/ConnectedAppsSection';
 import GeneralSettingsTab from '@/components/features/users/SettingsModal/GeneralSettingsTab';
 import GooglePayShortcutSection from '@/components/features/users/SettingsModal/GooglePayShortcutSection';
 import SettingsTabButton from '@/components/features/users/SettingsModal/SettingsTabButton';
@@ -26,7 +28,7 @@ import { useAuth } from '@/providers/AuthProvider';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { isAndroidDevice, isIosDevice } from '@/utils/device';
 
-type SettingsTabKey = 'general' | 'sharedHousehold' | 'applePay' | 'googlePay';
+type SettingsTabKey = 'general' | 'sharedHousehold' | 'applePay' | 'googlePay' | 'connectedApps';
 
 // UA gating is convenience-only (show the relevant tab per device), not a security
 // boundary — the shortcut token auth is the real gate on the ingest endpoints.
@@ -86,6 +88,11 @@ const SettingsModal = ({ isOpen, closeDialog }: BaseDialogProps) => {
           },
         ]
       : []),
+    {
+      key: 'connectedApps',
+      labelKey: 'settingsModal.tabs.connectedApps',
+      icon: HubOutlinedIcon,
+    },
   ];
 
   return (
@@ -104,7 +111,8 @@ const SettingsModal = ({ isOpen, closeDialog }: BaseDialogProps) => {
               <Tabs
                 value={activeTab}
                 onChange={(_, value: SettingsTabKey) => setActiveTab(value)}
-                variant="fullWidth"
+                variant={tabs.length > 3 ? 'scrollable' : 'fullWidth'}
+                scrollButtons={false}
                 sx={{
                   borderBottom: 1,
                   borderColor: 'divider',
@@ -125,6 +133,7 @@ const SettingsModal = ({ isOpen, closeDialog }: BaseDialogProps) => {
                 {activeTab === 'sharedHousehold' && <SharedHouseholdTab />}
                 {activeTab === 'applePay' && <ApplePayShortcutSection />}
                 {activeTab === 'googlePay' && <GooglePayShortcutSection />}
+                {activeTab === 'connectedApps' && <ConnectedAppsSection />}
               </Box>
             </Box>
           ) : (
@@ -157,6 +166,7 @@ const SettingsModal = ({ isOpen, closeDialog }: BaseDialogProps) => {
                 {activeTab === 'sharedHousehold' && <SharedHouseholdTab />}
                 {activeTab === 'applePay' && <ApplePayShortcutSection />}
                 {activeTab === 'googlePay' && <GooglePayShortcutSection />}
+                {activeTab === 'connectedApps' && <ConnectedAppsSection />}
               </Box>
             </Row>
           )}
