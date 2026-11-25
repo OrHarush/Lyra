@@ -35,7 +35,7 @@ interface TopCategoriesContentProps {
 }
 
 interface BarClickPayload {
-  id: string;
+  id?: string;
 }
 
 const ROW_HEIGHT = 44;
@@ -53,7 +53,7 @@ const TopCategoriesChart = ({
   const getDeltaLabel = useTrendDeltaLabel();
 
   const handleBarClick = (payload: BarClickPayload) => {
-    if (!onBarClick) {
+    if (!onBarClick || !payload.id) {
       return;
     }
 
