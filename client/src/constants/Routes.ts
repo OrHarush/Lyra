@@ -33,6 +33,7 @@ export const ROUTES = {
   TRANSACTIONS_REVIEW_URL: '/transactions/review',
   INVITATION_URL: '/invitations/:token',
   SHORTCUT_AUTH_URL: '/shortcut-auth',
+  MCP_CONSENT_URL: '/oauth/consent',
 } as const;
 
 export const buildInvitationUrl = (token: string) => `/invitations/${token}`;
@@ -167,6 +168,18 @@ export const API_ROUTES = {
     REVOKE: '/api/shortcut/revoke',
     MACRO: '/api/shortcut/macro',
     CONNECTION: '/api/shortcut/connection',
+  },
+
+  MCP: {
+    OAUTH_REQUEST: (requestId: string) => `/api/mcp/oauth/requests/${encodeURIComponent(requestId)}`,
+    OAUTH_APPROVE: (requestId: string) =>
+      `/api/mcp/oauth/requests/${encodeURIComponent(requestId)}/approve`,
+    OAUTH_DENY: (requestId: string) =>
+      `/api/mcp/oauth/requests/${encodeURIComponent(requestId)}/deny`,
+    CONNECTIONS: '/api/mcp/connections',
+    CONNECTION_BY_ID: (connectionId: string) =>
+      `/api/mcp/connections/${encodeURIComponent(connectionId)}`,
+    PERSONAL_TOKEN: '/api/mcp/connections/personal',
   },
 
   IMPORT_PREVIEW: '/api/import/preview',

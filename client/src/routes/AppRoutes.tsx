@@ -30,6 +30,7 @@ import Investments from '@/pages/Investments';
 import InvitationLandingPage from '@/pages/Invitation/InvitationLandingPage';
 import LegalPage from '@/pages/LegalPage/LegalPage';
 import LoginPage from '@/pages/Login';
+import McpConsentPage from '@/pages/McpConsent';
 import NotFoundPage from '@/pages/NotFoundPage';
 import Overview from '@/pages/Overview';
 import PaymentMethods from '@/pages/PaymentMethods';
@@ -112,6 +113,7 @@ const AppRoutes = () => {
             />
             <Route path={ROUTES.INVITATION_URL} element={<InvitationLandingPage />} />
             <Route path={ROUTES.SHORTCUT_AUTH_URL} element={<ShortcutAuthPage />} />
+            <Route path={ROUTES.MCP_CONSENT_URL} element={<McpConsentPage />} />
           </Route>
           <Route
             element={

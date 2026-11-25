@@ -24,6 +24,7 @@ import enGoals from '@/locales/en/goals.json';
 import enHome from '@/locales/en/home.json';
 import enInvestments from '@/locales/en/investments.json';
 import enLogin from '@/locales/en/login.json';
+import enMcp from '@/locales/en/mcp.json';
 import enOverview from '@/locales/en/overview.json';
 import enPaymentMethods from '@/locales/en/paymentMethods.json';
 import enPrivacyPolicy from '@/locales/en/privacyPolicy.json';
@@ -51,6 +52,7 @@ import heGoals from '@/locales/he/goals.json';
 import heHome from '@/locales/he/home.json';
 import heInvestments from '@/locales/he/investments.json';
 import heLogin from '@/locales/he/login.json';
+import heMcp from '@/locales/he/mcp.json';
 import heOverview from '@/locales/he/overview.json';
 import hePaymentMethods from '@/locales/he/paymentMethods.json';
 import hePrivacyPolicy from '@/locales/he/privacyPolicy.json';
@@ -94,6 +96,7 @@ i18n
         calculators: enCalculators,
         publicCalculators: enPublicCalculators,
         investments: enInvestments,
+        mcp: enMcp,
       },
       he: {
         admin: heAdmin,
@@ -123,6 +126,7 @@ i18n
         calculators: heCalculators,
         publicCalculators: hePublicCalculators,
         investments: heInvestments,
+        mcp: heMcp,
       },
     },
     fallbackLng: 'he',

@@ -116,4 +116,7 @@ export const queryKeys = {
 
   workspaces: () => ['workspaces'],
   invitation: (token: string) => ['invitation', token],
+
+  mcpConnections: () => ['mcpConnections'],
+  mcpConsentRequest: (requestId: string) => ['mcpConsentRequest', requestId],
 };
