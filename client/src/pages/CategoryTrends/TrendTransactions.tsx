@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import TransactionPreviewList from '@/components/features/transactions/TransactionPreviewList';
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
+import ScrollableColumn from '@/components/shared/layout/containers/ScrollableColumn';
 import { useCategoryTransactions } from '@/hooks/entities/useCategoryTransactions';
 import CategoryTrendsError from '@/pages/CategoryTrends/CategoryTrendsError';
 import SortToggle from '@/pages/CategoryTrends/SortToggle';
@@ -51,7 +52,7 @@ const TrendTransactions = ({ categoryId, month, sort, onSortChange }: TrendTrans
         </Typography>
         <SortToggle value={sort} onChange={onSortChange} />
       </Row>
-      <Column sx={{ minHeight: 0, flex: { md: 1 }, overflowY: { md: 'auto' } }} spacing={1.5}>
+      <ScrollableColumn sx={{ minHeight: 0, flex: { md: 1 } }} spacing={1.5}>
         {renderBody()}
         {list.hasNextPage && (
           <Button
@@ -63,7 +64,7 @@ const TrendTransactions = ({ categoryId, month, sort, onSortChange }: TrendTrans
             {t('transactions.showMore')}
           </Button>
         )}
-      </Column>
+      </ScrollableColumn>
     </Column>
   );
 };
