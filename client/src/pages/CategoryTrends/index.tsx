@@ -1,5 +1,5 @@
 import InsightsIcon from '@mui/icons-material/Insights';
-import { Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Card, CardContent, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import Column from '@/components/shared/layout/containers/Column';
@@ -12,6 +12,7 @@ import CategoryTrendsError from '@/pages/CategoryTrends/CategoryTrendsError';
 import CategoryTrendsSkeleton from '@/pages/CategoryTrends/CategoryTrendsSkeleton';
 import MonthSummary from '@/pages/CategoryTrends/MonthSummary';
 import RangeSwitch from '@/pages/CategoryTrends/RangeSwitch';
+import { getPanelContentStyle } from '@/pages/CategoryTrends/styles';
 import TrendChart from '@/pages/CategoryTrends/TrendChart';
 import TrendTransactions from '@/pages/CategoryTrends/TrendTransactions';
 import { useCategoryTrendsPage } from '@/pages/CategoryTrends/useCategoryTrendsPage';
@@ -69,7 +70,9 @@ const CategoryTrends = () => {
             flexDirection: { xs: 'column', md: panelsDirection },
           }}
         >
-          <Column spacing={2} sx={{ flex: { md: 3 }, minWidth: 0, minHeight: 0 }}>
+          <Card sx={{ flex: { md: 3 }, minWidth: 0, minHeight: 0, display: 'flex' }}>
+            <CardContent sx={getPanelContentStyle()}>
+            <Column spacing={2} sx={{ flex: 1, minHeight: 0 }}>
             <Row alignItems="flex-start" justifyContent="space-between" columnGap={2} rowGap={1} flexWrap="wrap">
               <MonthSummary period={view.selectedMonth} entry={page.selectedEntry} />
               <RangeSwitch value={view.range} onChange={page.selectRange} />
@@ -83,15 +86,19 @@ const CategoryTrends = () => {
               color={view.selected?.color}
               onSelectMonth={state.selectMonth}
             />
-          </Column>
-          <Column sx={{ flex: { md: 2 }, minWidth: 0, minHeight: 0 }}>
+            </Column>
+            </CardContent>
+          </Card>
+          <Card sx={{ flex: { md: 2 }, minWidth: 0, minHeight: 0, display: 'flex' }}>
+            <CardContent sx={getPanelContentStyle()}>
             <TrendTransactions
               categoryId={view.selectedId}
               month={view.selectedMonth}
               sort={state.sort}
               onSortChange={state.selectSort}
             />
-          </Column>
+            </CardContent>
+          </Card>
         </Row>
       ) : (
         <EmptyState

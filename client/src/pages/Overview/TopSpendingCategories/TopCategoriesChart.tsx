@@ -16,7 +16,6 @@ import Row from '@/components/shared/layout/containers/Row';
 import { getTrendColor } from '@/components/shared/ui/trendColor';
 import ViewAllLink from '@/components/shared/ui/ViewAllLink';
 import { useTrendDeltaLabel } from '@/hooks/business/useTrendDeltaLabel';
-import { useIsMobile } from '@/hooks/common/useIsMobile';
 import { useCategoryName } from '@/hooks/entities/useCategoryName';
 import BarValueLabel from '@/pages/Overview/TopSpendingCategories/BarValueLabel';
 import CategoryAxisTick from '@/pages/Overview/TopSpendingCategories/CategoryAxisTick';
@@ -49,7 +48,6 @@ const TopCategoriesChart = ({
   viewAllUrl,
 }: TopCategoriesContentProps) => {
   const theme = useTheme();
-  const isMobile = useIsMobile();
   const { t } = useTranslation('overview');
   const getCategoryName = useCategoryName();
   const getDeltaLabel = useTrendDeltaLabel();
@@ -91,7 +89,6 @@ const TopCategoriesChart = ({
         sx={{
           height: '100%',
           width: '100%',
-          p: isMobile ? 1 : 2,
           display: 'flex',
           flex: 1,
           minHeight: 0,
@@ -108,19 +105,9 @@ const TopCategoriesChart = ({
             '&:last-child': { pb: 2 },
           }}
         >
-          <Row
-            alignItems="center"
-            justifyContent="space-between"
-            columnGap={1}
-            sx={{ mb: 2.5, flexShrink: 0 }}
-          >
-            <Typography variant="h5" color="text.primary" sx={{ minWidth: 0 }}>
-              {t('topSpendingCategories.title')}
-            </Typography>
-            {viewAllUrl && (
-              <ViewAllLink to={viewAllUrl} label={t('topSpendingCategories.viewAll')} />
-            )}
-          </Row>
+          <Typography variant="h5" color="text.primary" sx={{ mb: 2.5, flexShrink: 0 }}>
+            {t('topSpendingCategories.title')}
+          </Typography>
           <Box
             sx={{
               flex: 1,
@@ -134,14 +121,14 @@ const TopCategoriesChart = ({
               <BarChart
                 layout="vertical"
                 data={dataset}
-                margin={{ top: 0, right: 72, bottom: 0, left: 8 }}
+                margin={{ top: 0, right: 64, bottom: 0, left: 0 }}
                 barCategoryGap="30%"
               >
                 <XAxis type="number" hide />
                 <YAxis
                   type="category"
                   dataKey="name"
-                  width={110}
+                  width={84}
                   tick={<CategoryAxisTick colors={dataset.map(entry => entry.color)} captions={captions} />}
                   axisLine={false}
                   tickLine={false}
@@ -159,6 +146,11 @@ const TopCategoriesChart = ({
               </BarChart>
             </ResponsiveContainer>
           </Box>
+          {viewAllUrl && (
+            <Row justifyContent="flex-end" sx={{ mt: 1, flexShrink: 0 }}>
+              <ViewAllLink to={viewAllUrl} label={t('topSpendingCategories.viewAll')} />
+            </Row>
+          )}
           {isLoading && (
             <Fade in={isLoading}>
               <Box

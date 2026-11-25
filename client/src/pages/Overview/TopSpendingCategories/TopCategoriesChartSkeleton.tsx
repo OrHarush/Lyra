@@ -3,14 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
-import { useIsMobile } from '@/hooks/common/useIsMobile';
 
 const BAR_WIDTHS = ['85%', '55%', '40%', '28%', '18%'];
 const ROW_HEIGHT = 44;
 
 const TopCategoriesChartSkeleton = () => {
   const { t } = useTranslation('overview');
-  const isMobile = useIsMobile();
 
   return (
     <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ display: 'flex', minHeight: 0 }}>
@@ -18,7 +16,6 @@ const TopCategoriesChartSkeleton = () => {
         sx={{
           height: '100%',
           width: '100%',
-          p: isMobile ? 1 : 2,
           display: 'flex',
           flex: 1,
           minHeight: 0,
