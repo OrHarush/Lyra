@@ -12,7 +12,7 @@
         "setup": "Ready in 1 minute"
       },
       "privacy": "Your data is protected",
-      "privacyTooltip": "Your data is encrypted. We never connect to your bank. You import your own CSV files and we never share your information with third parties.",
+      "privacyTooltip": "Your data is encrypted. We never connect to your bank. You import your own CSV files and we never share your information with third parties. If you choose to connect an AI assistant, it can read the household you pick, and you can revoke that access anytime.",
       "frames": {
         "billingCycle": {
           "title": "Per-card billing cycle",
@@ -114,6 +114,49 @@
         "emailPlaceholder": "Email",
         "inviteButton": "Invite",
         "footnote": "Everyone with their own login, one shared cash flow"
+      }
+    },
+    "ai": {
+      "eyebrow": "New · Lyra + AI",
+      "headline": "Ask about your money. <accent>In plain words.</accent>",
+      "subheadline": "Connect Lyra to Claude or other MCP-compatible assistants and ask about your spending, cash flow and goals. Answers come from your real numbers, not guesses.",
+      "chat": {
+        "assistantLabel": "AI assistant",
+        "connectedBadge": "Connected to Lyra · View only",
+        "question1": "How much did we spend on food this month compared to last month?",
+        "answer1": "Food is at <total></total> so far this month, <drop></drop> less than October. Most of the drop is groceries at Shufersal.",
+        "workspacePill": "Shared household",
+        "question2": "And what will be left at the end of the month?",
+        "answer2": "Your projected balance is <projected></projected>, after rent and the Visa charge still due."
+      },
+      "steps": {
+        "title": "Connect in three steps",
+        "add": {
+          "title": "Add Lyra as a connector",
+          "description": "In Claude, open Settings › Connectors › Add custom connector and paste this address:"
+        },
+        "allow": {
+          "title": "Sign in and pick a household",
+          "description": "Log in to Lyra, choose which household the assistant can see, and tap Allow."
+        },
+        "ask": {
+          "title": "Just ask",
+          "description": "“Where did the money go in October?” “Am I on track for my savings goal?”"
+        }
+      },
+      "privacy": {
+        "readOnly": {
+          "title": "Read-only",
+          "description": "It can't add, edit or delete anything in Lyra."
+        },
+        "workspace": {
+          "title": "You pick the household",
+          "description": "It only sees the one you choose, nothing else."
+        },
+        "revoke": {
+          "title": "Revoke anytime",
+          "description": "One click in Settings › Connected apps."
+        }
       }
     },
     "clarity": {
