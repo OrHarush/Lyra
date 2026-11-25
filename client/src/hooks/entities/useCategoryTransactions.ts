@@ -1,4 +1,4 @@
-import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import api from '@/api/axios';
 import { queryKeys } from '@/constants/queryKeys';
@@ -21,7 +21,12 @@ export const useCategoryTransactions = (
     queryKey: queryKeys.categoryTransactions(categoryId ?? '', month, sort),
     initialPageParam: 1,
     enabled: !!user && !!categoryId,
-    placeholderData: keepPreviousData,
+    // Only a sort change may reuse the previous list; another category or month must show a skeleton
+    // so the list never disagrees with the chart.
+    placeholderData: (previousData, previousQuery) =>
+      previousQuery?.queryKey[3] === categoryId && previousQuery?.queryKey[4] === month
+        ? previousData
+        : undefined,
     queryFn: async ({ pageParam }) => {
       const url = buildTransactionsUrl(
         {
