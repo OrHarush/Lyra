@@ -1,5 +1,6 @@
 import ScrollableColumn from '@/components/shared/layout/containers/ScrollableColumn';
 import Footer from '@/components/shared/layout/Footer';
+import AiConnectSection from '@/pages/Home/AiConnectSection';
 import BottomCtaSection from '@/pages/Home/BottomCtaSection';
 import ComparisonSection from '@/pages/Home/ComparisonSection';
 import DashboardClaritySection from '@/pages/Home/DashboardClaritySection';
@@ -17,6 +18,7 @@ const HomePage = () => {
         <HeroSection />
         <DashboardClaritySection />
         <HowItWorksSection />
+        <AiConnectSection />
         <ComparisonSection />
         <FaqSection />
         <TestimonialsSection />

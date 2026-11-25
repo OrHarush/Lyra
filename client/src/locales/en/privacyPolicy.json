@@ -1,6 +1,6 @@
 {
   "title": "Privacy Policy",
-  "date": "May 16, 2026",
+  "date": "November 25, 2026",
 
   "sections": {
     "intro": {
@@ -69,7 +69,7 @@
 
     "thirdParties": {
       "title": "9. Third-Party Services",
-      "body": "Lyra stores your data on MongoDB Atlas in the European Union (Frankfurt, Germany region). We use Google OAuth for authentication only — Google does not receive your financial data. The frontend is hosted on Vercel and the backend is hosted on Render. These providers process data only as required to operate the service."
+      "body": "Lyra stores your data on MongoDB Atlas in the European Union (Frankfurt, Germany region). We use Google OAuth for authentication only — Google does not receive your financial data. The frontend is hosted on Vercel and the backend is hosted on Render. These providers process data only as required to operate the service. If you choose to connect an AI assistant (such as Claude) to Lyra, that assistant's provider receives read-only access to the financial data of the household you select, and processes it under its own privacy policy. Lyra shares nothing with it unless you connect it, and you can revoke the connection at any time from Settings › Connected apps."
     },
 
     "age": {
