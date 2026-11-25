@@ -5,11 +5,13 @@ import { ApiResponse } from '../http/ApiResponse';
 import { asyncHandler } from '../middlewares/asyncHandler';
 import { ExportTransactionsQuery } from '../schemas/transactionExportSchemas';
 import {
+  GetCategoryTrendsQuery,
   GetTransactionCalendarQuery,
   GetTransactionsQuery,
   GetTransactionSummaryQuery,
   ReviewTransactionsDTO,
 } from '../schemas/transactionSchemas';
+import * as categoryTrendsService from '../services/transactions/categoryTrendsService';
 import * as exportTransactionsService from '../services/transactions/exportTransactionsService';
 import * as quickChipsService from '../services/transactions/quickChipsService';
 import * as transactionReviewService from '../services/transactions/transactionReviewService';
@@ -44,6 +46,15 @@ export const getTransactionSummary = asyncHandler(async (req: Request, res: Resp
   );
 
   return ApiResponse.ok(res, summary);
+});
+
+export const getCategoryTrends = asyncHandler(async (req: Request, res: Response) => {
+  const trends = await categoryTrendsService.getCategoryTrends(
+    req.workspaceId,
+    req.validatedQuery as GetCategoryTrendsQuery
+  );
+
+  return ApiResponse.ok(res, trends);
 });
 
 export const getTransactionCalendar = asyncHandler(async (req: Request, res: Response) => {

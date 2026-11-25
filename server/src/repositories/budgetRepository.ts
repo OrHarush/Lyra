@@ -21,6 +21,14 @@ export const findMany = async (workspaceId: string, filter: BudgetFilter) => {
   return Budget.find(query).sort({ year: -1, month: -1, createdAt: -1 }).lean<IBudget[]>().exec();
 };
 
+export const findInYearRange = async (workspaceId: string, fromYear: number, toYear: number) =>
+  Budget.find({
+    workspaceId: new Types.ObjectId(workspaceId),
+    year: { $gte: fromYear, $lte: toYear },
+  })
+    .lean<IBudget[]>()
+    .exec();
+
 export const findById = async (id: string, workspaceId: string) =>
   Budget.findOne({ _id: id, workspaceId: new Types.ObjectId(workspaceId) })
     .lean<IBudget>()

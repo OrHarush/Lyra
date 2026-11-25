@@ -5,6 +5,7 @@ import {
   createTransaction,
   deleteTransaction,
   exportTransactions,
+  getCategoryTrends,
   getQuickChips,
   getReviewCount,
   getReviewList,
@@ -19,6 +20,7 @@ import {
 import { validateBody, validateQuery } from '../middlewares/validate';
 import { ExportTransactionsSchema } from '../schemas/transactionExportSchemas';
 import {
+  GetCategoryTrendsSchema,
   GetTransactionCalendarSchema,
   GetTransactionsSchema,
   GetTransactionSummarySchema,
@@ -34,6 +36,7 @@ router.get('/review', getReviewList);
 router.post('/review', validateBody(ReviewTransactionsSchema), reviewTransactions);
 router.get('/export', validateQuery(ExportTransactionsSchema), exportTransactions);
 router.get('/calendar', validateQuery(GetTransactionCalendarSchema), getTransactionCalendar);
+router.get('/category-trends', validateQuery(GetCategoryTrendsSchema), getCategoryTrends);
 router.get('/summary', validateQuery(GetTransactionSummarySchema), getTransactionSummary);
 router.get('/', validateQuery(GetTransactionsSchema), getTransactions);
 router.get('/:id', getTransactionById);

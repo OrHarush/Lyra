@@ -9,6 +9,7 @@ export * from './schemas/recurringTemplate';
 export * from './schemas/transaction';
 export * from './schemas/workspace';
 export * from './types/BalanceBreakdown';
+export * from './types/CategoryTrends';
 export * from './types/colors';
 export * from './types/defaultAccounts';
 export * from './types/defaultCategories';

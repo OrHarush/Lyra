@@ -32,6 +32,23 @@ export const findMany = async (workspaceId: string, options: GetTransactionsOpti
     .exec();
 };
 
+export const findExpensesInRange = async (
+  workspaceId: string,
+  from: Date,
+  to: Date,
+  accountId?: string
+) =>
+  Transaction.find({
+    workspaceId: new Types.ObjectId(workspaceId),
+    type: 'Expense',
+    date: { $gte: from, $lt: to },
+    ...(accountId && { account: new Types.ObjectId(accountId) }),
+  })
+    .populate('category', 'name key type color icon')
+    .populate('paymentMethod', 'type billingDay')
+    .lean<ITransactionPopulated[]>()
+    .exec();
+
 export const findById = async (id: string, workspaceId: string) =>
   Transaction.findOne({ _id: id, workspaceId: new Types.ObjectId(workspaceId) })
     .populate('category')

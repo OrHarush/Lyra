@@ -1,4 +1,8 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { z } from 'zod';
+
+dayjs.extend(utc);
 
 export const GetTransactionsSchema = z
   .object({
@@ -115,3 +119,30 @@ export const ReviewTransactionsSchema = z.object({
 });
 
 export type ReviewTransactionsDTO = z.infer<typeof ReviewTransactionsSchema>;
+
+const MAX_TREND_MONTHS = 12;
+
+export const GetCategoryTrendsSchema = z
+  .object({
+    endMonth: z
+      .string()
+      .regex(/^\d{4}-(0[1-9]|1[0-2])$/, 'endMonth must be YYYY-MM')
+      .optional(),
+    months: z.string().regex(/^\d+$/, 'months must be a number').optional(),
+    accountId: z.string().optional(),
+  })
+  .transform(data => {
+    const [year, month] = data.endMonth
+      ? data.endMonth.split('-').map(Number)
+      : [dayjs.utc().year(), dayjs.utc().month() + 1];
+    const requestedMonths = data.months ? parseInt(data.months, 10) : MAX_TREND_MONTHS;
+
+    return {
+      endYear: year,
+      endMonth: month - 1,
+      months: Math.min(Math.max(requestedMonths, 1), MAX_TREND_MONTHS),
+      accountId: data.accountId,
+    };
+  });
+
+export type GetCategoryTrendsQuery = z.infer<typeof GetCategoryTrendsSchema>;
