@@ -1,8 +1,8 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink } from 'react-router-dom';
 
 import Row from '@/components/shared/layout/containers/Row';
+import ViewAllLink from '@/components/shared/ui/ViewAllLink';
 import { ROUTES } from '@/constants/Routes';
 
 interface RecentTransactionsHeaderProps {
@@ -18,9 +18,7 @@ const RecentTransactionsHeader = ({ hasSeeAll }: RecentTransactionsHeaderProps) 
         {t('recentTransactions.title')}
       </Typography>
       {hasSeeAll && (
-        <Button component={RouterLink} to={ROUTES.TRANSACTIONS_URL} size="small">
-          {t('recentTransactions.seeAll')}
-        </Button>
+        <ViewAllLink to={ROUTES.TRANSACTIONS_URL} label={t('recentTransactions.seeAll')} />
       )}
     </Row>
   );

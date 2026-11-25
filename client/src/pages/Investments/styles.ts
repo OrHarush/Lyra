@@ -40,22 +40,6 @@ export const getProfitPillStyle = (isLoss: boolean): SxProps<Theme> => ({
   bgcolor: theme => alpha(isLoss ? theme.palette.error.main : theme.palette.success.main, 0.12),
 });
 
-export const getRangeSegmentsStyle = (): SxProps<Theme> => ({
-  p: '4px',
-  borderRadius: '12px',
-  bgcolor: theme => alpha(theme.palette.text.secondary, 0.08),
-});
-
-export const getRangeOptionStyle = (isSelected: boolean): SxProps<Theme> => ({
-  px: 1.5,
-  py: 0.5,
-  borderRadius: '8px',
-  fontSize: '0.8125rem',
-  fontWeight: 600,
-  color: isSelected ? 'primary.main' : 'text.secondary',
-  bgcolor: theme => (isSelected ? alpha(theme.palette.primary.main, 0.16) : 'transparent'),
-});
-
 const PURCHASE_CARD_WIDTH = 300;
 
 export const getPurchaseStripStyle = (): SxProps<Theme> => ({

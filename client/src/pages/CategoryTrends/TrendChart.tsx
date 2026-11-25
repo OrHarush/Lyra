@@ -1,8 +1,6 @@
 import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import {
-  Bar,
-  Cell,
   ComposedChart,
   Legend,
   Line,
@@ -13,6 +11,7 @@ import {
 } from 'recharts';
 
 import Column from '@/components/shared/layout/containers/Column';
+import TrendDot from '@/pages/CategoryTrends/TrendDot';
 import TrendTooltip from '@/pages/CategoryTrends/TrendTooltip';
 import { TrendChartRow } from '@/utils/entities/categoryTrends';
 
@@ -24,13 +23,20 @@ interface TrendChartProps {
 }
 
 const MIN_CHART_HEIGHT = 260;
-const UNSELECTED_OPACITY = 0.4;
 
 const TrendChart = ({ rows, selectedPeriod, color, onSelectMonth }: TrendChartProps) => {
   const theme = useTheme();
   const { t } = useTranslation('categoryTrends');
-  const barColor = color ?? theme.palette.primary.main;
+  const lineColor = color ?? theme.palette.primary.main;
   const hasBudget = rows.some(row => row.budget !== null);
+
+  const selectRowAtCursor = (state: { activeIndex?: string | number | null }) => {
+    const row = rows[Number(state?.activeIndex)];
+
+    if (row) {
+      onSelectMonth(row.period);
+    }
+  };
 
   return (
     <Column
@@ -42,34 +48,29 @@ const TrendChart = ({ rows, selectedPeriod, color, onSelectMonth }: TrendChartPr
       }}
     >
       <ResponsiveContainer width="100%" height="100%" style={{ direction: 'ltr' }}>
-        <ComposedChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
+        <ComposedChart
+          data={rows}
+          margin={{ top: 16, right: 16, bottom: 0, left: 16 }}
+          onClick={selectRowAtCursor}
+        >
           <XAxis
             dataKey="label"
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: theme.palette.text.secondary }}
           />
-          <YAxis hide />
-          <Tooltip content={<TrendTooltip />} cursor={false} />
-          <Bar
+          <YAxis hide domain={[0, 'auto']} />
+          <Tooltip content={<TrendTooltip />} cursor={{ stroke: theme.palette.divider }} />
+          <Line
             dataKey="total"
             name={t('chart.spent')}
-            radius={[6, 6, 0, 0]}
-            style={{ cursor: 'pointer' }}
-            onClick={(bar: { payload?: TrendChartRow }) => {
-              if (bar.payload) {
-                onSelectMonth(bar.payload.period);
-              }
-            }}
-          >
-            {rows.map(row => (
-              <Cell
-                key={row.period}
-                fill={barColor}
-                fillOpacity={row.period === selectedPeriod ? 1 : UNSELECTED_OPACITY}
-              />
-            ))}
-          </Bar>
+            type="monotone"
+            stroke={lineColor}
+            strokeWidth={3}
+            dot={<TrendDot selectedPeriod={selectedPeriod} color={lineColor} />}
+            activeDot={false}
+            isAnimationActive={false}
+          />
           {hasBudget && (
             <Line
               dataKey="budget"

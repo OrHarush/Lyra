@@ -1,6 +1,6 @@
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
+import SegmentedToggle from '@/components/shared/ui/SegmentedToggle';
 import { RANGE_OPTIONS, TrendRange } from '@/utils/entities/categoryTrends';
 
 interface RangeSwitchProps {
@@ -10,21 +10,18 @@ interface RangeSwitchProps {
 
 const RangeSwitch = ({ value, onChange }: RangeSwitchProps) => {
   const { t } = useTranslation('categoryTrends');
+  const options = RANGE_OPTIONS.map(option => ({
+    value: option,
+    label: t('range.option', { count: option }),
+  }));
 
   return (
-    <ToggleButtonGroup
-      exclusive
-      size="small"
+    <SegmentedToggle
+      options={options}
       value={value}
-      aria-label={t('range.label')}
-      onChange={(_, next: TrendRange | null) => next && onChange(next)}
-    >
-      {RANGE_OPTIONS.map(option => (
-        <ToggleButton key={option} value={option} sx={{ px: 1.5, textTransform: 'none' }}>
-          {t('range.option', { count: option })}
-        </ToggleButton>
-      ))}
-    </ToggleButtonGroup>
+      onChange={onChange}
+      ariaLabel={t('range.label')}
+    />
   );
 };
 

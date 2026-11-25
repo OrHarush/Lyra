@@ -49,10 +49,6 @@ const TopSpendingCategories = () => {
     navigate(buildCategoryTrendsUrl(date, categoryId));
   };
 
-  const openAllCategoryTrends = () => {
-    navigate(buildCategoryTrendsUrl(date));
-  };
-
   if (chartData.length === 0 && !isLoading) {
     return <EmptyCategoriesChart />;
   }
@@ -63,7 +59,7 @@ const TopSpendingCategories = () => {
       deltas={deltas}
       isLoading={isLoading}
       onBarClick={openCategoryTrends}
-      onViewAll={openAllCategoryTrends}
+      viewAllUrl={buildCategoryTrendsUrl(date)}
     />
   );
 };

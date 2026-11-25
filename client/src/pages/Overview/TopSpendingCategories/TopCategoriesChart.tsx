@@ -1,7 +1,6 @@
 import { DefaultCategoryKey, TrendDelta } from '@lyra/shared';
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CircularProgress,
@@ -15,6 +14,7 @@ import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from 'rec
 
 import Row from '@/components/shared/layout/containers/Row';
 import { getTrendColor } from '@/components/shared/ui/trendColor';
+import ViewAllLink from '@/components/shared/ui/ViewAllLink';
 import { useTrendDeltaLabel } from '@/hooks/business/useTrendDeltaLabel';
 import { useIsMobile } from '@/hooks/common/useIsMobile';
 import { useCategoryName } from '@/hooks/entities/useCategoryName';
@@ -32,7 +32,7 @@ interface TopCategoriesContentProps {
   deltas?: Record<string, TrendDelta>;
   isLoading?: boolean;
   onBarClick?: (categoryId: string) => void;
-  onViewAll?: () => void;
+  viewAllUrl?: string;
 }
 
 interface BarClickPayload {
@@ -46,7 +46,7 @@ const TopCategoriesChart = ({
   deltas = {},
   isLoading,
   onBarClick,
-  onViewAll,
+  viewAllUrl,
 }: TopCategoriesContentProps) => {
   const theme = useTheme();
   const isMobile = useIsMobile();
@@ -117,10 +117,8 @@ const TopCategoriesChart = ({
             <Typography variant="h5" color="text.primary" sx={{ minWidth: 0 }}>
               {t('topSpendingCategories.title')}
             </Typography>
-            {onViewAll && (
-              <Button size="small" onClick={onViewAll} sx={{ flexShrink: 0, textTransform: 'none' }}>
-                {t('topSpendingCategories.viewAll')}
-              </Button>
+            {viewAllUrl && (
+              <ViewAllLink to={viewAllUrl} label={t('topSpendingCategories.viewAll')} />
             )}
           </Row>
           <Box

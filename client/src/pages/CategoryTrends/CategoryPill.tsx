@@ -36,7 +36,7 @@ const CategoryPill = ({ pill, isSelected, onSelect }: CategoryPillProps) => {
       }}
     >
       <Row alignItems="center" spacing={1}>
-        <CategoryIconFrame color={pill.color} icon={pill.icon} />
+        <CategoryIconFrame color={pill.color} icon={pill.icon} size="small" />
         <Typography variant="body2" fontWeight={600} noWrap maxWidth={PILL_NAME_MAX_WIDTH}>
           {pill.name}
         </Typography>

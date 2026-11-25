@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import Row from '@/components/shared/layout/containers/Row';
+import { useDragScroll } from '@/hooks/common/useDragScroll';
 import CategoryPill from '@/pages/CategoryTrends/CategoryPill';
 import { TrendPill } from '@/pages/CategoryTrends/useCategoryTrendsPage';
 
@@ -13,6 +14,8 @@ interface CategoryPillsProps {
 
 const CategoryPills = ({ pills, selectedId, onSelect, ariaLabel }: CategoryPillsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useDragScroll(containerRef);
 
   useEffect(() => {
     const selectedPill = containerRef.current?.querySelector('[aria-pressed="true"]');
@@ -28,6 +31,7 @@ const CategoryPills = ({ pills, selectedId, onSelect, ariaLabel }: CategoryPills
       spacing={1}
       sx={{
         overflowX: 'auto',
+        cursor: 'grab',
         pb: 0.5,
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': { display: 'none' },

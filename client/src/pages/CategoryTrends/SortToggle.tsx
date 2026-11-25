@@ -1,6 +1,6 @@
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
+import SegmentedToggle from '@/components/shared/ui/SegmentedToggle';
 import { TrendSort } from '@/utils/entities/categoryTrends';
 
 interface SortToggleProps {
@@ -10,22 +10,18 @@ interface SortToggleProps {
 
 const SortToggle = ({ value, onChange }: SortToggleProps) => {
   const { t } = useTranslation('categoryTrends');
+  const options: { value: TrendSort; label: string }[] = [
+    { value: 'amount', label: t('transactions.sortAmount') },
+    { value: 'date', label: t('transactions.sortDate') },
+  ];
 
   return (
-    <ToggleButtonGroup
-      exclusive
-      size="small"
+    <SegmentedToggle
+      options={options}
       value={value}
-      aria-label={t('transactions.sortLabel')}
-      onChange={(_, next: TrendSort | null) => next && onChange(next)}
-    >
-      <ToggleButton value="amount" sx={{ px: 1.5, textTransform: 'none' }}>
-        {t('transactions.sortAmount')}
-      </ToggleButton>
-      <ToggleButton value="date" sx={{ px: 1.5, textTransform: 'none' }}>
-        {t('transactions.sortDate')}
-      </ToggleButton>
-    </ToggleButtonGroup>
+      onChange={onChange}
+      ariaLabel={t('transactions.sortLabel')}
+    />
   );
 };
 
