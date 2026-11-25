@@ -1,4 +1,9 @@
-import { CategoryTrendsResponse, TrendDelta, TrendDeltaBasis } from '@lyra/shared';
+import {
+  CategoryTrendsResponse,
+  DefaultCategoryKey,
+  TrendDelta,
+  TrendDeltaBasis,
+} from '@lyra/shared';
 
 import { IBudget } from '../../models/Budget';
 import { ITransactionPopulated } from '../../types/Transaction';
@@ -22,7 +27,7 @@ interface MonthSpend {
 
 interface CategoryInfo {
   name: string;
-  key?: string;
+  key?: DefaultCategoryKey;
   color?: string;
   icon?: string;
 }

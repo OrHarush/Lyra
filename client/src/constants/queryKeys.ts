@@ -32,6 +32,23 @@ export const queryKeys = {
     accountId,
     limit,
   ],
+  // Nested under 'transactions' so every existing allTransactions() invalidation refreshes trends.
+  allCategoryTrends: () => ['transactions', 'categoryTrends'],
+  categoryTrends: (endMonth: string, months: number, accountId?: string) => [
+    'transactions',
+    'categoryTrends',
+    endMonth,
+    months,
+    accountId ?? 'all',
+  ],
+  categoryTransactions: (categoryId: string, month: string, sort: string) => [
+    'transactions',
+    'categoryTrends',
+    'list',
+    categoryId,
+    month,
+    sort,
+  ],
   transactionsCount: () => ['transactions', 'count'],
   transactionsReviewCount: () => ['transactions', 'reviewCount'],
   transactionsReview: () => ['transactions', 'review'],

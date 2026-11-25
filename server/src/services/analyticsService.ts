@@ -73,3 +73,9 @@ export const recordPwaInstall = async (userId: string) => {
     console.error('Failed to track pwa_installed:', err)
   );
 };
+
+export const recordCategoryTrendsView = async (userId: string) => {
+  void track(userId, 'category_trends_viewed').catch(err =>
+    console.error('Failed to track category_trends_viewed:', err)
+  );
+};

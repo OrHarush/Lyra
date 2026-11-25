@@ -9,6 +9,7 @@ export const GetTransactionsSchema = z
     page: z.string().regex(/^\d+$/, 'page must be a number').optional().default('1'),
     limit: z.string().regex(/^\d+$/, 'limit must be a number').optional(),
     sort: z.enum(['asc', 'desc']).optional().default('desc'),
+    sortBy: z.enum(['date', 'amount']).optional().default('date'),
     categoryIds: z.string().optional().transform(v => (v ? v.split(',').filter(Boolean) : undefined)),
     paymentMethodIds: z
       .string()
@@ -47,6 +48,7 @@ export const GetTransactionsSchema = z
       page,
       limit,
       sort: (data.sort || 'desc') as 'asc' | 'desc',
+      sortBy: data.sortBy,
       categoryIds: data.categoryIds,
       paymentMethodIds: data.paymentMethodIds,
       accountIds: data.accountIds,

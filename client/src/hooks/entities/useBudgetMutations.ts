@@ -22,6 +22,7 @@ export const useCreateBudget = () => {
       return response.data.data;
     },
     onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.allCategoryTrends() });
       queryClient.invalidateQueries({
         queryKey: queryKeys.budgets(variables.year, variables.month),
       });
@@ -41,6 +42,7 @@ export const useCreateBudgetBulk = () => {
       return response.data.data;
     },
     onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.allCategoryTrends() });
       queryClient.invalidateQueries({
         queryKey: queryKeys.budgets(variables.year),
       });
@@ -61,6 +63,7 @@ export const useUpdateBudget = () => {
       return response.data.data;
     },
     onSuccess: data => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.allCategoryTrends() });
       queryClient.invalidateQueries({ queryKey: queryKeys.budgets(data.year) });
     },
   });
@@ -74,6 +77,7 @@ export const useDeleteBudget = () => {
       await axiosInstance.delete(`${API_ROUTES.BUDGETS}/${budgetId}`);
     },
     onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.allCategoryTrends() });
       queryClient.invalidateQueries({ queryKey: queryKeys.budgets(variables.year) });
     },
   });

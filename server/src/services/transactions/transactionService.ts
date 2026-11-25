@@ -67,6 +67,7 @@ export const findAll = async (workspaceId: string, options: GetTransactionsOptio
     targetYear,
     targetMonth,
     sort,
+    sortBy,
     search,
     categoryIds,
     paymentMethodIds,
@@ -126,7 +127,7 @@ export const findAll = async (workspaceId: string, options: GetTransactionsOptio
   }
 
   const { income, expenses } = sumIncomeAndExpenses(filtered);
-  const result = sortAndPaginate(filtered, sort, page, limit);
+  const result = sortAndPaginate(filtered, sort, page, limit, sortBy);
 
   return {
     ...result,

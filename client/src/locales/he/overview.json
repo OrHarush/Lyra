@@ -116,7 +116,8 @@
   },
 
   "topSpendingCategories": {
-    "title": "קטגוריות עם ההוצאה הגבוהה ביותר"
+    "title": "קטגוריות עם ההוצאה הגבוהה ביותר",
+    "viewAll": "הצג הכל"
   },
   "budgetWatch": {
     "title": "תקציבים",

@@ -1,0 +1,49 @@
+{
+  "pageTitle": "Category trends",
+  "pills": {
+    "ariaLabel": "Categories",
+    "jumpTo": "Jump to category"
+  },
+  "delta": {
+    "higher": "{{percent}}% higher",
+    "lower": "{{percent}}% lower",
+    "higherBy": "{{amount}} higher",
+    "lowerBy": "{{amount}} lower",
+    "new": "New"
+  },
+  "tooltip": {
+    "vsLastMonth": "vs last month",
+    "vsSamePoint": "vs the same point last month (month so far)"
+  },
+  "chart": {
+    "title": "Monthly spending",
+    "spent": "Spent",
+    "budget": "Budget"
+  },
+  "range": {
+    "label": "Range",
+    "option": "{{count}}M"
+  },
+  "transactions": {
+    "title": "Transactions in {{month}}",
+    "sortLabel": "Sort by",
+    "sortAmount": "Highest",
+    "sortDate": "Newest",
+    "showMore": "Show more",
+    "scheduled": "Scheduled",
+    "empty": "No transactions in this category for this month."
+  },
+  "empty": {
+    "title": "See how your spending changes",
+    "description": "This page shows how much you spend in each category every month, and whether it is going up or down. It fills in as you add expenses."
+  },
+  "categoryEmpty": {
+    "title": "No spending in this category yet",
+    "description": "Once you add expenses to this category, its monthly trend will appear here."
+  },
+  "error": {
+    "trends": "We couldn't load your category trends.",
+    "transactions": "We couldn't load these transactions.",
+    "retry": "Try again"
+  }
+}

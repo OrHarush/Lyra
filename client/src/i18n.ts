@@ -17,6 +17,7 @@ import enBudgets from '@/locales/en/budgets.json';
 import enCalculators from '@/locales/en/calculators.json';
 import enCashflowGuide from '@/locales/en/cashflowGuide.json';
 import enCategories from '@/locales/en/categories.json';
+import enCategoryTrends from '@/locales/en/categoryTrends.json';
 import enChat from '@/locales/en/chat.json';
 import enCommon from '@/locales/en/common.json';
 import enGoals from '@/locales/en/goals.json';
@@ -43,6 +44,7 @@ import heBudgets from '@/locales/he/budgets.json';
 import heCalculators from '@/locales/he/calculators.json';
 import heCashflowGuide from '@/locales/he/cashflowGuide.json';
 import heCategories from '@/locales/he/categories.json';
+import heCategoryTrends from '@/locales/he/categoryTrends.json';
 import heChat from '@/locales/he/chat.json';
 import heCommon from '@/locales/he/common.json';
 import heGoals from '@/locales/he/goals.json';
@@ -84,6 +86,7 @@ i18n
         transactions: enTransactions,
         accounts: enAccounts,
         categories: enCategories,
+        categoryTrends: enCategoryTrends,
         paymentMethods: enPaymentMethods,
         budgets: enBudgets,
         chat: enChat,
@@ -112,6 +115,7 @@ i18n
         transactions: heTransactions,
         accounts: heAccounts,
         categories: heCategories,
+        categoryTrends: heCategoryTrends,
         paymentMethods: hePaymentMethods,
         budgets: heBudgets,
         chat: heChat,

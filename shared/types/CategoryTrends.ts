@@ -1,3 +1,5 @@
+import { DefaultCategoryKey } from './defaultCategories';
+
 export type TrendDeltaKind = 'percent' | 'new' | 'smallBase' | 'none';
 
 export type TrendDeltaBasis = 'fullMonth' | 'monthToDate';
@@ -19,7 +21,7 @@ export interface CategoryTrendMonth {
 export interface CategoryTrend {
   categoryId: string;
   name: string;
-  key?: string;
+  key?: DefaultCategoryKey;
   color?: string;
   icon?: string;
   months: CategoryTrendMonth[];

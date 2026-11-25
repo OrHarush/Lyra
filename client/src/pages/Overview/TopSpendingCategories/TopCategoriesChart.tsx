@@ -1,6 +1,7 @@
-import { DefaultCategoryKey } from '@lyra/shared';
+import { DefaultCategoryKey, TrendDelta } from '@lyra/shared';
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CircularProgress,
@@ -12,6 +13,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
+import Row from '@/components/shared/layout/containers/Row';
+import { getTrendColor } from '@/components/shared/ui/trendColor';
+import { useTrendDeltaLabel } from '@/hooks/business/useTrendDeltaLabel';
 import { useIsMobile } from '@/hooks/common/useIsMobile';
 import { useCategoryName } from '@/hooks/entities/useCategoryName';
 import BarValueLabel from '@/pages/Overview/TopSpendingCategories/BarValueLabel';
@@ -25,8 +29,10 @@ interface TopCategoriesContentProps {
     amount: number;
     color: string | undefined;
   }[];
+  deltas?: Record<string, TrendDelta>;
   isLoading?: boolean;
   onBarClick?: (categoryId: string) => void;
+  onViewAll?: () => void;
 }
 
 interface BarClickPayload {
@@ -35,11 +41,18 @@ interface BarClickPayload {
 
 const ROW_HEIGHT = 44;
 
-const TopCategoriesChart = ({ chartData, isLoading, onBarClick }: TopCategoriesContentProps) => {
+const TopCategoriesChart = ({
+  chartData,
+  deltas = {},
+  isLoading,
+  onBarClick,
+  onViewAll,
+}: TopCategoriesContentProps) => {
   const theme = useTheme();
   const isMobile = useIsMobile();
   const { t } = useTranslation('overview');
   const getCategoryName = useCategoryName();
+  const getDeltaLabel = useTrendDeltaLabel();
 
   const handleBarClick = (payload: BarClickPayload) => {
     if (!onBarClick) {
@@ -57,6 +70,18 @@ const TopCategoriesChart = ({ chartData, isLoading, onBarClick }: TopCategoriesC
       amount: item.amount,
       color: item.color ?? theme.palette.grey[500],
     }));
+
+  const captions = dataset.map(item => {
+    const label = deltas[item.id] ? getDeltaLabel(deltas[item.id]) : null;
+
+    return label
+      ? {
+          text: label.compactText,
+          color: getTrendColor(label.direction, theme),
+          description: `${label.text} ${label.tooltip}`,
+        }
+      : null;
+  });
 
   const chartHeight = dataset.length * ROW_HEIGHT;
 
@@ -83,14 +108,21 @@ const TopCategoriesChart = ({ chartData, isLoading, onBarClick }: TopCategoriesC
             '&:last-child': { pb: 2 },
           }}
         >
-          <Typography
-            variant="h5"
-            color="text.primary"
-            align={isMobile ? 'center' : undefined}
+          <Row
+            alignItems="center"
+            justifyContent="space-between"
+            columnGap={1}
             sx={{ mb: 2.5, flexShrink: 0 }}
           >
-            {t('topSpendingCategories.title')}
-          </Typography>
+            <Typography variant="h5" color="text.primary" sx={{ minWidth: 0 }}>
+              {t('topSpendingCategories.title')}
+            </Typography>
+            {onViewAll && (
+              <Button size="small" onClick={onViewAll} sx={{ flexShrink: 0, textTransform: 'none' }}>
+                {t('topSpendingCategories.viewAll')}
+              </Button>
+            )}
+          </Row>
           <Box
             sx={{
               flex: 1,
@@ -112,7 +144,7 @@ const TopCategoriesChart = ({ chartData, isLoading, onBarClick }: TopCategoriesC
                   type="category"
                   dataKey="name"
                   width={110}
-                  tick={<CategoryAxisTick colors={dataset.map(entry => entry.color)} />}
+                  tick={<CategoryAxisTick colors={dataset.map(entry => entry.color)} captions={captions} />}
                   axisLine={false}
                   tickLine={false}
                 />

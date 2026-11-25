@@ -20,6 +20,7 @@ import RiseUpReview from '@/pages/Blog/RiseUpReview';
 import Budgets from '@/pages/Budgets';
 import Calculators from '@/pages/Calculators';
 import Categories from '@/pages/Categories';
+import CategoryTrends from '@/pages/CategoryTrends';
 import Chat from '@/pages/Chat';
 import Goals from '@/pages/Goals';
 import GoalDetail from '@/pages/Goals/GoalDetail';
@@ -132,6 +133,7 @@ const AppRoutes = () => {
           >
             <Route path={ROUTES.OVERVIEW_URL} element={<Overview />} />
             <Route path={ROUTES.TRANSACTIONS_URL} element={<Transactions />} />
+            <Route path={ROUTES.CATEGORY_TRENDS_URL} element={<CategoryTrends />} />
             <Route path={ROUTES.TRANSACTIONS_REVIEW_URL} element={<TransactionsReview />} />
             <Route path={ROUTES.IMPORT_URL} element={<ImportWizardPage />} />
             <Route path={ROUTES.ACCOUNTS_URL} element={<Accounts />} />

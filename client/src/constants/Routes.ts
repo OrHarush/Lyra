@@ -12,6 +12,7 @@ export const ROUTES = {
   BLOG_COUPLES_MONEY_URL: '/blog/couples-money',
   OVERVIEW_URL: '/overview',
   TRANSACTIONS_URL: '/transactions',
+  CATEGORY_TRENDS_URL: '/category-trends',
   CATEGORIES_URL: '/categories',
   PAYMENT_METHODS_URL: '/payment-methods',
   BUDGETS_URL: '/budget',
@@ -52,6 +53,7 @@ export const API_ROUTES = {
   MONTHLY_REPORT_SEEN: '/api/monthly-report/seen',
 
   TRANSACTIONS: '/api/transactions',
+  CATEGORY_TRENDS: '/api/transactions/category-trends',
   TRANSACTIONS_RECENT: (accountId: string, limit: number) =>
     `/api/transactions?${new URLSearchParams({ accountIds: accountId, page: '1', limit: String(limit), sort: 'desc' })}`,
   TRANSACTIONS_EXPORT: (month: string) => `/api/transactions/export?month=${month}`,
@@ -173,6 +175,7 @@ export const API_ROUTES = {
 
   ANALYTICS_SHARE_CLICK: '/api/analytics/share-click',
   ANALYTICS_PWA_INSTALL: '/api/analytics/pwa-install',
+  ANALYTICS_CATEGORY_TRENDS_VIEW: '/api/analytics/category-trends-view',
 
   WORKSPACES: '/api/workspaces',
   WORKSPACE_BY_ID: (workspaceId: string) => `/api/workspaces/${workspaceId}`,

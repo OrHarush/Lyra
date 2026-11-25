@@ -200,9 +200,14 @@ export const sortAndPaginate = (
   data: any[],
   sort: 'asc' | 'desc' = 'desc',
   page?: number,
-  limit?: number
+  limit?: number,
+  sortBy: 'date' | 'amount' = 'date'
 ) => {
   const sorted = [...data].sort((a, b) => {
+    if (sortBy === 'amount' && a.amount !== b.amount) {
+      return sort === 'asc' ? a.amount - b.amount : b.amount - a.amount;
+    }
+
     const aDate = new Date(a.date).getTime();
     const bDate = new Date(b.date).getTime();
 

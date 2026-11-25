@@ -232,3 +232,23 @@ describe('getTrendsFetchWindow', () => {
     expect(to.toISOString()).toBe('2027-01-01T00:00:00.000Z');
   });
 });
+
+describe('sortAndPaginate sortBy', () => {
+  const rows = [
+    { date: '2026-11-01', amount: 10 },
+    { date: '2026-11-03', amount: 5 },
+    { date: '2026-11-02', amount: 30 },
+  ];
+
+  it('keeps date-descending as the default', async () => {
+    const { sortAndPaginate } = await import('../../src/utils/transaction');
+
+    expect(sortAndPaginate(rows).data.map(r => r.amount)).toEqual([5, 30, 10]);
+  });
+
+  it('sorts by amount when asked', async () => {
+    const { sortAndPaginate } = await import('../../src/utils/transaction');
+
+    expect(sortAndPaginate(rows, 'desc', undefined, undefined, 'amount').data.map(r => r.amount)).toEqual([30, 10, 5]);
+  });
+});

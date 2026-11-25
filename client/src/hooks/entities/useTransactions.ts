@@ -12,6 +12,7 @@ export interface TransactionsFilters {
   accountIds?: string[];
   paymentMethodIds?: string[];
   type?: TransactionTypeFilter;
+  sortBy?: 'date' | 'amount';
 }
 
 export interface TransactionsPageResponse {
@@ -26,7 +27,16 @@ export interface TransactionsPageResponse {
 }
 
 export const buildTransactionsUrl = (filters: TransactionsFilters, page: number, limit?: number) => {
-  const { year, month, search, categoryIds, accountIds, paymentMethodIds, type = 'All' } = filters;
+  const {
+    year,
+    month,
+    search,
+    categoryIds,
+    accountIds,
+    paymentMethodIds,
+    type = 'All',
+    sortBy,
+  } = filters;
 
   const params = new URLSearchParams({
     year: year.toString(),
@@ -52,6 +62,10 @@ export const buildTransactionsUrl = (filters: TransactionsFilters, page: number,
 
   if (type !== 'All') {
     params.append('type', type);
+  }
+
+  if (sortBy) {
+    params.append('sortBy', sortBy);
   }
 
   if (search && search.trim()) {

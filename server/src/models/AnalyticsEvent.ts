@@ -24,6 +24,7 @@ export const ANALYTICS_EVENT_TYPES = [
   'investment_purchase_created',
   'investment_purchase_deleted',
   'investments_page_viewed',
+  'category_trends_viewed',
 ] as const;
 
 export type AnalyticsEventType = (typeof ANALYTICS_EVENT_TYPES)[number];
@@ -36,6 +37,8 @@ export interface IAnalyticsEvent {
   createdAt: Date;
 }
 
+// Class: ANALYTICS (product behavior: feature usage, not a security-relevant "who did what").
+// Hence the 365-day TTL on createdAt below, per the privacy policy.
 const AnalyticsEventSchema = new Schema<IAnalyticsEvent>(
   {
     event: {

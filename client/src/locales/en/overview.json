@@ -110,7 +110,8 @@
   },
 
   "topSpendingCategories": {
-    "title": "Top Spending Categories"
+    "title": "Top Spending Categories",
+    "viewAll": "View all"
   },
   "budgetWatch": {
     "title": "Budgets",

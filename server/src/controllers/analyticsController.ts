@@ -24,3 +24,15 @@ export const trackPwaInstallController = asyncHandler(async (req: Request, res: 
 
   return ApiResponse.ok(res, { tracked: true });
 });
+
+export const trackCategoryTrendsViewController = asyncHandler(
+  async (req: Request, res: Response) => {
+    if (!req.userId) {
+      throw ApiError.unauthorized('Unauthorized');
+    }
+
+    await analyticsService.recordCategoryTrendsView(req.userId);
+
+    return ApiResponse.ok(res, { tracked: true });
+  }
+);
