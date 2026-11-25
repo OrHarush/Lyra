@@ -92,7 +92,11 @@
       "workspace_left": "left workspace",
       "workspace_deleted": "workspace deleted",
       "member_removed": "member removed",
-      "workspace_switched": "switched workspace"
+      "workspace_switched": "switched workspace",
+      "investment_purchase_created": "investment bought",
+      "investment_purchase_deleted": "investment deleted",
+      "investments_page_viewed": "viewed investments",
+      "category_trends_viewed": "viewed trends"
     }
   },
   "allUsers": {

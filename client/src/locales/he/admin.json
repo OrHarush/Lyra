@@ -92,7 +92,11 @@
       "workspace_left": "עזב סביבה",
       "workspace_deleted": "סביבה נמחקה",
       "member_removed": "חבר הוסר",
-      "workspace_switched": "החלפת סביבה"
+      "workspace_switched": "החלפת סביבה",
+      "investment_purchase_created": "רכישת השקעה",
+      "investment_purchase_deleted": "מחיקת השקעה",
+      "investments_page_viewed": "צפייה בהשקעות",
+      "category_trends_viewed": "צפייה במגמות"
     }
   },
   "allUsers": {
