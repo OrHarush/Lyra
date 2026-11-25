@@ -1,8 +1,7 @@
 {
   "pageTitle": "Category trends",
   "pills": {
-    "ariaLabel": "Categories",
-    "jumpTo": "Jump to category"
+    "ariaLabel": "Categories"
   },
   "delta": {
     "higher": "{{percent}}% higher",
@@ -30,7 +29,6 @@
     "sortAmount": "Highest",
     "sortDate": "Newest",
     "showMore": "Show more",
-    "scheduled": "Scheduled",
     "empty": "No transactions in this category for this month."
   },
   "empty": {

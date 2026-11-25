@@ -9,8 +9,6 @@ export type TrendSort = 'amount' | 'date';
 
 export const DEFAULT_RANGE: TrendRange = 6;
 
-export const MAX_PILLS_WITHOUT_DROPDOWN = 12;
-
 export interface TrendChartRow {
   period: string;
   label: string;

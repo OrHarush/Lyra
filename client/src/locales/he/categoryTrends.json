@@ -1,8 +1,7 @@
 {
   "pageTitle": "מגמות לפי קטגוריה",
   "pills": {
-    "ariaLabel": "קטגוריות",
-    "jumpTo": "מעבר לקטגוריה"
+    "ariaLabel": "קטגוריות"
   },
   "delta": {
     "higher": "גבוה ב-{{percent}}%",
@@ -30,7 +29,6 @@
     "sortAmount": "הגבוהות ראשונות",
     "sortDate": "החדשות ראשונות",
     "showMore": "הצג עוד",
-    "scheduled": "מתוזמן",
     "empty": "אין תנועות בקטגוריה הזו בחודש הזה."
   },
   "empty": {

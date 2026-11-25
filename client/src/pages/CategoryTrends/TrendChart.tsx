@@ -23,7 +23,7 @@ interface TrendChartProps {
   onSelectMonth: (period: string) => void;
 }
 
-const CHART_HEIGHT = 260;
+const MIN_CHART_HEIGHT = 260;
 const UNSELECTED_OPACITY = 0.4;
 
 const TrendChart = ({ rows, selectedPeriod, color, onSelectMonth }: TrendChartProps) => {
@@ -33,7 +33,14 @@ const TrendChart = ({ rows, selectedPeriod, color, onSelectMonth }: TrendChartPr
   const hasBudget = rows.some(row => row.budget !== null);
 
   return (
-    <Column sx={{ height: CHART_HEIGHT, '& *:focus:not(:focus-visible)': { outline: 'none' } }}>
+    <Column
+      sx={{
+        flex: 1,
+        minHeight: MIN_CHART_HEIGHT,
+        height: { xs: MIN_CHART_HEIGHT, md: 'auto' },
+        '& *:focus:not(:focus-visible)': { outline: 'none' },
+      }}
+    >
       <ResponsiveContainer width="100%" height="100%" style={{ direction: 'ltr' }}>
         <ComposedChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
           <XAxis

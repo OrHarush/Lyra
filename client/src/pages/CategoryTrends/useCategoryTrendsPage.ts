@@ -24,6 +24,7 @@ export interface TrendPill {
   id: string;
   name: string;
   color?: string;
+  icon?: string;
   delta: TrendDelta;
 }
 
@@ -84,6 +85,7 @@ export const useCategoryTrendsPage = () => {
         id: category.categoryId,
         name: getCategoryDisplayName(category, tCategories),
         color: category.color,
+        icon: category.icon,
         delta: findMonthEntry(category, view.selectedMonth)?.delta ?? {
           kind: 'none',
           absolute: 0,

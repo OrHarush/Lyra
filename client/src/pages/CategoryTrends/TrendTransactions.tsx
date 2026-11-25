@@ -1,12 +1,12 @@
-import { Button, Divider, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
+import TransactionPreviewList from '@/components/features/transactions/TransactionPreviewList';
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import { useCategoryTransactions } from '@/hooks/entities/useCategoryTransactions';
 import CategoryTrendsError from '@/pages/CategoryTrends/CategoryTrendsError';
 import SortToggle from '@/pages/CategoryTrends/SortToggle';
-import TrendTransactionRow from '@/pages/CategoryTrends/TrendTransactionRow';
 import TrendTransactionsSkeleton from '@/pages/CategoryTrends/TrendTransactionsSkeleton';
 import { formatMonthTitle, TrendSort } from '@/utils/entities/categoryTrends';
 
@@ -40,34 +40,30 @@ const TrendTransactions = ({ categoryId, month, sort, onSortChange }: TrendTrans
       );
     }
 
-    return (
-      <Column divider={<Divider flexItem />}>
-        {list.transactions.map(transaction => (
-          <TrendTransactionRow key={transaction._id} transaction={transaction} />
-        ))}
-      </Column>
-    );
+    return <TransactionPreviewList transactions={list.transactions} />;
   };
 
   return (
-    <Column spacing={1.5}>
+    <Column spacing={1.5} sx={{ minHeight: 0, flex: 1 }}>
       <Row alignItems="center" justifyContent="space-between" flexWrap="wrap" rowGap={1} columnGap={2}>
         <Typography variant="h6" fontWeight={700}>
           {t('transactions.title', { month: formatMonthTitle(month) })}
         </Typography>
         <SortToggle value={sort} onChange={onSortChange} />
       </Row>
-      {renderBody()}
-      {list.hasNextPage && (
-        <Button
-          variant="outlined"
-          disabled={list.isFetchingNextPage}
-          onClick={() => list.fetchNextPage()}
-          sx={{ alignSelf: 'center' }}
-        >
-          {t('transactions.showMore')}
-        </Button>
-      )}
+      <Column sx={{ minHeight: 0, flex: { md: 1 }, overflowY: { md: 'auto' } }} spacing={1.5}>
+        {renderBody()}
+        {list.hasNextPage && (
+          <Button
+            variant="outlined"
+            disabled={list.isFetchingNextPage}
+            onClick={() => list.fetchNextPage()}
+            sx={{ alignSelf: 'center' }}
+          >
+            {t('transactions.showMore')}
+          </Button>
+        )}
+      </Column>
     </Column>
   );
 };
