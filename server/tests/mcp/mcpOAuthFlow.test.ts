@@ -22,19 +22,25 @@ const db = vi.hoisted(() => ({
 const isLive = (row: Row, field = 'expiresAt') => !row[field] || row[field] > new Date();
 
 vi.mock('../../src/repositories/mcpOAuthRepository', () => ({
-  insertClient: async (clientId: string, clientInfo: Row) => db.clients.push({ clientId, clientInfo }),
+  insertClient: async (clientId: string, clientInfo: Row) =>
+    db.clients.push({ clientId, clientInfo }),
   findClient: async (clientId: string) => db.clients.find(c => c.clientId === clientId) ?? null,
   insertAuthorizationRequest: async (data: Row) => db.requests.push({ ...data, status: 'pending' }),
   findPendingRequest: async (requestId: string) =>
     db.requests.find(r => r.requestId === requestId && r.status === 'pending' && isLive(r)) ?? null,
   approvePendingRequest: async (requestId: string, approval: Row) => {
-    const row = db.requests.find(r => r.requestId === requestId && r.status === 'pending' && isLive(r));
+    const row = db.requests.find(
+      r => r.requestId === requestId && r.status === 'pending' && isLive(r)
+    );
 
     if (!row) {
       return null;
     }
 
-    Object.assign(row, approval, { status: 'approved', userId: new Types.ObjectId(approval.userId) });
+    Object.assign(row, approval, {
+      status: 'approved',
+      userId: new Types.ObjectId(approval.userId),
+    });
 
     return row;
   },
@@ -44,8 +50,9 @@ vi.mock('../../src/repositories/mcpOAuthRepository', () => ({
     return row ? Object.assign(row, { status: 'denied' }) : null;
   },
   findApprovedByCodeHash: async (codeHash: string) =>
-    db.requests.find(r => r.codeHash === codeHash && r.status === 'approved' && isLive(r, 'codeExpiresAt')) ??
-    null,
+    db.requests.find(
+      r => r.codeHash === codeHash && r.status === 'approved' && isLive(r, 'codeExpiresAt')
+    ) ?? null,
   consumeApprovedCode: async (codeHash: string) => {
     const row = db.requests.find(
       r => r.codeHash === codeHash && r.status === 'approved' && isLive(r, 'codeExpiresAt')
@@ -57,11 +64,17 @@ vi.mock('../../src/repositories/mcpOAuthRepository', () => ({
 
 vi.mock('../../src/repositories/mcpCredentialRepository', () => {
   const sameId = (a: unknown, b: unknown) => String(a) === String(b);
-  const findActive = (id: unknown) => db.connections.find(c => sameId(c._id, id) && !c.revokedAt) ?? null;
+  const findActive = (id: unknown) =>
+    db.connections.find(c => sameId(c._id, id) && !c.revokedAt) ?? null;
 
   return {
     insertConnection: async (data: Row) => {
-      const row = { ...data, _id: new Types.ObjectId(), userId: new Types.ObjectId(data.userId), createdAt: new Date() };
+      const row = {
+        ...data,
+        _id: new Types.ObjectId(),
+        userId: new Types.ObjectId(data.userId),
+        createdAt: new Date(),
+      };
       db.connections.push(row);
 
       return row;
@@ -70,7 +83,9 @@ vi.mock('../../src/repositories/mcpCredentialRepository', () => {
     findActiveConnectionsForUser: async (userId: string) =>
       db.connections.filter(c => sameId(c.userId, userId) && !c.revokedAt),
     findActiveOAuthConnectionsForClient: async (userId: string, clientId: string) =>
-      db.connections.filter(c => sameId(c.userId, userId) && c.clientId === clientId && !c.revokedAt),
+      db.connections.filter(
+        c => sameId(c.userId, userId) && c.clientId === clientId && !c.revokedAt
+      ),
     revokeConnection: async (id: unknown) => {
       const row = findActive(id);
 
@@ -87,11 +102,14 @@ vi.mock('../../src/repositories/mcpCredentialRepository', () => {
     findLiveToken: async (tokenHash: string, type: string) =>
       db.tokens.find(t => t.tokenHash === tokenHash && t.type === type && isLive(t)) ?? null,
     consumeRefreshToken: async (tokenHash: string) => {
-      const row = db.tokens.find(t => t.tokenHash === tokenHash && t.type === 'refresh' && !t.consumedAt && isLive(t));
+      const row = db.tokens.find(
+        t => t.tokenHash === tokenHash && t.type === 'refresh' && !t.consumedAt && isLive(t)
+      );
 
       return row ? Object.assign(row, { consumedAt: new Date() }) : null;
     },
-    findTokenByHash: async (tokenHash: string) => db.tokens.find(t => t.tokenHash === tokenHash) ?? null,
+    findTokenByHash: async (tokenHash: string) =>
+      db.tokens.find(t => t.tokenHash === tokenHash) ?? null,
     deleteTokensForConnection: async (id: unknown) => {
       db.tokens = db.tokens.filter(t => !sameId(t.connectionId, id));
     },
@@ -100,6 +118,15 @@ vi.mock('../../src/repositories/mcpCredentialRepository', () => {
 
 vi.mock('../../src/repositories/mcpAuditEventRepository', () => ({
   insert: async (data: Row) => db.audit.push(data),
+}));
+
+vi.mock('../../src/mcp/readModel', async importOriginal => ({
+  ...(await importOriginal<object>()),
+  findWorkspace: async () => {
+    const mongoose = (await import('mongoose')).default;
+
+    return mongoose.mongo.Collection.prototype.insertOne.call({}, { sneaky: true });
+  },
 }));
 
 vi.mock('../../src/models/User', () => ({
@@ -149,7 +176,11 @@ const seedUser = () => {
 const registerClient = async () => {
   const res = await request(app)
     .post('/register')
-    .send({ client_name: 'Claude', redirect_uris: [REDIRECT_URI], token_endpoint_auth_method: 'none' });
+    .send({
+      client_name: 'Claude',
+      redirect_uris: [REDIRECT_URI],
+      token_endpoint_auth_method: 'none',
+    });
 
   expect(res.status).toBe(201);
 
@@ -184,14 +215,17 @@ const authorizeAndExchange = async () => {
     .send({ workspaceId: user.workspaceId });
   const callback = new URL(approve.body.data.redirectUrl);
 
-  const tokenRes = await request(app).post('/token').type('form').send({
-    grant_type: 'authorization_code',
-    client_id: clientId,
-    code: callback.searchParams.get('code'),
-    code_verifier: verifier,
-    redirect_uri: REDIRECT_URI,
-    resource: RESOURCE,
-  });
+  const tokenRes = await request(app)
+    .post('/token')
+    .type('form')
+    .send({
+      grant_type: 'authorization_code',
+      client_id: clientId,
+      code: callback.searchParams.get('code'),
+      code_verifier: verifier,
+      redirect_uri: REDIRECT_URI,
+      resource: RESOURCE,
+    });
 
   return { user, clientId, callback, tokenRes };
 };
@@ -278,7 +312,7 @@ describe('OAuth authorization code flow', () => {
     const res = await callMcp(bearer(tokenRes.body.access_token));
 
     expect(res.status).toBe(200);
-    expect(res.text).toContain('getTransactions');
+    expect(res.text).toContain('getOverview');
   });
 
   it('refuses to approve a workspace the session user is not a member of', async () => {
@@ -317,12 +351,15 @@ describe('OAuth authorization code flow', () => {
   it('does not let an authorization code be used twice', async () => {
     const { clientId, callback } = await authorizeAndExchange();
 
-    const res = await request(app).post('/token').type('form').send({
-      grant_type: 'authorization_code',
-      client_id: clientId,
-      code: callback.searchParams.get('code'),
-      code_verifier: 'irrelevant',
-    });
+    const res = await request(app)
+      .post('/token')
+      .type('form')
+      .send({
+        grant_type: 'authorization_code',
+        client_id: clientId,
+        code: callback.searchParams.get('code'),
+        code_verifier: 'irrelevant',
+      });
 
     expect(res.status).toBe(400);
   });
@@ -370,6 +407,29 @@ describe('revocation and lifecycle', () => {
     expect(replay.status).toBe(400);
     expect((await callMcp(bearer(rotated.body.access_token))).status).toBe(401);
     expect(db.audit.map(e => e.type)).toContain('MCP_REFRESH_REUSE_DETECTED');
+  });
+
+  it('blocks any database write a tool attempts during an MCP request', async () => {
+    const { tokenRes } = await authorizeAndExchange();
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    const res = await request(app)
+      .post('/mcp')
+      .set(MCP_HEADERS)
+      .set('Authorization', bearer(tokenRes.body.access_token))
+      .send({
+        jsonrpc: '2.0',
+        id: 2,
+        method: 'tools/call',
+        params: { name: 'getInvestments', arguments: {} },
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('"isError":true');
+    expect(errorSpy.mock.calls.flat().some(arg => arg?.name === 'ReadOnlyViolationError')).toBe(
+      true
+    );
+    errorSpy.mockRestore();
   });
 
   it('mints a working personal token from Settings', async () => {

@@ -57,11 +57,7 @@ export const lyraOAuthProvider: OAuthServerProvider = {
       return client ? asClientInfo(client) : undefined;
     },
     registerClient: translateErrors(InvalidClientMetadataError, async metadata =>
-      asClientInfo(
-        await mcpOAuthService.registerClient(
-          metadata as mcpOAuthService.ClientMetadata
-        )
-      )
+      asClientInfo(await mcpOAuthService.registerClient(metadata as mcpOAuthService.ClientMetadata))
     ),
   },
 
