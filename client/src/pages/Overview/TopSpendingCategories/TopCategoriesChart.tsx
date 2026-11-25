@@ -105,9 +105,19 @@ const TopCategoriesChart = ({
             '&:last-child': { pb: 2 },
           }}
         >
-          <Typography variant="h5" color="text.primary" sx={{ mb: 2.5, flexShrink: 0 }}>
-            {t('topSpendingCategories.title')}
-          </Typography>
+          <Row
+            alignItems="center"
+            justifyContent="space-between"
+            columnGap={1}
+            sx={{ mb: 2.5, flexShrink: 0 }}
+          >
+            <Typography variant="h5" color="text.primary" sx={{ minWidth: 0 }}>
+              {t('topSpendingCategories.title')}
+            </Typography>
+            {viewAllUrl && (
+              <ViewAllLink to={viewAllUrl} label={t('topSpendingCategories.viewAll')} />
+            )}
+          </Row>
           <Box
             sx={{
               flex: 1,
@@ -146,11 +156,6 @@ const TopCategoriesChart = ({
               </BarChart>
             </ResponsiveContainer>
           </Box>
-          {viewAllUrl && (
-            <Row justifyContent="flex-end" sx={{ mt: 1, flexShrink: 0 }}>
-              <ViewAllLink to={viewAllUrl} label={t('topSpendingCategories.viewAll')} />
-            </Row>
-          )}
           {isLoading && (
             <Fade in={isLoading}>
               <Box
