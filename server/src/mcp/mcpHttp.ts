@@ -12,6 +12,7 @@ import { MCP_CONFIG } from '../config/mcp';
 import * as mcpAuditService from '../services/mcp/mcpAuditService';
 import { createMcpServer } from './mcpServer';
 import { lyraOAuthProvider } from './oauthProvider';
+import { runReadOnly } from './readOnlyGuard';
 
 interface McpAuthExtra {
   userId: string;
@@ -97,8 +98,10 @@ const handleMcpRequest = async (req: Request, res: Response) => {
     void server.close();
   });
 
-  await server.connect(transport);
-  await transport.handleRequest(req, res, req.body);
+  await runReadOnly(async () => {
+    await server.connect(transport);
+    await transport.handleRequest(req, res, req.body);
+  });
 };
 
 const rejectMethod = (_req: Request, res: Response) => {

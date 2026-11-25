@@ -305,7 +305,11 @@ export const createInvestmentService = ({
 
   const loadFxCloses = async (fromDate: string) => {
     try {
-      return await market.getDailyCloses(FX_SYMBOL, addDaysIso(fromDate, -SEED_LOOKBACK_DAYS), today());
+      return await market.getDailyCloses(
+        FX_SYMBOL,
+        addDaysIso(fromDate, -SEED_LOOKBACK_DAYS),
+        today()
+      );
     } catch {
       return null;
     }
@@ -365,11 +369,11 @@ export const createInvestmentService = ({
     const loaded = await Promise.all(symbols.map(symbol => loadCloses(symbol, from)));
     const failed = loaded.filter(entry => entry.closes === null).map(entry => entry.symbol);
     const usdSymbols = new Set(usd.map(purchase => purchase.yahooSymbol));
-    const missingSymbols = fxHistory
-      ? failed
-      : [...new Set([...failed, ...usdSymbols])];
+    const missingSymbols = fxHistory ? failed : [...new Set([...failed, ...usdSymbols])];
     const included = selected.filter(purchase => !missingSymbols.includes(purchase.yahooSymbol));
-    const usable = loaded.filter(entry => entry.closes !== null && !missingSymbols.includes(entry.symbol));
+    const usable = loaded.filter(
+      entry => entry.closes !== null && !missingSymbols.includes(entry.symbol)
+    );
     const closesBySymbol = new Map(usable.map(entry => [entry.symbol, entry.closes!]));
     const fxCloses = fxHistory?.closes ?? null;
 
@@ -454,11 +458,20 @@ const bareSymbol = (symbol: string) => symbol.split('.')[0];
 const withoutUserId = ({ userId: _userId, ...changes }: NewInvestmentPurchase) => changes;
 
 // Catalog funds render from the catalog while their entry exists; the stored snapshot is the fallback.
-const withCatalogPresentation = <T extends { source: InstrumentSource; instrumentId: string; displayName: string; badge: string; hedged: boolean }>(
+const withCatalogPresentation = <
+  T extends {
+    source: InstrumentSource;
+    instrumentId: string;
+    displayName: string;
+    badge: string;
+    hedged: boolean;
+  },
+>(
   fund: T,
   catalog: CatalogEntry[]
 ): T => {
-  const entry = fund.source === 'catalog' ? findCatalogEntryById(catalog, fund.instrumentId) : undefined;
+  const entry =
+    fund.source === 'catalog' ? findCatalogEntryById(catalog, fund.instrumentId) : undefined;
 
   return entry
     ? { ...fund, displayName: entry.name, badge: entry.badge, hedged: entry.hedged }
@@ -535,9 +548,14 @@ const toPriceQuotes = (
 ): Record<string, PriceQuote> =>
   Object.fromEntries(symbols.flatMap(symbol => (quotes[symbol] ? [[symbol, quotes[symbol]]] : [])));
 
+export const marketDataGateway = new MarketDataGateway(
+  new YahooMarketDataProvider(),
+  new MarketDataCache()
+);
+
 export const investmentService = createInvestmentService({
   purchases: purchaseRepository,
-  market: new MarketDataGateway(new YahooMarketDataProvider(), new MarketDataCache()),
+  market: marketDataGateway,
   now: () => new Date(),
   track: (userId, event) =>
     void analyticsService

@@ -1,8 +1,15 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "simple-import-sort"],
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "simple-import-sort"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "env": {
     "node": true,
     "es2021": true
@@ -17,10 +24,50 @@
     "simple-import-sort/exports": "error",
     "no-console": "warn",
     "prefer-arrow-callback": "error",
-    "arrow-body-style": ["error", "as-needed"],
-    "quotes": ["error", "single", { "avoidEscape": true }],
-    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "arrow-body-style": [
+      "error",
+      "as-needed"
+    ],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-floating-promises": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/mcp/tools/**/*.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "**/services/**",
+                  "**/repositories/**",
+                  "**/models/*",
+                  "mongoose"
+                ],
+                "allowTypeImports": true,
+                "message": "MCP tools are read-only: reach data only through src/mcp/readModel.ts."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }
