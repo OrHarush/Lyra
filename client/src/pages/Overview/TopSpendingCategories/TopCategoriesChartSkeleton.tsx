@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
+import { DASHBOARD_CARD_PADDING } from '@/pages/Overview/styles';
 
 const BAR_WIDTHS = ['85%', '55%', '40%', '28%', '18%'];
 const ROW_HEIGHT = 44;
@@ -28,7 +29,8 @@ const TopCategoriesChartSkeleton = () => {
             flexDirection: 'column',
             flex: 1,
             minHeight: 0,
-            '&:last-child': { pb: 2 },
+            p: DASHBOARD_CARD_PADDING,
+            '&:last-child': { pb: DASHBOARD_CARD_PADDING },
           }}
         >
           <Typography

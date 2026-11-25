@@ -17,6 +17,7 @@ import { getTrendColor } from '@/components/shared/ui/trendColor';
 import ViewAllLink from '@/components/shared/ui/ViewAllLink';
 import { useTrendDeltaLabel } from '@/hooks/business/useTrendDeltaLabel';
 import { useCategoryName } from '@/hooks/entities/useCategoryName';
+import { DASHBOARD_CARD_PADDING } from '@/pages/Overview/styles';
 import BarValueLabel from '@/pages/Overview/TopSpendingCategories/BarValueLabel';
 import CategoryAxisTick from '@/pages/Overview/TopSpendingCategories/CategoryAxisTick';
 
@@ -102,7 +103,8 @@ const TopCategoriesChart = ({
             flex: 1,
             minHeight: 0,
             position: 'relative',
-            '&:last-child': { pb: 2 },
+            p: DASHBOARD_CARD_PADDING,
+            '&:last-child': { pb: DASHBOARD_CARD_PADDING },
           }}
         >
           <Row

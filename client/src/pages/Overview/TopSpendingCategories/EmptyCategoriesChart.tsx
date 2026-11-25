@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import EntityEmpty from '@/components/entities/EntityEmpty';
 import Column from '@/components/shared/layout/containers/Column';
+import { DASHBOARD_CARD_PADDING } from '@/pages/Overview/styles';
 
 const EmptyCategoriesChart = () => {
   const { t } = useTranslation('overview');
@@ -18,7 +19,7 @@ const EmptyCategoriesChart = () => {
           flex: 1,
         }}
       >
-        <Column height={'100%'} width={'100%'} padding={4} justifyContent={'center'}>
+        <Column height={'100%'} width={'100%'} sx={{ p: DASHBOARD_CARD_PADDING }} justifyContent={'center'}>
           <Typography variant="h6" gutterBottom>
             {t('topSpendingCategories.title')}
           </Typography>

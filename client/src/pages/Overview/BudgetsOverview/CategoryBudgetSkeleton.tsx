@@ -3,14 +3,17 @@ import { useTranslation } from 'react-i18next';
 
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
+import { DASHBOARD_CARD_PADDING } from '@/pages/Overview/styles';
 
 const CategoriesBudgetSkeleton = () => {
   const { t } = useTranslation('overview');
 
   return (
     <Grid size={{ xs: 12, md: 6, lg: 4 }}>
-      <Card sx={{ height: '100%', p: 2 }}>
-        <CardContent sx={{ height: '100%' }}>
+      <Card sx={{ height: '100%' }}>
+        <CardContent
+          sx={{ height: '100%', p: DASHBOARD_CARD_PADDING, '&:last-child': { pb: DASHBOARD_CARD_PADDING } }}
+        >
           <Column spacing={2}>
             <Typography variant="h5" color="text.secondary">
               {t('budgetWatch.title')}

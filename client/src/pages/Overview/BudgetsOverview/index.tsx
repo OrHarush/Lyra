@@ -11,6 +11,7 @@ import BudgetList from '@/pages/Overview/BudgetsOverview/BudgetList';
 import CategoriesBudgetSkeleton from '@/pages/Overview/BudgetsOverview/CategoryBudgetSkeleton';
 import NoBudgetsEmptyCTA from '@/pages/Overview/BudgetsOverview/NoBudgetsEmptyCTA';
 import { useOverviewFilters } from '@/pages/Overview/OverviewFiltersProvider';
+import { DASHBOARD_CARD_PADDING } from '@/pages/Overview/styles';
 
 const BudgetsOverview = () => {
   const { t } = useTranslation('overview');
@@ -30,15 +31,16 @@ const BudgetsOverview = () => {
 
   return (
     <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ display: 'flex', minHeight: 0 }}>
-      <Card sx={{ height: '100%', p: isMobile ? 1 : 2, display: 'flex', flex: 1, minHeight: 0 }}>
+      <Card sx={{ height: '100%', display: 'flex', flex: 1, minHeight: 0 }}>
         <CardContent
           sx={{
             height: '100%',
             display: 'flex',
             flex: 1,
             minHeight: 0,
+            p: DASHBOARD_CARD_PADDING,
             '&:last-child': {
-              pb: 0,
+              pb: DASHBOARD_CARD_PADDING,
             },
           }}
         >
