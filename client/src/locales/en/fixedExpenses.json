@@ -1,21 +1,26 @@
 {
   "page": {
-    "title": "Fixed expenses"
+    "title": "Fixed expenses",
+    "subtitle": "Bills and subscriptions that repeat every month"
   },
   "summary": {
-    "perMonth": "Per month",
-    "perYear": "Per year",
-    "count_one": "{{count}} fixed expense",
-    "count_other": "{{count}} fixed expenses"
+    "monthlyLabel": "Costs you every month",
+    "perYear": "a year",
+    "split": "Monthly split by type"
+  },
+  "kinds": {
+    "bill": "Bills",
+    "subscription": "Subscriptions",
+    "regular": "Other"
   },
   "sections": {
+    "bill": {
+      "title": "Fixed bills",
+      "hint": "Tracked here. They can't be cancelled."
+    },
     "subscription": {
       "title": "Subscriptions",
-      "hint": "You can cancel these"
-    },
-    "bill": {
-      "title": "Bills",
-      "hint": "Tracked only. Amounts are estimates."
+      "hint": "You can cancel these; we'll open the company's cancellation page."
     },
     "regular": {
       "title": "Other fixed expenses",
@@ -23,13 +28,13 @@
     }
   },
   "row": {
-    "next": "Next: {{date}}",
-    "perMonth": "a month",
-    "estimate": "Estimate",
+    "dueBy": "Due by {{date}}",
+    "renewsOn": "Renews on {{date}}",
+    "nextOn": "Next on {{date}}",
     "cancel": "Cancel",
-    "edit": "Edit details",
-    "moreActions": "More actions"
+    "edit": "Edit {{name}}"
   },
+  "add": "Add a fixed expense",
   "cancel": {
     "title": "Did you cancel {{name}}?",
     "bodyWithLink": "We opened the provider's cancellation page. Once you've cancelled there, confirm here and we'll stop this expense from today. Past payments stay.",
@@ -43,8 +48,7 @@
   },
   "empty": {
     "title": "No fixed expenses yet",
-    "body": "Add a recurring expense, like a subscription or a bill, to see what you pay every month.",
-    "cta": "Add a fixed expense"
+    "body": "Add a recurring expense, like a subscription or a bill, to see what you pay every month."
   },
   "toast": {
     "cancelled": "{{name}} stopped",

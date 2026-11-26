@@ -11,7 +11,7 @@ const FixedExpensesEmptyState = ({ onAdd }: { onAdd: () => void }) => {
       icon={EventRepeatIcon}
       title={t('empty.title')}
       description={t('empty.body')}
-      action={{ label: t('empty.cta'), onClick: onAdd }}
+      action={{ label: t('add'), onClick: onAdd }}
     />
   );
 };

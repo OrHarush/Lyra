@@ -1,52 +1,48 @@
-import AddIcon from '@mui/icons-material/Add';
-import { Button, Card, Divider, Typography } from '@mui/material';
+import { Card, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import CurrencyText from '@/components/shared/ui/CurrencyText';
-import { useIsSmallScreen } from '@/hooks/common/useIsSmallScreen';
-import { FixedExpenseListDto } from '@/types/FixedExpense';
+import KindSplitBar from '@/pages/FixedExpenses/KindSplitBar';
+import { getSummaryCardStyle } from '@/pages/FixedExpenses/styles';
+import SummaryLegendItem from '@/pages/FixedExpenses/SummaryLegendItem';
+import { FixedExpenseDto, FixedExpenseListDto } from '@/types/FixedExpense';
+import { sumMonthlyByKind } from '@/utils/entities/fixedExpense';
 
 interface FixedExpensesSummaryProps {
   totals: FixedExpenseListDto['totals'];
-  count: number;
-  onAdd: () => void;
+  items: FixedExpenseDto[];
 }
 
-const FixedExpensesSummary = ({ totals, count, onAdd }: FixedExpensesSummaryProps) => {
+const FixedExpensesSummary = ({ totals, items }: FixedExpensesSummaryProps) => {
   const { t } = useTranslation('fixedExpenses');
-  const isSmallScreen = useIsSmallScreen();
+  const monthlyByKind = sumMonthlyByKind(items);
 
   return (
-    <Card sx={{ p: { xs: 2, sm: 3 } }}>
-      <Row alignItems="center" justifyContent="space-between" spacing={2} flexWrap="wrap" useFlexGap>
-        <Row spacing={{ xs: 2, sm: 4 }} alignItems="center">
-          <Column spacing={0.25}>
+    <Card sx={getSummaryCardStyle()}>
+      <Column spacing={2}>
+        <Column spacing={0.5}>
+          <Row justifyContent="space-between" alignItems="center" spacing={1}>
             <Typography variant="body2" color="text.secondary">
-              {t('summary.perMonth')}
+              {t('summary.monthlyLabel')}
             </Typography>
-            <CurrencyText value={totals.monthly} variant="h4" fontWeight={700} />
-          </Column>
-          <Divider orientation="vertical" flexItem />
-          <Column spacing={0.25}>
-            <Typography variant="body2" color="text.secondary">
-              {t('summary.perYear')}
-            </Typography>
-            <CurrencyText value={totals.yearly} variant="h5" fontWeight={600} />
-          </Column>
-        </Row>
-        <Column spacing={1} alignItems={{ xs: 'flex-start', sm: 'flex-end' }}>
-          <Typography variant="body2" color="text.secondary">
-            {t('summary.count', { count })}
-          </Typography>
-          {!isSmallScreen && (
-            <Button variant="contained" startIcon={<AddIcon />} onClick={onAdd}>
-              {t('empty.cta')}
-            </Button>
-          )}
+            <Row spacing={0.5} alignItems="baseline">
+              <CurrencyText value={totals.yearly} variant="body2" color="text.secondary" />
+              <Typography variant="body2" color="text.secondary">
+                {t('summary.perYear')}
+              </Typography>
+            </Row>
+          </Row>
+          <CurrencyText value={totals.monthly} variant="h3" fontWeight={800} color="error.main" />
         </Column>
-      </Row>
+        <KindSplitBar shares={monthlyByKind} />
+        <Row spacing={2} flexWrap="wrap" useFlexGap justifyContent="space-between">
+          {monthlyByKind.map(({ kind, monthly }) => (
+            <SummaryLegendItem key={kind} kind={kind} monthly={monthly} />
+          ))}
+        </Row>
+      </Column>
     </Card>
   );
 };

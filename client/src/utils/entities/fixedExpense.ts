@@ -1,17 +1,6 @@
-import { BillType, SUBSCRIPTION_PROVIDERS, SubscriptionProviderId } from '@lyra/shared';
-import BoltIcon from '@mui/icons-material/Bolt';
-import HomeWorkIcon from '@mui/icons-material/HomeWork';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import WaterDropIcon from '@mui/icons-material/WaterDrop';
+import { FixedExpenseKind, SUBSCRIPTION_PROVIDERS, SubscriptionProviderId } from '@lyra/shared';
 
-export const BILL_TYPE_ICONS: Record<BillType, typeof BoltIcon> = {
-  electricity: BoltIcon,
-  water: WaterDropIcon,
-  arnona: HomeWorkIcon,
-  gas: LocalFireDepartmentIcon,
-  other: ReceiptLongIcon,
-};
+import { FixedExpenseDto } from '@/types/FixedExpense';
 
 export const getProviderName = (providerId: SubscriptionProviderId, language: string) => {
   const { name } = SUBSCRIPTION_PROVIDERS[providerId];
@@ -25,3 +14,13 @@ export const getProviderCancelUrl = (providerId?: SubscriptionProviderId | null)
 export const openCancellationPage = (url: string) => {
   window.open(url, '_blank', 'noopener,noreferrer');
 };
+
+export const FIXED_EXPENSE_SECTION_ORDER: FixedExpenseKind[] = ['bill', 'subscription', 'regular'];
+
+export const sumMonthlyByKind = (items: FixedExpenseDto[]) =>
+  FIXED_EXPENSE_SECTION_ORDER.map(kind => ({
+    kind,
+    monthly: items
+      .filter(item => item.kind === kind)
+      .reduce((total, item) => total + item.monthlyAmount, 0),
+  })).filter(({ monthly }) => monthly > 0);

@@ -42,3 +42,34 @@ export const getKindSectionStyle = (): SxProps<Theme> => ({
   border: '1px solid',
   borderColor: 'divider',
 });
+
+// The illustrations are drawn for a light backdrop, so the tile stays light in both themes.
+const ICON_TILE_BACKGROUND = '#F1EEFB';
+
+export const getIconTileStyle = (size: number, hasTile: boolean): SxProps<Theme> => ({
+  position: 'relative',
+  width: size,
+  height: size,
+  flexShrink: 0,
+  borderRadius: hasTile ? `${Math.round(size * 0.28)}px` : '6px',
+  bgcolor: hasTile ? ICON_TILE_BACKGROUND : 'transparent',
+  overflow: 'hidden',
+});
+
+export const getIconSkeletonStyle = (): SxProps<Theme> => ({
+  position: 'absolute',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  borderRadius: 'inherit',
+});
+
+export const getIconImageStyle = (isLoaded: boolean, hasTile: boolean): SxProps<Theme> => ({
+  width: '100%',
+  height: '100%',
+  p: hasTile ? '12%' : 0,
+  objectFit: 'contain',
+  display: 'block',
+  opacity: isLoaded ? 1 : 0,
+  transition: 'opacity 200ms ease',
+});
