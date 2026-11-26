@@ -1,4 +1,4 @@
-import { Box, List, ListSubheader } from '@mui/material';
+import { Box, List } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -14,11 +14,12 @@ import {
 import SidebarNavigationButton, {
   SidebarButtonConfig,
 } from '@/components/shared/layout/sidebar/SidebarButtons/SidebarNavigationButton';
+import SidebarSection from '@/components/shared/layout/sidebar/SidebarButtons/SidebarSection';
 import {
-  getSidebarSubtitleStyle,
   SIDEBAR_SUBTITLE_HEIGHT,
   SidebarButtonsStyles,
 } from '@/components/shared/layout/sidebar/SidebarButtons/styles';
+import { useCollapsedSidebarSections } from '@/components/shared/layout/sidebar/SidebarButtons/useCollapsedSidebarSections';
 import { useAuth } from '@/providers/AuthProvider';
 import { isAdmin } from '@/utils/env';
 
@@ -26,12 +27,23 @@ const MobileSidebarButtons = () => {
   const { t } = useTranslation('sidebar');
   const location = useLocation();
   const { user } = useAuth();
+  const { isExpanded, toggleSection } = useCollapsedSidebarSections();
   const mainNavigation = [fixedExpensesButton, investmentsButton, calculatorsButton];
-
   const adminNavigation = buildAdminNavigationButtons(isAdmin(user));
-  const rows = [...mainNavigation, ...manageNavigation, ...adminNavigation];
-  const activeIndex = rows.findIndex(button => isSidebarButtonActive(button, location.pathname));
-  const subtitleOffset = activeIndex >= mainNavigation.length ? SIDEBAR_SUBTITLE_HEIGHT : 0;
+
+  // Collapsed rows take no space, so the highlight counts only the visible ones.
+  const visibleRows = [
+    ...mainNavigation,
+    ...(isExpanded('manage') ? manageNavigation : []),
+    ...(isExpanded('admin') ? adminNavigation : []),
+  ];
+  const activeIndex = visibleRows.findIndex(button =>
+    isSidebarButtonActive(button, location.pathname)
+  );
+  const activeRow = visibleRows[activeIndex];
+  const titlesAboveActive = adminNavigation.includes(activeRow)
+    ? 2
+    : Number(manageNavigation.includes(activeRow));
 
   const renderButton = (button: SidebarButtonConfig) => (
     <SidebarNavigationButton
@@ -44,14 +56,27 @@ const MobileSidebarButtons = () => {
 
   return (
     <Box sx={{ position: 'relative' }}>
-      <Box sx={SidebarButtonsStyles(activeIndex, subtitleOffset)} />
+      <Box
+        sx={SidebarButtonsStyles(activeIndex, titlesAboveActive * SIDEBAR_SUBTITLE_HEIGHT)}
+      />
       <List sx={{ position: 'relative', zIndex: 1 }}>
         {mainNavigation.map(renderButton)}
-        <ListSubheader disableSticky sx={getSidebarSubtitleStyle()}>
-          {t('manage')}
-        </ListSubheader>
-        {manageNavigation.map(renderButton)}
-        <AdminNavigation adminNavigation={adminNavigation} />
+        <SidebarSection
+          title={t('manage')}
+          isExpanded={isExpanded('manage')}
+          onToggle={() => toggleSection('manage')}
+        >
+          {manageNavigation.map(renderButton)}
+        </SidebarSection>
+        {adminNavigation.length > 0 && (
+          <SidebarSection
+            title={t('admin')}
+            isExpanded={isExpanded('admin')}
+            onToggle={() => toggleSection('admin')}
+          >
+            <AdminNavigation adminNavigation={adminNavigation} />
+          </SidebarSection>
+        )}
       </List>
     </Box>
   );

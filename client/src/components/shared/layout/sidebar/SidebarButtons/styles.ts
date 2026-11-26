@@ -1,16 +1,21 @@
 import { SxProps, Theme } from '@mui/material';
 
-export const SIDEBAR_SUBTITLE_HEIGHT = 32;
+export const SIDEBAR_SUBTITLE_HEIGHT = 36;
 
 // The height is fixed so the sliding highlight can skip over it exactly.
 export const getSidebarSubtitleStyle = (): SxProps<Theme> => ({
   height: SIDEBAR_SUBTITLE_HEIGHT,
-  lineHeight: `${SIDEBAR_SUBTITLE_HEIGHT}px`,
-  px: 3,
-  fontSize: '0.75rem',
-  fontWeight: 600,
+  mx: 1,
+  px: 2,
+  borderRadius: '12px',
+  justifyContent: 'space-between',
+});
+
+export const getSidebarSectionArrowStyle = (isExpanded: boolean): SxProps<Theme> => ({
+  fontSize: 18,
   color: 'text.secondary',
-  bgcolor: 'transparent',
+  transform: isExpanded ? 'rotate(180deg)' : 'none',
+  transition: 'transform 0.2s ease',
 });
 
 // `extraOffset` accounts for non-button content above the active row, such as a subtitle.
