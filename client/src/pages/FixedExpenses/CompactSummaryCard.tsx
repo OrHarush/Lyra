@@ -21,7 +21,12 @@ const CompactSummaryCard = ({ totals, groups, nextCharge }: FixedExpensesSummary
           <Typography variant="body2" color="text.secondary">
             {t('summary.perYearLabel')}
           </Typography>
-          <CurrencyText value={totals.yearly} variant="h5" fontWeight={700} />
+          <CurrencyText
+            value={totals.yearly}
+            variant="h5"
+            fontWeight={700}
+            sx={{ alignSelf: 'flex-start' }}
+          />
           <Typography variant="body2" color="text.secondary">
             {`${t('summary.nextCharge')}: ${nextCharge.name}`}
           </Typography>

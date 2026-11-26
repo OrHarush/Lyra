@@ -27,7 +27,12 @@ const WideSummaryCards = ({ totals, groups, nextCharge }: FixedExpensesSummaryPr
         <Column height="100%" justifyContent="space-between" spacing={2}>
           <Column spacing={0.5}>
             <Typography color="text.secondary">{t('summary.monthlyLabel')}</Typography>
-            <CurrencyText value={totals.monthly} variant="h2" fontWeight={700} />
+            <CurrencyText
+              value={totals.monthly}
+              variant="h2"
+              fontWeight={700}
+              sx={{ alignSelf: 'flex-start' }}
+            />
             <Row spacing={0.5} alignItems="baseline">
               <CurrencyText value={totals.yearly} variant="body1" color="text.secondary" />
               <Typography color="text.secondary">{t('summary.perYear')}</Typography>
