@@ -22,6 +22,7 @@ import {
   forecastBalance,
   isWithinWindow,
   toBalanceDeltas,
+  toBudgetMonth,
 } from './balance/ledger';
 import { getActiveWorkspaceIdOrThrow } from './workspaceService';
 
@@ -179,18 +180,18 @@ export const getBalanceForecast = async (
   }
 
   const { finalBalance, now } = await computeAccountBalance(workspaceId, accountId);
-  // Starts a month early because card purchases are charged on the next billing day.
-  const from = dayjs.utc(now).subtract(1, 'month').startOf('month').toDate();
-  const endOfTargetMonth = dayjs.utc(new Date(Date.UTC(year, month, 1))).endOf('month').toDate();
+  const targetMonth = dayjs.utc(new Date(Date.UTC(year, month, 1)));
+  // Card purchases from last month are still unpaid, and rows dated next month can belong to
+  // the target month (card cycle or "belongs to previous month").
   const transactions = await findScheduledTransactions(workspaceId, {
     accountId,
-    from,
-    to: endOfTargetMonth,
+    from: dayjs.utc(now).subtract(1, 'month').startOf('month').toDate(),
+    to: targetMonth.add(1, 'month').endOf('month').toDate(),
   });
   const forecast = forecastBalance(
     toBalanceDeltas(transactions, accountId),
     { currentBalance: finalBalance, now: new Date(now) },
-    endOfTargetMonth
+    toBudgetMonth({ year, month })
   );
 
   return {

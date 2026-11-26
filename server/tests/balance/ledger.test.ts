@@ -20,13 +20,32 @@ import {
 
 const NOW = day('2026-11-10');
 
-const delta = (amount: number, isoDay: string, isVirtual = false): BalanceDelta => ({
+const delta = (
+  amount: number,
+  isoDay: string,
+  { isVirtual = false, budgetMonth = isoDay.slice(0, 7) } = {}
+): BalanceDelta => ({
   amount,
   effectiveDate: day(isoDay),
+  budgetMonth,
   isVirtual,
 });
 
 describe('toBalanceDeltas', () => {
+  it('gives each row its budget month', () => {
+    const deltas = toBalanceDeltas(
+      [
+        expense(1, '2026-12-29', { belongToPreviousMonth: true }),
+        expense(1, '2026-12-01', { paymentMethod: creditCard(10) }),
+        expense(1, '2026-12-10', { paymentMethod: creditCard(10) }),
+        expense(1, '2026-12-10'),
+      ],
+      ACCOUNT_ID
+    );
+
+    expect(deltas.map(d => d.budgetMonth)).toEqual(['2026-11', '2026-11', '2026-12', '2026-12']);
+  });
+
   it('signs rows by transaction type, whatever the category', () => {
     const deltas = toBalanceDeltas(
       [
@@ -84,7 +103,7 @@ describe('balanceSinceCheckpoint', () => {
         delta(-20, '2026-11-02'),
         delta(-300, '2026-11-10'),
         delta(-4000, '2026-11-11'),
-        delta(-50_000, '2026-11-05', true),
+        delta(-50_000, '2026-11-05', { isVirtual: true }),
       ],
       { after: day('2026-11-01'), upTo: NOW }
     );
@@ -94,30 +113,38 @@ describe('balanceSinceCheckpoint', () => {
 });
 
 describe('forecastBalance', () => {
-  it('adds every upcoming row up to the date, real and recurring', () => {
+  const anchor = { currentBalance: 1000, now: NOW };
+
+  it('adds every unpaid row whose budget month is the target month or earlier', () => {
     const forecast = forecastBalance(
       [
         delta(-1, '2026-11-10'),
-        delta(500, '2026-11-20', true),
-        delta(-200, '2026-11-30'),
-        delta(-100, '2026-12-15', true),
-        delta(-9999, '2027-01-01'),
+        delta(500, '2026-11-20', { isVirtual: true }),
+        delta(-200, '2026-12-29', { budgetMonth: '2026-11' }),
+        delta(-30, '2026-11-15', { budgetMonth: '2026-10' }),
+        delta(-100, '2026-12-05'),
       ],
-      { currentBalance: 1000, now: NOW },
-      day('2026-12-31')
+      anchor,
+      '2026-11'
     );
 
     expect(forecast).toEqual({
       currentBalance: 1000,
       expectedIncome: 500,
-      expectedExpenses: 300,
-      projectedBalance: 1200,
+      expectedExpenses: 230,
+      projectedBalance: 1270,
     });
+  });
+
+  it('includes the months in between when looking further ahead', () => {
+    const deltas = [delta(-100, '2026-11-20'), delta(-100, '2026-12-20'), delta(-100, '2027-01-20')];
+
+    expect(forecastBalance(deltas, anchor, '2027-01').projectedBalance).toBe(700);
   });
 });
 
 describe('balanceAt', () => {
-  const deltas = [delta(-100, '2026-11-05'), delta(-7, '2026-11-06', true), delta(-30, '2026-11-20')];
+  const deltas = [delta(-100, '2026-11-05'), delta(-7, '2026-11-06', { isVirtual: true }), delta(-30, '2026-11-20')];
   const anchor = { currentBalance: 1000, now: NOW };
 
   it('walks back over real rows only', () => {

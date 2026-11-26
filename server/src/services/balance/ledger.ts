@@ -1,11 +1,18 @@
 import { ITransactionPopulated } from '../../types/Transaction';
-import { getEffectiveBalanceDate, signedDeltaForAccount } from '../../utils/transaction';
+import {
+  getEffectiveBalanceDate,
+  getEffectiveMonth,
+  signedDeltaForAccount,
+} from '../../utils/transaction';
 
-// The single set of rules for account balances: money moves on its balance date, and everything
-// that leaves the account lowers it. Spending reports group by month and category elsewhere.
+// The single set of rules for account balances. Each row moves money on its balance date
+// (cards: the billing day) and belongs to a budget month (the card cycle, or the previous month
+// when flagged). The balance and the calendar follow the balance date; the projected balance of
+// a month follows the budget month. Everything that leaves the account lowers it.
 
 export interface BalanceDelta {
   effectiveDate: Date;
+  budgetMonth: string;
   amount: number;
   isVirtual: boolean;
 }
@@ -35,10 +42,14 @@ export const toBalanceDeltas = (
     .filter(tx => !!tx.date && touchesAccount(tx, accountId))
     .map(tx => ({
       effectiveDate: getEffectiveBalanceDate(tx),
+      budgetMonth: toBudgetMonth(getEffectiveMonth(tx)),
       amount: signedDeltaForAccount(tx, accountId),
       isVirtual: !!tx.isVirtual,
     }))
     .filter(delta => delta.amount !== 0);
+
+export const toBudgetMonth = ({ year, month }: { year: number; month: number }) =>
+  `${year}-${String(month + 1).padStart(2, '0')}`;
 
 export const isWithinWindow = (effectiveDate: Date, { after, upTo }: DateWindow) =>
   effectiveDate > after && effectiveDate <= upTo;
@@ -49,12 +60,15 @@ export const balanceSinceCheckpoint = (
   window: DateWindow
 ) => checkpointBalance + sumAmounts(selectSettled(selectWithin(deltas, window)));
 
+// What the balance will be once everything belonging to `throughMonth` (or earlier) is paid.
 export const forecastBalance = (
   deltas: BalanceDelta[],
   { currentBalance, now }: BalanceAnchor,
-  upTo: Date
+  throughMonth: string
 ): BalanceForecast => {
-  const upcoming = selectWithin(deltas, { after: now, upTo });
+  const upcoming = deltas.filter(
+    delta => delta.effectiveDate > now && delta.budgetMonth <= throughMonth
+  );
   const expectedIncome = sumAmounts(upcoming.filter(delta => delta.amount > 0));
   const expectedExpenses = Math.abs(sumAmounts(upcoming.filter(delta => delta.amount < 0)));
 
@@ -68,7 +82,7 @@ export const forecastBalance = (
 
 export const balanceAt = (moment: Date, deltas: BalanceDelta[], anchor: BalanceAnchor) => {
   if (moment >= anchor.now) {
-    return forecastBalance(deltas, anchor, moment).projectedBalance;
+    return anchor.currentBalance + sumAmounts(selectWithin(deltas, { after: anchor.now, upTo: moment }));
   }
 
   const settledSince = selectSettled(selectWithin(deltas, { after: moment, upTo: anchor.now }));

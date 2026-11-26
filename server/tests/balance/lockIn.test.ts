@@ -175,26 +175,26 @@ describe('balance numbers', () => {
       expect(await novemberBalances()).toEqual({ current: 9700, calendar: 9700, projected: 9700 });
     });
 
-    it('charges a purchase made after the billing day next month', async () => {
+    it('charges a purchase made after the billing day next month, but projects it in its own month', async () => {
       transactions = [expense(300, '2026-11-08', { paymentMethod: creditCard(2) })];
 
       expect(await novemberBalances()).toEqual({
         current: 10_000,
         calendar: 10_000,
-        projected: 10_000,
+        projected: 9700,
       });
-      expect(await calendarBalance('2026-12-31')).toBe(9700);
+      expect(await calendarBalance('2026-12-02')).toBe(9700);
       expect(await projectedBalance(2026, 12)).toBe(9700);
       expect(await monthTotals(2026, 11)).toMatchObject({ monthlyExpenses: 300 });
     });
 
-    it('charges a purchase made on the billing day next month', async () => {
+    it('charges a purchase made on the billing day next month, but projects it in its own month', async () => {
       transactions = [expense(300, '2026-11-15', { paymentMethod: creditCard(15) })];
 
       expect(await novemberBalances()).toEqual({
         current: 10_000,
         calendar: 10_000,
-        projected: 10_000,
+        projected: 9700,
       });
       expect(await calendarBalance('2026-12-15')).toBe(9700);
     });
@@ -272,15 +272,124 @@ describe('balance numbers', () => {
     expect(await projectedBalance(2027, 3)).toBe(9500);
   });
 
-  it('a row flagged as belonging to the previous month', async () => {
-    transactions = [income(1000, '2026-12-01', { belongToPreviousMonth: true })];
+  describe('rows that belong to an earlier month than their date', () => {
+    it('salary on Dec 1 flagged as November lands in November’s projection', async () => {
+      transactions = [income(1000, '2026-12-01', { belongToPreviousMonth: true })];
 
-    expect(await novemberBalances()).toEqual({
-      current: 10_000,
-      calendar: 10_000,
-      projected: 10_000,
+      expect(await novemberBalances()).toEqual({
+        current: 10_000,
+        calendar: 10_000,
+        projected: 11_000,
+      });
+      expect(await calendarBalance('2026-12-01')).toBe(11_000);
+      expect(await monthTotals(2026, 11)).toMatchObject({ monthlyIncome: 1000 });
     });
-    expect(await monthTotals(2026, 11)).toMatchObject({ monthlyIncome: 1000 });
+
+    it('an expense on Dec 15 flagged as November lands in November’s projection', async () => {
+      transactions = [expense(400, '2026-12-15', { belongToPreviousMonth: true })];
+
+      expect(await novemberBalances()).toEqual({
+        current: 10_000,
+        calendar: 10_000,
+        projected: 9600,
+      });
+      expect(await calendarBalance('2026-12-14')).toBe(10_000);
+      expect(await calendarBalance('2026-12-15')).toBe(9600);
+    });
+
+    it('an expense on Dec 29 flagged as November still lands in November’s projection', async () => {
+      transactions = [expense(250, '2026-12-29', { belongToPreviousMonth: true })];
+
+      expect(await projectedBalance(2026, 11)).toBe(9750);
+      expect(await calendarBalance('2026-12-28')).toBe(10_000);
+      expect(await calendarBalance('2026-12-29')).toBe(9750);
+    });
+
+    it('stays counted when looking further ahead', async () => {
+      transactions = [expense(250, '2026-12-29', { belongToPreviousMonth: true })];
+
+      expect(await projectedBalance(2026, 12)).toBe(9750);
+      expect(await projectedBalance(2027, 2)).toBe(9750);
+    });
+
+    it('a Jan 3 row flagged as December belongs to December, not November', async () => {
+      transactions = [expense(500, '2027-01-03', { belongToPreviousMonth: true })];
+
+      expect(await projectedBalance(2026, 11)).toBe(10_000);
+      expect(await projectedBalance(2026, 12)).toBe(9500);
+    });
+
+    it('an unflagged December row stays out of November’s projection', async () => {
+      transactions = [expense(500, '2026-12-05'), expense(70, '2026-12-29')];
+
+      expect(await projectedBalance(2026, 11)).toBe(10_000);
+      expect(await projectedBalance(2026, 12)).toBe(9430);
+    });
+
+    it('a card purchase on Dec 1 before the billing day belongs to November', async () => {
+      transactions = [expense(300, '2026-12-01', { paymentMethod: creditCard(10) })];
+
+      expect(await projectedBalance(2026, 11)).toBe(9700);
+      expect(await calendarBalance('2026-12-09')).toBe(10_000);
+      expect(await calendarBalance('2026-12-10')).toBe(9700);
+    });
+
+    it('a card purchase on Dec 10, the billing day, belongs to December', async () => {
+      transactions = [expense(300, '2026-12-10', { paymentMethod: creditCard(10) })];
+
+      expect(await projectedBalance(2026, 11)).toBe(10_000);
+      expect(await projectedBalance(2026, 12)).toBe(9700);
+    });
+
+    it('an October card purchase charged after today is still owed in November', async () => {
+      transactions = [expense(300, '2026-10-28', { paymentMethod: creditCard(15) })];
+
+      expect(await novemberBalances()).toEqual({
+        current: 10_000,
+        calendar: 9700,
+        projected: 9700,
+      });
+    });
+
+    it('a recurring salary flagged as previous month lands in the month before each payday', async () => {
+      templates = [
+        monthlyExpenseTemplate(2000, 1, '2026-12-01', {
+          type: 'Income',
+          category: category('Income') as never,
+          belongToPreviousMonth: true,
+        }),
+      ];
+
+      expect(await projectedBalance(2026, 11)).toBe(12_000);
+      expect(await projectedBalance(2026, 12)).toBe(14_000);
+      expect(await calendarBalance('2026-11-30')).toBe(10_000);
+    });
+
+    it('does not count a flagged row twice once its date has passed', async () => {
+      transactions = [expense(400, '2026-11-02', { belongToPreviousMonth: true })];
+
+      expect(await novemberBalances()).toEqual({ current: 9600, calendar: 9600, projected: 9600 });
+    });
+  });
+
+  it('matches the production dashboard: card bill, loan and salary on Dec 1-2 belong to November', async () => {
+    const amex = creditCard(1);
+    transactions = [
+      income(3733, '2026-11-05'),
+      expense(8000, '2026-11-12', { paymentMethod: amex }),
+      expense(991.5, '2026-11-20', { paymentMethod: amex }),
+      income(1, '2026-12-01', { belongToPreviousMonth: true }),
+      expense(1000, '2026-12-02', { belongToPreviousMonth: true }),
+    ];
+
+    expect(await getBalanceForecast(WORKSPACE_ID, ACCOUNT_ID, { year: 2026, month: 10 })).toEqual({
+      currentBalance: 13_733,
+      expectedIncome: 1,
+      expectedExpenses: 9991.5,
+      projectedBalance: 3742.5,
+    });
+    expect(await calendarBalance('2026-11-30')).toBe(13_733);
+    expect(await calendarBalance('2026-12-02')).toBe(3742.5);
   });
 
   it('an upcoming row without a category', async () => {
