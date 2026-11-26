@@ -9,6 +9,7 @@ import { initReactI18next } from 'react-i18next';
 import enAccessibility from '@/locales/en/accessibility.json';
 import enAccounts from '@/locales/en/accounts.json';
 import enAdmin from '@/locales/en/admin.json';
+import enBills from '@/locales/en/bills.json';
 import enBlog from '@/locales/en/blog.json';
 import enBlogCouplesMoney from '@/locales/en/blogCouplesMoney.json';
 import enBlogCreditCardBillingCycle from '@/locales/en/blogCreditCardBillingCycle.json';
@@ -26,6 +27,7 @@ import enHome from '@/locales/en/home.json';
 import enInvestments from '@/locales/en/investments.json';
 import enLogin from '@/locales/en/login.json';
 import enMcp from '@/locales/en/mcp.json';
+import enNotifications from '@/locales/en/notifications.json';
 import enOverview from '@/locales/en/overview.json';
 import enPaymentMethods from '@/locales/en/paymentMethods.json';
 import enPrivacyPolicy from '@/locales/en/privacyPolicy.json';
@@ -38,6 +40,7 @@ import enUser from '@/locales/en/user.json';
 import heAccessibility from '@/locales/he/accessibility.json';
 import heAccounts from '@/locales/he/accounts.json';
 import heAdmin from '@/locales/he/admin.json';
+import heBills from '@/locales/he/bills.json';
 import heBlog from '@/locales/he/blog.json';
 import heBlogCouplesMoney from '@/locales/he/blogCouplesMoney.json';
 import heBlogCreditCardBillingCycle from '@/locales/he/blogCreditCardBillingCycle.json';
@@ -55,6 +58,7 @@ import heHome from '@/locales/he/home.json';
 import heInvestments from '@/locales/he/investments.json';
 import heLogin from '@/locales/he/login.json';
 import heMcp from '@/locales/he/mcp.json';
+import heNotifications from '@/locales/he/notifications.json';
 import heOverview from '@/locales/he/overview.json';
 import hePaymentMethods from '@/locales/he/paymentMethods.json';
 import hePrivacyPolicy from '@/locales/he/privacyPolicy.json';
@@ -100,6 +104,8 @@ i18n
         publicCalculators: enPublicCalculators,
         investments: enInvestments,
         mcp: enMcp,
+        bills: enBills,
+        notifications: enNotifications,
       },
       he: {
         admin: heAdmin,
@@ -131,6 +137,8 @@ i18n
         publicCalculators: hePublicCalculators,
         investments: heInvestments,
         mcp: heMcp,
+        bills: heBills,
+        notifications: heNotifications,
       },
     },
     fallbackLng: 'he',

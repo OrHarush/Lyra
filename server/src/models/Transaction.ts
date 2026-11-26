@@ -27,6 +27,9 @@ export interface ITransaction {
   source: TransactionSource;
   reviewedAt?: Date | null;
   sourceMerchant?: string | null;
+  // A due bill recorded at its estimate. Absent on every other row, which reads as approved.
+  isAwaitingApproval?: boolean;
+  createdAt?: Date;
 }
 
 const TransactionSchema: Schema = new Schema(
@@ -61,6 +64,7 @@ const TransactionSchema: Schema = new Schema(
     },
     reviewedAt: { type: Date },
     sourceMerchant: { type: String, default: null },
+    isAwaitingApproval: { type: Boolean },
   },
   { timestamps: true }
 );
@@ -87,5 +91,9 @@ TransactionSchema.index(
   { partialFilterExpression: { importFingerprint: { $exists: true } } }
 );
 TransactionSchema.index({ userId: 1, source: 1, reviewedAt: 1 });
+TransactionSchema.index(
+  { workspaceId: 1, date: 1 },
+  { name: 'awaiting_bills', partialFilterExpression: { isAwaitingApproval: true } }
+);
 
 export default mongoose.model<ITransaction>('Transaction', TransactionSchema);

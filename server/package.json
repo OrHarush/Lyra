@@ -24,7 +24,8 @@
     "backfill:personal-icon": "ts-node scripts/backfill-personal-workspace-icon.ts",
     "mint:shortcut-token": "ts-node scripts/mintShortcutToken.ts",
     "stats:adoption": "ts-node scripts/adoption-stats.ts",
-    "verify:catalog": "ts-node scripts/verify-catalog.ts"
+    "verify:catalog": "ts-node scripts/verify-catalog.ts",
+    "seed:bill-alerts": "ts-node scripts/seed-bill-alerts.ts"
   },
   "keywords": [],
   "author": "",

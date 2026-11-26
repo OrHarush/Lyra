@@ -8,15 +8,21 @@ interface ScheduledRange {
   accountId?: string;
 }
 
-// Real rows plus the recurring ones that haven't been generated yet.
+// Real rows plus the recurring ones that haven't been generated yet. Bills still awaiting
+// approval are included however old they are, because they are still expected to be paid.
 export const findScheduledTransactions = async (
   workspaceId: string,
   { from, to, accountId }: ScheduledRange
 ) => {
-  const [transactions, templates] = await Promise.all([
+  const [transactions, olderAwaitingBills, templates] = await Promise.all([
     transactionRepository.findMany(workspaceId, { accountId, from, to }),
+    transactionRepository.findAwaitingApproval(workspaceId, { accountId, before: from }),
     recurringTemplateRepository.findActiveForDateRangePopulated(workspaceId, from, to),
   ]);
 
-  return [...transactions, ...buildVirtualTransactions(templates, transactions, from, to)];
+  return [
+    ...olderAwaitingBills,
+    ...transactions,
+    ...buildVirtualTransactions(templates, transactions, from, to),
+  ];
 };

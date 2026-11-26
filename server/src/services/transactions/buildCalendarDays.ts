@@ -27,13 +27,7 @@ export const buildCalendarDays = (
   const eventsByDate = groupEventsByDate(transactions, from, to, accountId);
   const balances =
     accountId && balanceContext
-      ? buildDailyBalances(
-          transactions,
-          rangeDays,
-          accountId,
-          balanceContext.currentBalance,
-          balanceContext.now
-        )
+      ? buildDailyBalances(transactions, rangeDays, accountId, balanceContext)
       : new Map<string, number>();
 
   return rangeDays.map(day => {

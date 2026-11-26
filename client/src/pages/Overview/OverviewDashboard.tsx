@@ -12,6 +12,7 @@ import MoneyCalendar from '@/pages/Overview/MoneyCalendar';
 import MonthlyFinancialOverview from '@/pages/Overview/MonthlyFinancialOverview';
 import { useOverviewFilters } from '@/pages/Overview/OverviewFiltersProvider';
 import OverviewHeader from '@/pages/Overview/OverviewHeader';
+import PendingBillsCard from '@/pages/Overview/PendingBillsCard';
 import RecentTransactions from '@/pages/Overview/RecentTransactions';
 import RecurringSetupBanner from '@/pages/Overview/RecurringSetupBanner';
 import ReviewTransactionsBanner from '@/pages/Overview/ReviewTransactionsBanner';
@@ -34,6 +35,7 @@ const OverviewDashboard = () => {
     <Column height={'100%'} minHeight={0} spacing={2} sx={{ flex: 1 }}>
       <OverviewHeader />
       <Column height={'100%'} minHeight={0} spacing={4} sx={{ flex: 1 }}>
+        <PendingBillsCard />
         <ReviewTransactionsBanner />
         <RecurringSetupBanner />
         <Grid container spacing={4} size={{ xs: 12 }}>

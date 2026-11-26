@@ -4,6 +4,7 @@ import { alpha, IconButton, TableCell, TableRow, Tooltip, Typography } from '@mu
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import AwaitingApprovalChip from '@/components/features/bills/AwaitingApprovalChip';
 import Row from '@/components/shared/layout/containers/Row';
 import CurrencyText from '@/components/shared/ui/CurrencyText';
 import EditAndDeleteButtons from '@/components/shared/ui/EditAndDeleteButtons';
@@ -101,6 +102,7 @@ const TransactionTableRow = ({ transaction }: TransactionTableRowProps) => {
             {transaction.type === 'Transfer' ? 'Transfer' : transaction.name}
           </Typography>
           <RecurrenceBadge transaction={transaction} />
+          {transaction.isAwaitingApproval && <AwaitingApprovalChip transaction={transaction} />}
           {transaction.note && <TransactionNoteIcon note={transaction.note} />}
         </Row>
       </TableCell>

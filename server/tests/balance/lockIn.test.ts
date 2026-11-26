@@ -22,7 +22,10 @@ import {
   transfer,
 } from './fixtures';
 
-vi.mock('../../src/repositories/transactionRepository', () => ({ findMany: vi.fn() }));
+vi.mock('../../src/repositories/transactionRepository', () => ({
+  findMany: vi.fn(),
+  findAwaitingApproval: vi.fn(async () => []),
+}));
 vi.mock('../../src/repositories/recurringTemplateRepository', () => ({
   findActiveForDateRangePopulated: vi.fn(),
 }));

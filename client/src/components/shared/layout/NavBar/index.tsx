@@ -3,12 +3,11 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import MenuIcon from '@mui/icons-material/Menu';
 import { Box, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
 
+import NotificationBell from '@/components/features/notifications/NotificationBell';
 import Row from '@/components/shared/layout/containers/Row';
 import Controls from '@/components/shared/layout/NavBar/Controls';
 import NavBarContainer from '@/components/shared/layout/NavBar/NavBarContainer';
-import ThemeToggleButton from '@/components/shared/layout/NavBar/ThemeToggleButton';
 import { usePageHeaderContext } from '@/components/shared/layout/PageHeaderContext';
-import LanguageSelect from '@/components/shared/ui/LanguageSelect';
 import MonthDateSelector from '@/components/shared/ui/MonthDateSelector';
 
 interface NavBarProps {
@@ -52,9 +51,8 @@ const NavBar = ({ onMobileOpen, sidebarExpanded, onToggleSidebar }: NavBarProps)
             <MonthDateSelector value={dateConfig.value} onChange={dateConfig.onChange} />
           </Box>
         )}
-        <Row spacing={1} alignItems="center" sx={{ marginInlineStart: 'auto' }}>
-          <ThemeToggleButton />
-          <LanguageSelect sx={{ width: 36, height: 36, backgroundColor: 'transparent' }} />
+        <Row alignItems="center" sx={{ marginInlineStart: 'auto' }}>
+          <NotificationBell />
         </Row>
       </NavBarContainer>
     );

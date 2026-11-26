@@ -1,0 +1,18 @@
+{
+  "title": "Notifications",
+  "bellLabel_zero": "Notifications",
+  "bellLabel_one": "Notifications, {{count}} item needs your action",
+  "bellLabel_other": "Notifications, {{count}} items need your action",
+  "sections": {
+    "action": "Needs your action",
+    "update": "Updates"
+  },
+  "empty": {
+    "title": "Nothing needs you right now",
+    "body": "When a bill is waiting for your approval, it will show up here."
+  },
+  "error": {
+    "title": "We couldn't load your notifications",
+    "retry": "Try again"
+  }
+}

@@ -9,6 +9,11 @@ export const findMany = async (workspaceId: string) =>
     .lean<IRecurringTemplate[]>()
     .exec();
 
+export const findByIds = async (ids: Types.ObjectId[], workspaceId: string) =>
+  RecurringTemplate.find({ _id: { $in: ids }, workspaceId: new Types.ObjectId(workspaceId) })
+    .lean<IRecurringTemplate[]>()
+    .exec();
+
 export const findById = async (id: string, workspaceId: string) =>
   RecurringTemplate.findOne({ _id: id, workspaceId: new Types.ObjectId(workspaceId) })
     .lean<IRecurringTemplate>()

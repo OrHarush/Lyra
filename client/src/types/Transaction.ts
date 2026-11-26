@@ -30,6 +30,7 @@ export interface TransactionDto {
   frequency?: RecurringFrequency;
   templateId?: string;
   isVirtual?: boolean;
+  isAwaitingApproval?: boolean;
   belongToPreviousMonth?: boolean;
   category: CategoryDto;
   paymentMethod?: PaymentMethodDto;

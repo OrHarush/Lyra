@@ -15,11 +15,13 @@ export interface BalanceDelta {
   budgetMonth: string;
   amount: number;
   isVirtual: boolean;
+  isAwaitingApproval: boolean;
 }
 
 export interface BalanceAnchor {
   currentBalance: number;
   now: Date;
+  checkpointDate?: Date;
 }
 
 export interface BalanceForecast {
@@ -45,6 +47,7 @@ export const toBalanceDeltas = (
       budgetMonth: toBudgetMonth(getEffectiveMonth(tx)),
       amount: signedDeltaForAccount(tx, accountId),
       isVirtual: !!tx.isVirtual,
+      isAwaitingApproval: !!tx.isAwaitingApproval,
     }))
     .filter(delta => delta.amount !== 0);
 
@@ -63,11 +66,14 @@ export const balanceSinceCheckpoint = (
 // What the balance will be once everything belonging to `throughMonth` (or earlier) is paid.
 export const forecastBalance = (
   deltas: BalanceDelta[],
-  { currentBalance, now }: BalanceAnchor,
+  anchor: BalanceAnchor,
   throughMonth: string
 ): BalanceForecast => {
+  const { currentBalance, now } = anchor;
   const upcoming = deltas.filter(
-    delta => delta.effectiveDate > now && delta.budgetMonth <= throughMonth
+    delta =>
+      (delta.effectiveDate > now || isOverdueApproval(delta, anchor)) &&
+      delta.budgetMonth <= throughMonth
   );
   const expectedIncome = sumAmounts(upcoming.filter(delta => delta.amount > 0));
   const expectedExpenses = Math.abs(sumAmounts(upcoming.filter(delta => delta.amount < 0)));
@@ -82,7 +88,10 @@ export const forecastBalance = (
 
 export const balanceAt = (moment: Date, deltas: BalanceDelta[], anchor: BalanceAnchor) => {
   if (moment >= anchor.now) {
-    return anchor.currentBalance + sumAmounts(selectWithin(deltas, { after: anchor.now, upTo: moment }));
+    const scheduled = selectWithin(deltas, { after: anchor.now, upTo: moment });
+    const overdue = deltas.filter(delta => isOverdueApproval(delta, anchor));
+
+    return anchor.currentBalance + sumAmounts([...scheduled, ...overdue]);
   }
 
   const settledSince = selectSettled(selectWithin(deltas, { after: moment, upTo: anchor.now }));
@@ -97,7 +106,15 @@ const selectWithin = (deltas: BalanceDelta[], window: DateWindow) =>
   deltas.filter(delta => isWithinWindow(delta.effectiveDate, window));
 
 // Which rows are real money today. Forecasts count every row, settled or not.
-const selectSettled = (deltas: BalanceDelta[]) => deltas.filter(delta => !delta.isVirtual);
+const selectSettled = (deltas: BalanceDelta[]) =>
+  deltas.filter(delta => !delta.isVirtual && !delta.isAwaitingApproval);
+
+// A due bill nobody approved yet is still expected to be paid. One dated before the checkpoint is
+// left out, because the balance the user entered then may already include it.
+const isOverdueApproval = (delta: BalanceDelta, { now, checkpointDate }: BalanceAnchor) =>
+  delta.isAwaitingApproval &&
+  delta.effectiveDate <= now &&
+  (!checkpointDate || delta.effectiveDate > checkpointDate);
 
 const sumAmounts = (deltas: BalanceDelta[]) =>
   deltas.reduce((total, delta) => total + delta.amount, 0);

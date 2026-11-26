@@ -13,6 +13,7 @@ import Sidebar from '@/components/shared/layout/sidebar';
 import { usePwaInstallTracking } from '@/hooks/analytics/usePwaInstallTracking';
 import { useFeedbackPopup } from '@/hooks/feedback/useFeedbackPopup';
 import { useMonthlyReportPopup } from '@/hooks/monthlyReport/useMonthlyReportPopup';
+import { BillApprovalProvider } from '@/providers/BillApprovalProvider';
 
 const AuthenticatedLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -27,26 +28,28 @@ const AuthenticatedLayout = () => {
 
   return (
     <PageHeaderProvider>
-      <Row height={'100dvh'} width={'100%'} overflow={'hidden'}>
-        <Sidebar
-          mobileOpen={mobileOpen}
-          onMobileOpen={openMobile}
-          onMobileClose={closeMobile}
-          sidebarExpanded={sidebarExpanded}
-          onToggleSidebar={toggleSidebar}
-        />
-        <Column width={'100%'} minWidth={0} minHeight={0} overflow={'hidden'}>
-          <NavBar
+      <BillApprovalProvider>
+        <Row height={'100dvh'} width={'100%'} overflow={'hidden'}>
+          <Sidebar
+            mobileOpen={mobileOpen}
             onMobileOpen={openMobile}
+            onMobileClose={closeMobile}
             sidebarExpanded={sidebarExpanded}
             onToggleSidebar={toggleSidebar}
           />
-          <Column flex={1} minHeight={0} overflow={'auto'}>
-            <Outlet />
+          <Column width={'100%'} minWidth={0} minHeight={0} overflow={'hidden'}>
+            <NavBar
+              onMobileOpen={openMobile}
+              sidebarExpanded={sidebarExpanded}
+              onToggleSidebar={toggleSidebar}
+            />
+            <Column flex={1} minHeight={0} overflow={'auto'}>
+              <Outlet />
+            </Column>
+            <BottomNav />
           </Column>
-          <BottomNav />
-        </Column>
-      </Row>
+        </Row>
+      </BillApprovalProvider>
       <ConsentBanner />
       {isSurveyOpen && (
         <FeedbackDialog isOpen={isSurveyOpen} closeDialog={closeSurvey} variant="popup" />

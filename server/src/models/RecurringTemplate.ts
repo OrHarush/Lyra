@@ -36,6 +36,7 @@ export interface IRecurringTemplate {
   cancelUrl?: string;
   billType?: BillType;
   cancelledAt?: Date;
+  createdAt?: Date;
 }
 
 const RecurringTemplateSchema: Schema = new Schema(

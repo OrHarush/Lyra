@@ -66,6 +66,9 @@ export const queryKeys = {
   quickChips: () => ['transactions', 'quickChips'],
   // Nested under 'transactions' so creating or editing a recurring transaction refreshes the list.
   fixedExpenses: () => ['transactions', 'fixedExpenses'],
+  // Nested under 'transactions' so handling a bill anywhere refreshes the card and the bell.
+  pendingBills: () => ['transactions', 'pendingBills'],
+  notifications: () => ['transactions', 'notifications'],
   recurringTemplates: () => ['recurringTemplates'],
 
   accounts: () => ['accounts'],

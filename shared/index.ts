@@ -1,4 +1,5 @@
 export * from './schemas/account';
+export * from './schemas/bill';
 export * from './schemas/budget';
 export * from './schemas/category';
 export * from './schemas/common';

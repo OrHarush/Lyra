@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
+import AwaitingApprovalChip from '@/components/features/bills/AwaitingApprovalChip';
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import CurrencyText from '@/components/shared/ui/CurrencyText';
@@ -81,7 +82,7 @@ const TransactionCard = ({ transaction }: TransactionCardViewProps) => {
           />
         </Column>
         <Row width={'100%'} justifyContent={'space-between'} alignItems={'center'}>
-          <Column>
+          <Column alignItems={'flex-start'}>
             <Row alignItems={'center'} spacing={1}>
               <Typography
                 variant="body2"
@@ -100,6 +101,7 @@ const TransactionCard = ({ transaction }: TransactionCardViewProps) => {
             <Typography variant="caption" color="text.secondary">
               {dayjs(getTransactionDisplayDate(transaction)).format('DD/MM/YYYY')}
             </Typography>
+            {transaction.isAwaitingApproval && <AwaitingApprovalChip transaction={transaction} />}
           </Column>
           <CurrencyText
             variant="body1"

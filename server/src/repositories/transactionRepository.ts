@@ -32,6 +32,61 @@ export const findMany = async (workspaceId: string, options: GetTransactionsOpti
     .exec();
 };
 
+export const findAwaitingApproval = async (
+  workspaceId: string,
+  { accountId, before }: { accountId?: string; before?: Date } = {}
+) =>
+  Transaction.find({
+    workspaceId: new Types.ObjectId(workspaceId),
+    isAwaitingApproval: true,
+    ...(accountId && { account: new Types.ObjectId(accountId) }),
+    ...(before && { date: { $lt: before } }),
+  })
+    .sort({ date: 1 })
+    .populate('category')
+    .populate('paymentMethod')
+    .populate('account')
+    .lean<ITransactionPopulated[]>()
+    .exec();
+
+export const findRecentApprovedAmounts = async (templateId: string, limit: number) => {
+  const rows = await Transaction.find({
+    templateId: new Types.ObjectId(templateId),
+    isAwaitingApproval: { $ne: true },
+  })
+    .sort({ date: -1 })
+    .limit(limit)
+    .select('amount')
+    .lean<Pick<ITransaction, 'amount'>[]>()
+    .exec();
+
+  return rows.map(row => row.amount);
+};
+
+// Matching on the flag makes approval apply once, even when two household members tap together.
+export const approveAwaiting = async (
+  id: string,
+  data: Pick<ITransaction, 'amount' | 'importFingerprint'>,
+  workspaceId: string
+) =>
+  Transaction.findOneAndUpdate(
+    { _id: id, workspaceId: new Types.ObjectId(workspaceId), isAwaitingApproval: true },
+    { $set: { ...data, isAwaitingApproval: false } },
+    { new: true, runValidators: true }
+  )
+    .lean<ITransaction>()
+    .exec();
+
+export const moveToTemplate = (
+  fromTemplateId: string,
+  fromDate: Date,
+  data: Partial<ITransaction>
+) =>
+  Transaction.updateMany(
+    { templateId: new Types.ObjectId(fromTemplateId), date: { $gte: fromDate } },
+    { $set: data }
+  );
+
 export const findExpensesInRange = async (
   workspaceId: string,
   from: Date,

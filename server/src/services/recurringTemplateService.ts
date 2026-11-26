@@ -24,6 +24,12 @@ import { isCategoryCompatibleWithTransactionType } from '../utils/categoryCompat
 import { fingerprintForTransaction } from '../utils/importFingerprint';
 import * as analyticsService from './analyticsService';
 import { syncAllAccountsForUser } from './balanceService';
+import {
+  BILLS_IN_ESTIMATE,
+  confirmsAwaitingBill,
+  estimateBillAmount,
+  isDueForApproval,
+} from './bills/billApproval';
 import { buildFixedExpenses } from './recurring/buildFixedExpenses';
 import { normalizeFixedExpenseDetails } from './recurring/fixedExpenseDetails';
 import { isOccurrenceMonth } from './recurring/occurrence';
@@ -355,11 +361,24 @@ export const splitTemplate = async (
 
   const newTemplate = await recurringTemplateRepository.insert(newTemplateData);
 
-  await transactionRepository.deleteByTemplateIdFromDate(templateId, splitPoint.toDate());
+  const newTemplateId = (newTemplate._id as Types.ObjectId).toString();
+  const isBill = newTemplateData.kind === 'bill';
+
+  if (isBill) {
+    // Recorded bills carry real amounts, so they move to the new rule instead of being
+    // deleted and generated again from the estimate.
+    await transactionRepository.moveToTemplate(
+      templateId,
+      splitPoint.toDate(),
+      toRecordedRowChanges(newTemplateId, newTemplateData)
+    );
+  } else {
+    await transactionRepository.deleteByTemplateIdFromDate(templateId, splitPoint.toDate());
+  }
 
   await materializeOccurrence(
-    (newTemplate._id as Types.ObjectId).toString(),
-    { occurrenceDate: fromDate },
+    newTemplateId,
+    { occurrenceDate: fromDate, amount: isBill ? changes.amount : undefined },
     workspaceId
   );
 
@@ -371,6 +390,29 @@ export const splitTemplate = async (
     oldTemplate: existing,
     newTemplate: { ...newTemplate.toObject(), amount: fromCents(newTemplate.amount) },
   };
+};
+
+const toRecordedRowChanges = (
+  templateId: string,
+  template: Omit<IRecurringTemplate, '_id'>
+): Partial<ITransaction> => ({
+  templateId: new Types.ObjectId(templateId),
+  name: template.name,
+  note: template.note,
+  category: template.category,
+  paymentMethod: template.paymentMethod,
+  account: template.account,
+  frequency: template.frequency,
+  belongToPreviousMonth: template.belongToPreviousMonth,
+});
+
+const estimateAmount = async (template: IRecurringTemplate) => {
+  const recentAmounts = await transactionRepository.findRecentApprovedAmounts(
+    template._id,
+    BILLS_IN_ESTIMATE
+  );
+
+  return estimateBillAmount(recentAmounts, template.amount);
 };
 
 export const getFixedExpenses = async (workspaceId: string) => {
@@ -501,11 +543,11 @@ export const materializeOccurrence = async (
 
   const txDate = dto.date ? new Date(dto.date) : clampedDate(occurrence.year(), occurrence.month(), template.dayOfMonth);
 
-  const buildTxData = (): Omit<ITransaction, '_id'> => ({
+  const buildTxData = (fallbackAmount: number): Omit<ITransaction, '_id'> => ({
     name: dto.name ?? template.name ?? '',
     note: dto.note ?? template.note,
     type: effectiveType,
-    amount: dto.amount !== undefined ? toCents(dto.amount) : template.amount,
+    amount: dto.amount !== undefined ? toCents(dto.amount) : fallbackAmount,
     date: txDate,
     frequency: template.frequency,
     belongToPreviousMonth: dto.belongToPreviousMonth ?? template.belongToPreviousMonth ?? false,
@@ -528,7 +570,14 @@ export const materializeOccurrence = async (
   );
 
   if (existing) {
-    const txData = buildTxData();
+    // A recorded bill keeps its own amount unless a new one is given.
+    const txData = buildTxData(template.kind === 'bill' ? existing.amount : template.amount);
+
+    if (confirmsAwaitingBill(existing, txData.amount)) {
+      txData.isAwaitingApproval = false;
+      txData.importFingerprint = fingerprintForTransaction(txData);
+    }
+
     const updated = await transactionRepository.updateById(
       existing._id.toString(),
       txData,
@@ -546,7 +595,7 @@ export const materializeOccurrence = async (
     return { ...updated, amount: fromCents(updated.amount) };
   }
 
-  const txData = buildTxData();
+  const txData = buildTxData(template.amount);
   txData.importFingerprint = fingerprintForTransaction(txData);
 
   const created = await transactionRepository.insert(txData);
@@ -618,11 +667,14 @@ export const generatePendingTransactions = async (userId: string, upToDate: Date
         continue;
       }
 
+      const needsApproval = isDueForApproval(template, txDate);
+
       const txData: Omit<ITransaction, '_id'> = {
         name: template.name ?? '',
         note: template.note,
         type: template.type,
-        amount: template.amount,
+        amount: needsApproval ? await estimateAmount(template) : template.amount,
+        isAwaitingApproval: needsApproval || undefined,
         date: txDate,
         frequency: template.frequency,
         belongToPreviousMonth: template.belongToPreviousMonth ?? false,
@@ -637,7 +689,9 @@ export const generatePendingTransactions = async (userId: string, upToDate: Date
         source: 'manual',
       };
 
-      txData.importFingerprint = fingerprintForTransaction(txData);
+      if (!needsApproval) {
+        txData.importFingerprint = fingerprintForTransaction(txData);
+      }
 
       const tx = await transactionRepository.insert(txData);
 

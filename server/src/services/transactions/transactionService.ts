@@ -32,6 +32,7 @@ import * as accountService from '../accountService';
 import * as analyticsService from '../analyticsService';
 import { findScheduledTransactions } from '../balance/findScheduledTransactions';
 import { computeAccountBalance, getBalanceForecast, syncAccountBalance } from '../balanceService';
+import { confirmsAwaitingBill } from '../bills/billApproval';
 import { buildCalendarDays, flattenEvents } from './buildCalendarDays';
 import { buildVirtualTransactions } from './buildVirtualTransactions';
 import { invalidateQuickChipsCache } from './quickChipsService';
@@ -230,16 +231,19 @@ export const getTransactionCalendar = async (
   });
 
   const balanceContext = accountId
-    ? {
-        currentBalance: (await computeAccountBalance(workspaceId, accountId)).finalBalance,
-        now: now.toDate(),
-      }
+    ? await buildCalendarBalanceContext(workspaceId, accountId, now.toDate())
     : undefined;
 
   return {
     days: buildCalendarDays(transactions, rangeStart, rangeEnd, accountId, balanceContext),
     upcoming: flattenEvents(buildCalendarDays(transactions, upcomingStart, upcomingEnd, accountId)),
   };
+};
+
+const buildCalendarBalanceContext = async (workspaceId: string, accountId: string, now: Date) => {
+  const { finalBalance, checkpointDate } = await computeAccountBalance(workspaceId, accountId);
+
+  return { currentBalance: finalBalance, now, checkpointDate: new Date(checkpointDate) };
 };
 
 export const countAll = async (
@@ -377,6 +381,10 @@ export const update = async (
 
   if (becomesReviewed) {
     mapped.reviewedAt = new Date();
+  }
+
+  if (confirmsAwaitingBill(existing, mapped.amount)) {
+    mapped.isAwaitingApproval = false;
   }
 
   const updated = await transactionRepository.updateById(id, mapped, workspaceId);

@@ -31,4 +31,5 @@ export interface TransactionCalendar {
 export interface CalendarBalanceContext {
   currentBalance: number;
   now: Date;
+  checkpointDate?: Date;
 }

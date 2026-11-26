@@ -49,6 +49,10 @@ const buildBreakdownEntry = (
     effectiveBalanceDate: effectiveDate.toISOString(),
   };
 
+  if (tx.isAwaitingApproval) {
+    return { ...base, included: false, contributesToSum: 0, reason: 'bill awaiting approval' };
+  }
+
   const isCounted = isWithinWindow(effectiveDate, { after: checkpointDate, upTo: now });
 
   if (!isCounted && effectiveDate <= checkpointDate) {
@@ -179,7 +183,10 @@ export const getBalanceForecast = async (
     throw ApiError.badRequest('Invalid account ID');
   }
 
-  const { finalBalance, now } = await computeAccountBalance(workspaceId, accountId);
+  const { finalBalance, now, checkpointDate } = await computeAccountBalance(
+    workspaceId,
+    accountId
+  );
   const targetMonth = dayjs.utc(new Date(Date.UTC(year, month, 1)));
   // Card purchases from last month are still unpaid, and rows dated next month can belong to
   // the target month (card cycle or "belongs to previous month").
@@ -190,7 +197,11 @@ export const getBalanceForecast = async (
   });
   const forecast = forecastBalance(
     toBalanceDeltas(transactions, accountId),
-    { currentBalance: finalBalance, now: new Date(now) },
+    {
+      currentBalance: finalBalance,
+      now: new Date(now),
+      checkpointDate: new Date(checkpointDate),
+    },
     toBudgetMonth({ year, month })
   );
 

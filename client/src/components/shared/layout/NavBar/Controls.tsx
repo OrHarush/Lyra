@@ -1,3 +1,4 @@
+import NotificationBell from '@/components/features/notifications/NotificationBell';
 import Row from '@/components/shared/layout/containers/Row';
 import AppearanceSettings from '@/components/shared/layout/NavBar/AppearanceSettings';
 import { usePageHeaderContext } from '@/components/shared/layout/PageHeaderContext';
@@ -11,7 +12,10 @@ const Controls = () => {
       {showDateSelector && dateConfig && (
         <MonthDateSelector value={dateConfig.value} onChange={dateConfig.onChange} />
       )}
-      <AppearanceSettings />
+      <Row spacing={1}>
+        <NotificationBell />
+        <AppearanceSettings />
+      </Row>
     </Row>
   );
 };
