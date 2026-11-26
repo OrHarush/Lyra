@@ -1,59 +1,21 @@
-import { Card, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import { useMediaQuery, useTheme } from '@mui/material';
 
-import Column from '@/components/shared/layout/containers/Column';
-import Row from '@/components/shared/layout/containers/Row';
-import CurrencyText from '@/components/shared/ui/CurrencyText';
-import KindSplitBar from '@/pages/FixedExpenses/KindSplitBar';
-import NextChargeLine from '@/pages/FixedExpenses/NextChargeLine';
-import { getSummaryCardStyle } from '@/pages/FixedExpenses/styles';
-import SummaryLegendItem from '@/pages/FixedExpenses/SummaryLegendItem';
+import CompactSummaryCard from '@/pages/FixedExpenses/CompactSummaryCard';
+import WideSummaryCards from '@/pages/FixedExpenses/WideSummaryCards';
 import { FixedExpenseDto, FixedExpenseListDto } from '@/types/FixedExpense';
-import { sumMonthlyByKind } from '@/utils/entities/fixedExpense';
+import { FixedExpenseGroup } from '@/utils/entities/fixedExpenseGroups';
 
-interface FixedExpensesSummaryProps {
+export interface FixedExpensesSummaryProps {
   totals: FixedExpenseListDto['totals'];
-  items: FixedExpenseDto[];
+  groups: FixedExpenseGroup[];
+  nextCharge: FixedExpenseDto;
 }
 
-const FixedExpensesSummary = ({ totals, items }: FixedExpensesSummaryProps) => {
-  const { t } = useTranslation('fixedExpenses');
-  const monthlyByKind = sumMonthlyByKind(items);
-  const nextCharge = items[0];
+const FixedExpensesSummary = (props: FixedExpensesSummaryProps) => {
+  const theme = useTheme();
+  const isWide = useMediaQuery(theme.breakpoints.up('lg'));
 
-  return (
-    <Card sx={getSummaryCardStyle()}>
-      <Column spacing={2}>
-        <Row justifyContent="space-between" alignItems="flex-end" spacing={2} flexWrap="wrap" useFlexGap>
-          <Column spacing={0.25}>
-            <Typography variant="body2" color="text.secondary">
-              {t('summary.monthlyLabel')}
-            </Typography>
-            <CurrencyText value={totals.monthly} variant="h3" fontWeight={800} color="error.main" />
-          </Column>
-          <Column spacing={0.5} alignItems={{ xs: 'flex-start', sm: 'flex-end' }}>
-            <Row spacing={0.5} alignItems="baseline">
-              <CurrencyText value={totals.yearly} variant="body1" fontWeight={700} />
-              <Typography variant="body2" color="text.secondary">
-                {t('summary.perYear')}
-              </Typography>
-            </Row>
-            {nextCharge && <NextChargeLine item={nextCharge} />}
-          </Column>
-        </Row>
-        {monthlyByKind.length >= 2 && (
-          <Column spacing={1.5}>
-            <KindSplitBar shares={monthlyByKind} />
-            <Row spacing={2} flexWrap="wrap" useFlexGap>
-              {monthlyByKind.map(({ kind, monthly }) => (
-                <SummaryLegendItem key={kind} kind={kind} monthly={monthly} />
-              ))}
-            </Row>
-          </Column>
-        )}
-      </Column>
-    </Card>
-  );
+  return isWide ? <WideSummaryCards {...props} /> : <CompactSummaryCard {...props} />;
 };
 
 export default FixedExpensesSummary;

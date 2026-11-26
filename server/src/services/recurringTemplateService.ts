@@ -385,6 +385,7 @@ export const getFixedExpenses = async (workspaceId: string) => {
       frequency: template.frequency,
       amount: fromCents(template.amount),
       nextDate,
+      endDate: template.endDate ?? null,
       monthlyAmount: fromCents(monthlyAmount),
       yearlyAmount: fromCents(yearlyAmount),
       providerId: template.providerId ?? null,

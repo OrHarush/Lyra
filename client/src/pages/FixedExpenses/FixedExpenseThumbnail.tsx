@@ -1,7 +1,9 @@
 import CategoryIconFrame from '@/components/features/categories/CategoryIconFrame';
+import CoinIcon from '@/components/features/fixedExpenses/CoinIcon';
 import FixedExpenseIcon from '@/components/features/fixedExpenses/FixedExpenseIcon';
+import Row from '@/components/shared/layout/containers/Row';
 import { FixedExpenseDto } from '@/types/FixedExpense';
-import { getFixedExpenseIcon } from '@/utils/entities/fixedExpenseIcons';
+import { getFixedExpenseArtwork } from '@/utils/entities/fixedExpenseIcons';
 
 interface FixedExpenseThumbnailProps {
   item: FixedExpenseDto;
@@ -9,13 +11,21 @@ interface FixedExpenseThumbnailProps {
 }
 
 const FixedExpenseThumbnail = ({ item, size }: FixedExpenseThumbnailProps) => {
-  const iconName = getFixedExpenseIcon(item);
+  const artwork = getFixedExpenseArtwork(item);
 
-  if (!iconName) {
-    return <CategoryIconFrame color={item.category?.color} icon={item.category?.icon} />;
+  if (!artwork) {
+    return (
+      <Row justifyContent="center" alignItems="center" width={size} flexShrink={0}>
+        <CategoryIconFrame color={item.category?.color} icon={item.category?.icon} />
+      </Row>
+    );
   }
 
-  return <FixedExpenseIcon name={iconName} size={size} hasTile />;
+  if (artwork === 'coin') {
+    return <CoinIcon size={size} />;
+  }
+
+  return <FixedExpenseIcon name={artwork} size={size} />;
 };
 
 export default FixedExpenseThumbnail;

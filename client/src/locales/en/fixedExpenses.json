@@ -1,28 +1,20 @@
 {
   "page": {
-    "title": "Fixed expenses",
-    "subtitle": "Bills and subscriptions that repeat every month"
+    "title": "Your fixed expenses",
+    "subtitle": "Everything that leaves your account every month, in one place"
   },
   "summary": {
     "monthlyLabel": "Costs you every month",
+    "perMonth": "a month",
+    "perYearLabel": "A year",
     "perYear": "a year",
     "split": "Monthly split by type",
     "nextCharge": "Next charge",
-    "nextChargeOn": "{{name}} on {{date}}"
-  },
-  "kinds": {
-    "bill": "Bills",
-    "subscription": "Subscriptions",
-    "regular": "Other"
-  },
-  "banner": {
-    "title": "Mark what each expense is",
-    "body": "Tap Subscription or Bill on an expense. Subscriptions get a cancel button, so you'll see what you can cancel."
+    "nextChargeOn": "{{name}} {{when}}"
   },
   "row": {
     "cancel": "Cancel",
-    "edit": "Edit {{name}}",
-    "markAs": "Mark {{name}} as"
+    "edit": "Edit {{name}}"
   },
   "add": "Add a fixed expense",
   "cancel": {
@@ -50,5 +42,37 @@
     "retry": "Try again",
     "cancelFailed": "Couldn't stop this expense. Try again.",
     "updateFailed": "Couldn't save the changes. Try again."
+  },
+  "when": {
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "inDays_one": "in {{count}} day",
+    "inDays_other": "in {{count}} days"
+  },
+  "groups": {
+    "title": "By type",
+    "housing": "Housing",
+    "loans": "Loans & payments",
+    "subscriptions": "Subscriptions",
+    "bills": "Bills",
+    "insurance": "Insurance",
+    "other": "Other",
+    "activeCount_one": "{{count}} active",
+    "activeCount_other": "{{count}} active",
+    "andMore": "{{names}} and more",
+    "perMonth": "/ month"
+  },
+  "upcoming": {
+    "title": "Upcoming charges",
+    "showAll": "Show all"
+  },
+  "classify": {
+    "question": "{{name}}, is it a subscription?",
+    "why": "That way we'll know what you can cancel.",
+    "remaining_one": "{{count}} more left.",
+    "remaining_other": "{{count}} more left.",
+    "yesSubscription": "Yes, subscription",
+    "bill": "Bill",
+    "skip": "Skip"
   }
 }

@@ -1,16 +1,23 @@
-import { FixedExpenseKind } from '@lyra/shared';
 import { alpha, SxProps, Theme } from '@mui/material';
 
-export const FIXED_EXPENSES_MAX_WIDTH = 900;
+import { FixedExpenseGroupId } from '@/utils/entities/fixedExpenseGroups';
 
-export const getKindColor = (kind: FixedExpenseKind) => (theme: Theme) => {
-  const colors: Record<FixedExpenseKind, string> = {
-    bill: theme.palette.primary.main,
-    subscription: alpha(theme.palette.text.secondary, 0.55),
-    regular: alpha(theme.palette.primary.main, 0.4),
+export const FIXED_EXPENSES_MAX_WIDTH = 1040;
+export const GROUP_ICON_SIZE = 64;
+export const CHARGE_ICON_SIZE = 48;
+export const DONUT_SIZE = { compact: 132, wide: 160 };
+
+export const getGroupColor = (id: FixedExpenseGroupId) => (theme: Theme) => {
+  const colors: Record<FixedExpenseGroupId, string> = {
+    housing: theme.palette.primary.main,
+    loans: theme.palette.primary.dark,
+    subscriptions: theme.palette.success.main,
+    insurance: theme.palette.warning.main,
+    bills: theme.palette.info.main,
+    other: alpha(theme.palette.text.secondary, 0.6),
   };
 
-  return colors[kind];
+  return colors[id];
 };
 
 export const getContentStyle = (): SxProps<Theme> => ({
@@ -19,79 +26,78 @@ export const getContentStyle = (): SxProps<Theme> => ({
   alignSelf: 'center',
 });
 
-export const getSummaryCardStyle = (): SxProps<Theme> => ({
-  p: { xs: 2.5, sm: 3 },
-  borderRadius: 4,
+export const getCardStyle = (): SxProps<Theme> => ({
+  p: { xs: 2, md: 3 },
+  borderRadius: 5,
 });
 
-export const getSplitBarStyle = (): SxProps<Theme> => ({
-  height: 8,
-  width: '100%',
-  gap: '4px',
+export const getSummaryGridStyle = (): SxProps<Theme> => ({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: 2.5,
 });
 
-export const getSplitSegmentStyle = (kind: FixedExpenseKind, share: number): SxProps<Theme> => ({
-  flexGrow: share,
-  flexBasis: 0,
-  minWidth: 8,
-  borderRadius: 999,
-  bgcolor: getKindColor(kind),
+export const getNextChargeBoxStyle = (): SxProps<Theme> => ({
+  p: 1.5,
+  borderRadius: 3,
+  bgcolor: 'background.default',
 });
 
-export const getLegendDotStyle = (kind: FixedExpenseKind): SxProps<Theme> => ({
-  width: 8,
-  height: 8,
+export const getLegendDotStyle = (id: FixedExpenseGroupId): SxProps<Theme> => ({
+  width: 9,
+  height: 9,
   borderRadius: '50%',
   flexShrink: 0,
-  bgcolor: getKindColor(kind),
+  bgcolor: getGroupColor(id),
 });
 
-export const getBannerStyle = (): SxProps<Theme> => ({
-  borderRadius: 2,
-  py: 1.5,
-  px: { xs: 2, sm: 2.5 },
-  gap: 1.5,
-  alignItems: 'flex-start',
-  bgcolor: theme => alpha(theme.palette.primary.main, 0.06),
+export const getPromptCardStyle = (): SxProps<Theme> => ({
+  p: { xs: 2, md: 2.25 },
+  borderRadius: 5,
   border: '1px solid',
-  borderColor: theme => alpha(theme.palette.primary.main, 0.15),
+  borderColor: theme => alpha(theme.palette.primary.main, 0.35),
+  bgcolor: theme => alpha(theme.palette.primary.main, 0.07),
 });
 
-export const getListCardStyle = (): SxProps<Theme> => ({
-  px: { xs: 1.5, sm: 2 },
-  borderRadius: 3,
-});
-
-// Fixed columns keep name, category, date and amount aligned from row to row.
-export const getDesktopRowStyle = (): SxProps<Theme> => ({
-  display: 'grid',
-  gridTemplateColumns: '40px minmax(0, 2fr) minmax(0, 1.3fr) 104px 96px 196px',
-  alignItems: 'center',
-  columnGap: 2,
-  minHeight: 64,
-  py: 1,
-});
-
-export const getMobileRowStyle = (): SxProps<Theme> => ({
-  py: 1.25,
-  gap: 1.5,
-  alignItems: 'center',
-});
-
-export const getCancelButtonStyle = (): SxProps<Theme> => ({
-  flexShrink: 0,
-  borderRadius: 2,
+export const getPillButtonStyle = (): SxProps<Theme> => ({
+  borderRadius: 999,
+  px: 2.25,
   fontWeight: 700,
   whiteSpace: 'nowrap',
 });
 
-export const getQuickChipStyle = (): SxProps<Theme> => ({
-  fontWeight: 600,
-  height: 28,
+export const getGroupGridStyle = (): SxProps<Theme> => ({
+  display: 'grid',
+  gridTemplateColumns: { xs: 'minmax(0, 1fr)', sm: 'repeat(2, minmax(0, 1fr))' },
+  gap: { xs: 1.5, md: 2 },
 });
 
-export const getAddButtonStyle = (): SxProps<Theme> => ({
-  py: 1.5,
-  borderRadius: 3,
-  fontWeight: 700,
+export const getGroupCardStyle = (): SxProps<Theme> => ({
+  width: '100%',
+  height: '100%',
+  p: 2,
+  borderRadius: 5,
+  border: '1px solid',
+  borderColor: 'divider',
+  bgcolor: 'background.paper',
+  textAlign: 'start',
+  justifyContent: 'stretch',
+});
+
+export const getChargeListStyle = (): SxProps<Theme> => ({
+  px: { xs: 2, md: 2.5 },
+  py: 0.5,
+  borderRadius: 5,
+});
+
+export const getChargeRowStyle = (): SxProps<Theme> => ({
+  minHeight: 72,
+  gap: 1.5,
+  alignItems: 'center',
+});
+
+// A ring rather than a disc, so the placeholder has the donut's shape.
+export const getDonutSkeletonStyle = (): SxProps<Theme> => ({
+  flexShrink: 0,
+  mask: 'radial-gradient(circle, transparent 57%, #000 58%)',
 });

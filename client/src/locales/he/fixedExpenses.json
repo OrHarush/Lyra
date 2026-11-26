@@ -1,28 +1,20 @@
 {
   "page": {
-    "title": "הוצאות קבועות",
-    "subtitle": "חשבונות ומנויים שחוזרים כל חודש"
+    "title": "ההוצאות הקבועות שלך",
+    "subtitle": "כל מה שיורד ממך כל חודש, במקום אחד"
   },
   "summary": {
-    "monthlyLabel": "עולים לך כל חודש",
+    "monthlyLabel": "עולות לך כל חודש",
+    "perMonth": "בחודש",
+    "perYearLabel": "בשנה",
     "perYear": "בשנה",
     "split": "חלוקה חודשית לפי סוג",
     "nextCharge": "החיוב הבא",
-    "nextChargeOn": "{{name}} ב־{{date}}"
-  },
-  "kinds": {
-    "bill": "חשבונות",
-    "subscription": "מנויים",
-    "regular": "אחרות"
-  },
-  "banner": {
-    "title": "סמנו מה כל הוצאה",
-    "body": "לחצו \"מנוי\" או \"חשבון\" ליד הוצאה. למנויים נוסיף כפתור ביטול, וכך תראו מה אפשר לבטל."
+    "nextChargeOn": "{{name}} {{when}}"
   },
   "row": {
     "cancel": "ביטול",
-    "edit": "עריכת {{name}}",
-    "markAs": "סימון {{name}} כ"
+    "edit": "עריכת {{name}}"
   },
   "add": "הוסף הוצאה קבועה",
   "cancel": {
@@ -50,5 +42,40 @@
     "retry": "נסו שוב",
     "cancelFailed": "לא הצלחנו להפסיק את ההוצאה. נסו שוב.",
     "updateFailed": "לא הצלחנו לשמור את השינויים. נסו שוב."
+  },
+  "when": {
+    "today": "היום",
+    "tomorrow": "מחר",
+    "inDays_one": "בעוד יום",
+    "inDays_two": "בעוד יומיים",
+    "inDays_other": "בעוד {{count}} ימים"
+  },
+  "groups": {
+    "title": "לפי סוג",
+    "housing": "דיור",
+    "loans": "הלוואות ותשלומים",
+    "subscriptions": "מנויים",
+    "bills": "חשבונות",
+    "insurance": "ביטוחים",
+    "other": "אחרות",
+    "activeCount_one": "אחת פעילה",
+    "activeCount_two": "שתיים פעילות",
+    "activeCount_other": "{{count}} פעילות",
+    "andMore": "{{names}} ועוד",
+    "perMonth": "/ חודש"
+  },
+  "upcoming": {
+    "title": "החיובים הקרובים",
+    "showAll": "הצג הכל"
+  },
+  "classify": {
+    "question": "{{name}}, זה מנוי?",
+    "why": "ככה נדע מה אפשר לבטל.",
+    "remaining_one": "נשארה עוד אחת.",
+    "remaining_two": "נשארו עוד 2.",
+    "remaining_other": "נשארו עוד {{count}}.",
+    "yesSubscription": "כן, מנוי",
+    "bill": "חשבון",
+    "skip": "דלג"
   }
 }

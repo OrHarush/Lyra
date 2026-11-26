@@ -43,17 +43,14 @@ export const getKindSectionStyle = (): SxProps<Theme> => ({
   borderColor: 'divider',
 });
 
-// The illustrations are drawn for a light backdrop, so the tile stays light in both themes.
-const ICON_TILE_BACKGROUND = '#F1EEFB';
-
-export const getIconTileStyle = (size: number, hasTile: boolean): SxProps<Theme> => ({
+export const getIconBoxStyle = (size: number): SxProps<Theme> => ({
   position: 'relative',
   width: size,
   height: size,
   flexShrink: 0,
-  borderRadius: hasTile ? `${Math.round(size * 0.28)}px` : '6px',
-  bgcolor: hasTile ? ICON_TILE_BACKGROUND : 'transparent',
-  overflow: 'hidden',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 });
 
 export const getIconSkeletonStyle = (): SxProps<Theme> => ({
@@ -61,15 +58,27 @@ export const getIconSkeletonStyle = (): SxProps<Theme> => ({
   inset: 0,
   width: '100%',
   height: '100%',
-  borderRadius: 'inherit',
 });
 
-export const getIconImageStyle = (isLoaded: boolean, hasTile: boolean): SxProps<Theme> => ({
+export const getIconImageStyle = (isLoaded: boolean): SxProps<Theme> => ({
   width: '100%',
   height: '100%',
-  p: hasTile ? '12%' : 0,
   objectFit: 'contain',
   display: 'block',
   opacity: isLoaded ? 1 : 0,
   transition: 'opacity 200ms ease',
+});
+
+export const getCoinStyle = (size: number): SxProps<Theme> => ({
+  width: '72%',
+  height: '72%',
+  borderRadius: '50%',
+  bgcolor: '#FBBF24',
+  boxShadow: 'inset 0 -3px 0 #D99B0B',
+  color: '#7C5200',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontWeight: 700,
+  fontSize: `${(size * 0.32) / 16}rem`,
 });

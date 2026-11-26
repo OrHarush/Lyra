@@ -2,19 +2,18 @@ import { Box, Skeleton } from '@mui/material';
 import { useState } from 'react';
 
 import {
+  getIconBoxStyle,
   getIconImageStyle,
   getIconSkeletonStyle,
-  getIconTileStyle,
 } from '@/components/features/fixedExpenses/styles';
 import { FIXED_EXPENSE_ICON_URLS, FixedExpenseIconName } from '@/utils/entities/fixedExpenseIcons';
 
 interface FixedExpenseIconProps {
   name: FixedExpenseIconName;
   size: number;
-  hasTile?: boolean;
 }
 
-const FixedExpenseIcon = ({ name, size, hasTile = false }: FixedExpenseIconProps) => {
+const FixedExpenseIcon = ({ name, size }: FixedExpenseIconProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   // A cached image can finish before React attaches onLoad, so check once it mounts.
@@ -25,8 +24,8 @@ const FixedExpenseIcon = ({ name, size, hasTile = false }: FixedExpenseIconProps
   };
 
   return (
-    <Box sx={getIconTileStyle(size, hasTile)}>
-      {!isLoaded && <Skeleton variant="rounded" sx={getIconSkeletonStyle()} />}
+    <Box sx={getIconBoxStyle(size)}>
+      {!isLoaded && <Skeleton variant="circular" sx={getIconSkeletonStyle()} />}
       <Box
         component="img"
         ref={markLoadedIfCached}
@@ -35,7 +34,7 @@ const FixedExpenseIcon = ({ name, size, hasTile = false }: FixedExpenseIconProps
         loading="lazy"
         decoding="async"
         onLoad={() => setIsLoaded(true)}
-        sx={getIconImageStyle(isLoaded, hasTile)}
+        sx={getIconImageStyle(isLoaded)}
       />
     </Box>
   );

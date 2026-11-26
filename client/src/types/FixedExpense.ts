@@ -15,6 +15,7 @@ export interface FixedExpenseDto {
   frequency: RecurringFrequency;
   amount: number;
   nextDate: string;
+  endDate: string | null;
   monthlyAmount: number;
   yearlyAmount: number;
   providerId: SubscriptionProviderId | null;

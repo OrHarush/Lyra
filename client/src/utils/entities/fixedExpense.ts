@@ -1,4 +1,5 @@
-import { FixedExpenseKind, SUBSCRIPTION_PROVIDERS, SubscriptionProviderId } from '@lyra/shared';
+import { SUBSCRIPTION_PROVIDERS, SubscriptionProviderId } from '@lyra/shared';
+import dayjs from 'dayjs';
 
 import { FixedExpenseDto } from '@/types/FixedExpense';
 
@@ -15,19 +16,17 @@ export const openCancellationPage = (url: string) => {
   window.open(url, '_blank', 'noopener,noreferrer');
 };
 
-const SPLIT_ORDER: FixedExpenseKind[] = ['bill', 'subscription', 'regular'];
-
-// Unclassified expenses count as "other" in the monthly split.
-export const sumMonthlyByKind = (items: FixedExpenseDto[]) =>
-  SPLIT_ORDER.map(kind => ({
-    kind,
-    monthly: items
-      .filter(item => (item.kind ?? 'regular') === kind)
-      .reduce((total, item) => total + item.monthlyAmount, 0),
-  })).filter(({ monthly }) => monthly > 0);
-
-export const isMostlyUnclassified = (items: FixedExpenseDto[]) =>
-  items.filter(item => item.kind === null).length * 2 > items.length;
-
 export const sortByNextCharge = (items: FixedExpenseDto[]) =>
   [...items].sort((a, b) => a.nextDate.localeCompare(b.nextDate));
+
+export const countDaysUntil = (isoDate: string) =>
+  dayjs(isoDate.slice(0, 10)).startOf('day').diff(dayjs().startOf('day'), 'day');
+
+// Likely subscriptions are asked about first, since marking them unlocks cancelling.
+export const listUnclassified = (items: FixedExpenseDto[]) =>
+  items
+    .filter(item => item.kind === null)
+    .sort(
+      (a, b) =>
+        Number(b.category?.key === 'subscriptions') - Number(a.category?.key === 'subscriptions')
+    );
