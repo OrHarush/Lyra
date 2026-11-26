@@ -1,4 +1,4 @@
-import type { TransactionType } from '@lyra/shared';
+import type { RecurringFrequency, TransactionType } from '@lyra/shared';
 
 import { AccountDto } from '@/types/Account';
 import { CategoryDto } from '@/types/Category';
@@ -27,7 +27,7 @@ export interface TransactionDto {
   type: TransactionType;
   amount: number;
   date?: string;
-  frequency?: 'Monthly' | 'Yearly';
+  frequency?: RecurringFrequency;
   templateId?: string;
   isVirtual?: boolean;
   belongToPreviousMonth?: boolean;

@@ -3,6 +3,7 @@ import {
   DeactivateFromDTO,
   MaterializeRecurringOccurrenceDTO,
   SplitRecurringTemplateDTO,
+  UpdateFixedExpenseDetailsDTO,
   UpdateRecurringTemplateDTO,
 } from '@lyra/shared';
 import { Request, Response } from 'express';
@@ -79,6 +80,32 @@ export const splitTemplate = asyncHandler(async (req: Request, res: Response) =>
   );
 
   return ApiResponse.ok(res, result);
+});
+
+export const getFixedExpenses = asyncHandler(async (req: Request, res: Response) => {
+  const fixedExpenses = await recurringTemplateService.getFixedExpenses(req.workspaceId);
+
+  return ApiResponse.ok(res, fixedExpenses);
+});
+
+export const updateFixedExpenseDetails = asyncHandler(async (req: Request, res: Response) => {
+  const template = await recurringTemplateService.updateFixedExpenseDetails(
+    req.params.id as string,
+    req.validatedBody as UpdateFixedExpenseDetailsDTO,
+    req.workspaceId
+  );
+
+  return ApiResponse.ok(res, template);
+});
+
+export const cancelTemplate = asyncHandler(async (req: Request, res: Response) => {
+  const template = await recurringTemplateService.cancelTemplate(
+    req.params.id as string,
+    req.workspaceId,
+    req.userId
+  );
+
+  return ApiResponse.ok(res, template);
 });
 
 export const materializeOccurrence = asyncHandler(async (req: Request, res: Response) => {

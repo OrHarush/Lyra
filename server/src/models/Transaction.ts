@@ -1,3 +1,4 @@
+import { RECURRING_FREQUENCIES, RecurringFrequency } from '@lyra/shared';
 import mongoose, { Schema, Types } from 'mongoose';
 
 export type TransactionSource = 'manual' | 'csv' | 'google_pay' | 'apple_pay';
@@ -11,7 +12,7 @@ export interface ITransaction {
   type: 'Income' | 'Expense' | 'Transfer';
   amount: number;
   date?: Date;
-  frequency?: 'Monthly' | 'Yearly';
+  frequency?: RecurringFrequency;
   belongToPreviousMonth?: boolean;
   category?: Types.ObjectId;
   paymentMethod?: Types.ObjectId;
@@ -39,7 +40,7 @@ const TransactionSchema: Schema = new Schema(
     },
     amount: { type: Number, required: true },
     date: { type: Date },
-    frequency: { type: String, enum: ['Monthly', 'Yearly'] },
+    frequency: { type: String, enum: RECURRING_FREQUENCIES },
     belongToPreviousMonth: { type: Boolean, default: false },
     category: { type: Schema.Types.ObjectId, ref: 'Category' },
     paymentMethod: { type: Schema.Types.ObjectId, ref: 'PaymentMethod' },

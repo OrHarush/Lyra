@@ -15,13 +15,13 @@ import AccountSection from '@/pages/Transactions/components/TransactionForm/Acco
 import AddNoteSection from '@/pages/Transactions/components/TransactionForm/AddNoteSection';
 import BillingCycleHint from '@/pages/Transactions/components/TransactionForm/BillingCycleHint';
 import ClassificationSection from '@/pages/Transactions/components/TransactionForm/ClassificationSection';
+import EstimatedAmountHint from '@/pages/Transactions/components/TransactionForm/EstimatedAmountHint';
+import FixedExpenseSection from '@/pages/Transactions/components/TransactionForm/FixedExpenseSection';
 import FrequencyToggle from '@/pages/Transactions/components/TransactionForm/FrequencyToggle';
 import PaymentSection from '@/pages/Transactions/components/TransactionForm/PaymentSection';
 import PreviousMonthCheckboxRow from '@/pages/Transactions/components/TransactionForm/PreviousMonthCheckboxRow';
 import PreviousMonthCollapse from '@/pages/Transactions/components/TransactionForm/PreviousMonthCollapse';
-import RecurrenceSelect from '@/pages/Transactions/components/TransactionForm/RecurrenceSelect';
 import RecurringDatePills from '@/pages/Transactions/components/TransactionForm/RecurringDatePills';
-import ScheduleSection from '@/pages/Transactions/components/TransactionForm/ScheduleSection';
 import TransactionBaseDetails from '@/pages/Transactions/components/TransactionForm/TransactionBaseDetails';
 import TransactionTypeSelector from '@/pages/Transactions/components/TransactionForm/TransactionTypeSelector';
 
@@ -139,6 +139,7 @@ const TransactionForm = ({
           }}
           sx={mobileAmountSx}
         />
+        <EstimatedAmountHint />
         {!isRecurring && (
           <Row justifyContent="center">
             <DayDateSelector value={selectedDate} onChange={handleDateChange} />
@@ -168,6 +169,7 @@ const TransactionForm = ({
         </Grid>
         <PreviousMonthCollapse />
         {!hideRecurrence && <FrequencyToggle />}
+        {!hideRecurrence && <FixedExpenseSection />}
         <AddNoteSection />
       </Column>
     );
@@ -178,12 +180,14 @@ const TransactionForm = ({
       <Row justifyContent={'center'}>
         {!isRecurring && <DayDateSelector value={selectedDate} onChange={handleDateChange} />}
       </Row>
+      {isRecurring && <RecurringDatePills />}
       <BillingCycleHint />
       <TransactionTypeSelector disabled={disableTypeSelector} />
       {showQuickChips && (
         <QuickChipsRow activeChipId={activeChipId} setActiveChipId={setActiveChipId} />
       )}
       {amountField}
+      <EstimatedAmountHint />
       <Grid container spacing={2}>
         {!isTransfer && (
           <>
@@ -192,22 +196,20 @@ const TransactionForm = ({
             <Grid size={{ xs: 12 }}>
               <Divider sx={{ my: 0.5 }} />
             </Grid>
-            <AccountSection smSize={4} />
-            <PaymentSection smSize={4} />
-            {!hideRecurrence && <RecurrenceSelect smSize={4} />}
-            {!hideRecurrence && <ScheduleSection />}
+            <AccountSection smSize={6} />
+            <PaymentSection smSize={6} />
           </>
         )}
         {isTransfer && (
           <>
             <AccountSection />
-            <PaymentSection smSize={!hideRecurrence ? 6 : 12} />
-            {!hideRecurrence && <RecurrenceSelect smSize={6} />}
-            {!hideRecurrence && <ScheduleSection />}
+            <PaymentSection smSize={12} />
           </>
         )}
       </Grid>
       <PreviousMonthCheckboxRow />
+      {!hideRecurrence && <FrequencyToggle />}
+      {!hideRecurrence && <FixedExpenseSection />}
       <TextInput
         name="note"
         label={t('fields.note')}

@@ -40,7 +40,9 @@
     "accountRequired": "Account is required",
     "accountNumberInvalid": "Account number must be digits only",
     "accountNumberTooLong": "Account number must be at most 20 digits",
-    "startMonthBeforeEnd": "Start month must be before end month"
+    "startMonthBeforeEnd": "Start month must be before end month",
+    "invalidUrl": "Enter a link that starts with https://",
+    "urlTooLong": "Link is too long"
   },
   "entities": {
     "empty": {

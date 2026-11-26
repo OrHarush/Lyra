@@ -1,10 +1,11 @@
 import { z } from 'zod';
 
 import { nameSchema, objectIdSchema, positiveAmountSchema } from './common';
+import { FixedExpenseDetailsSchema, RECURRING_FREQUENCIES } from './fixedExpense';
 
-const BaseRecurringTemplateSchema = z.object({
+const BaseRecurringTemplateSchema = FixedExpenseDetailsSchema.extend({
   // Recurrence rules
-  frequency: z.enum(['Monthly', 'Yearly']),
+  frequency: z.enum(RECURRING_FREQUENCIES),
   dayOfMonth: z.number().int().min(1).max(31),
   startDate: z.string(),
   endDate: z.string().optional(),

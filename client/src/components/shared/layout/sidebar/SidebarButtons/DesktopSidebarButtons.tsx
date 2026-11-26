@@ -9,6 +9,7 @@ import {
   budgetButton,
   buildAdminNavigationButtons,
   calculatorsButton,
+  fixedExpensesButton,
   goalsButton,
   investmentsButton,
   isSidebarButtonActive,
@@ -29,6 +30,7 @@ const DesktopSidebarButtons = () => {
   const { user } = useAuth();
   const { expanded } = useSidebar();
   const standaloneNavigation = [
+    fixedExpensesButton,
     budgetButton,
     goalsButton,
     investmentsButton,

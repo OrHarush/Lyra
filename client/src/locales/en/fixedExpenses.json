@@ -1,0 +1,78 @@
+{
+  "page": {
+    "title": "Your fixed expenses",
+    "subtitle": "Everything that leaves your account every month, in one place"
+  },
+  "summary": {
+    "monthlyLabel": "Costs you every month",
+    "perMonth": "a month",
+    "perYearLabel": "A year",
+    "perYear": "a year",
+    "split": "Monthly split by type",
+    "nextCharge": "Next charge",
+    "nextChargeOn": "{{name}} {{when}}"
+  },
+  "row": {
+    "cancel": "Cancel",
+    "edit": "Edit {{name}}"
+  },
+  "add": "Add a fixed expense",
+  "cancel": {
+    "title": "Did you cancel {{name}}?",
+    "bodyWithLink": "We opened the provider's cancellation page. Once you've cancelled there, confirm here and we'll stop this expense from today. Past payments stay.",
+    "bodyWithoutLink": "There's no cancellation link saved. Cancel with the provider, then confirm here and we'll stop this expense from today. Past payments stay.",
+    "addLink": "Add a cancellation link",
+    "notYet": "Not yet",
+    "confirm": "Yes, I cancelled"
+  },
+  "edit": {
+    "title": "Edit fixed expense"
+  },
+  "empty": {
+    "title": "No fixed expenses yet",
+    "body": "Add a recurring expense, like a subscription or a bill, to see what you pay every month."
+  },
+  "toast": {
+    "cancelled": "{{name}} stopped",
+    "updated": "Fixed expense updated",
+    "classified": "{{name}} marked as {{kind}}"
+  },
+  "errors": {
+    "loadFailed": "Couldn't load your fixed expenses",
+    "retry": "Try again",
+    "cancelFailed": "Couldn't stop this expense. Try again.",
+    "updateFailed": "Couldn't save the changes. Try again."
+  },
+  "when": {
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "inDays_one": "in {{count}} day",
+    "inDays_other": "in {{count}} days"
+  },
+  "groups": {
+    "title": "By type",
+    "housing": "Housing",
+    "loans": "Loans & payments",
+    "subscriptions": "Subscriptions",
+    "bills": "Bills",
+    "insurance": "Insurance",
+    "other": "Other",
+    "activeCount_one": "{{count}} active",
+    "activeCount_other": "{{count}} active",
+    "andMore": "{{names}} and more",
+    "perMonth": "/ month"
+  },
+  "upcoming": {
+    "title": "Upcoming charges",
+    "showAll": "Show all"
+  },
+  "classify": {
+    "question": "{{name}}, is it a subscription?",
+    "why": "That way we'll know what you can cancel.",
+    "remaining_one": "{{count}} more left.",
+    "remaining_other": "{{count}} more left.",
+    "yesSubscription": "Yes, subscription",
+    "bill": "Bill",
+    "skip": "Skip"
+  }
+}

@@ -77,7 +77,8 @@
   "recurrence": {
     "none": "ללא",
     "monthly": "חודשי",
-    "yearly": "שנתי"
+    "yearly": "שנתי",
+    "bimonthly": "דו-חודשי"
   },
   "table": {
     "name": "שם",
@@ -296,5 +297,31 @@
   "day": {
     "today": "היום",
     "yesterday": "אתמול"
+  },
+  "fixedExpense": {
+    "question": "איזו הוצאה קבועה?",
+    "kinds": {
+      "regular": "רגילה",
+      "subscription": "מנוי",
+      "bill": "חשבון"
+    },
+    "kindHints": {
+      "regular": "חוזרת כמו שהיא. תופיע בעמוד ההוצאות הקבועות.",
+      "subscription": "מנוי אפשר לבטל. נציג אותו בעמוד ההוצאות הקבועות עם כפתור ביטול.",
+      "bill": "חשבון אי אפשר לבטל, והסכום משתנה. הזינו הערכה, והיא תיכנס לתחזית."
+    },
+    "provider": "ספק",
+    "otherProvider": "אחר",
+    "cancelUrl": "קישור לביטול",
+    "autoFilled": "מולא אוטומטית",
+    "billType": "סוג החשבון",
+    "billTypes": {
+      "electricity": "חשמל",
+      "water": "מים",
+      "arnona": "ארנונה",
+      "gas": "גז",
+      "other": "אחר"
+    },
+    "estimatedAmountHint": "סכום משוער: החשבון משתנה בכל חיוב."
   }
 }

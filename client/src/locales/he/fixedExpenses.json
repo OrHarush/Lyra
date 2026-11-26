@@ -1,0 +1,81 @@
+{
+  "page": {
+    "title": "ההוצאות הקבועות שלך",
+    "subtitle": "כל מה שיורד ממך כל חודש, במקום אחד"
+  },
+  "summary": {
+    "monthlyLabel": "עולות לך כל חודש",
+    "perMonth": "בחודש",
+    "perYearLabel": "בשנה",
+    "perYear": "בשנה",
+    "split": "חלוקה חודשית לפי סוג",
+    "nextCharge": "החיוב הבא",
+    "nextChargeOn": "{{name}} {{when}}"
+  },
+  "row": {
+    "cancel": "ביטול",
+    "edit": "עריכת {{name}}"
+  },
+  "add": "הוסף הוצאה קבועה",
+  "cancel": {
+    "title": "ביטלת את {{name}}?",
+    "bodyWithLink": "פתחנו את דף הביטול של הספק. אחרי שביטלת שם, אשרו כאן ונפסיק את ההוצאה מהיום. תשלומים קודמים יישארו.",
+    "bodyWithoutLink": "אין קישור ביטול שמור. בטלו אצל הספק, ואז אשרו כאן ונפסיק את ההוצאה מהיום. תשלומים קודמים יישארו.",
+    "addLink": "הוספת קישור ביטול",
+    "notYet": "עוד לא",
+    "confirm": "כן, ביטלתי"
+  },
+  "edit": {
+    "title": "עריכת הוצאה קבועה"
+  },
+  "empty": {
+    "title": "אין עדיין הוצאות קבועות",
+    "body": "הוסיפו הוצאה חוזרת, כמו מנוי או חשבון, כדי לראות כמה אתם משלמים כל חודש."
+  },
+  "toast": {
+    "cancelled": "{{name}} הופסק",
+    "updated": "ההוצאה הקבועה עודכנה",
+    "classified": "{{name}} סומן כ{{kind}}"
+  },
+  "errors": {
+    "loadFailed": "לא הצלחנו לטעון את ההוצאות הקבועות",
+    "retry": "נסו שוב",
+    "cancelFailed": "לא הצלחנו להפסיק את ההוצאה. נסו שוב.",
+    "updateFailed": "לא הצלחנו לשמור את השינויים. נסו שוב."
+  },
+  "when": {
+    "today": "היום",
+    "tomorrow": "מחר",
+    "inDays_one": "בעוד יום",
+    "inDays_two": "בעוד יומיים",
+    "inDays_other": "בעוד {{count}} ימים"
+  },
+  "groups": {
+    "title": "לפי סוג",
+    "housing": "דיור",
+    "loans": "הלוואות ותשלומים",
+    "subscriptions": "מנויים",
+    "bills": "חשבונות",
+    "insurance": "ביטוחים",
+    "other": "אחרות",
+    "activeCount_one": "אחת פעילה",
+    "activeCount_two": "שתיים פעילות",
+    "activeCount_other": "{{count}} פעילות",
+    "andMore": "{{names}} ועוד",
+    "perMonth": "/ חודש"
+  },
+  "upcoming": {
+    "title": "החיובים הקרובים",
+    "showAll": "הצג הכל"
+  },
+  "classify": {
+    "question": "{{name}}, זה מנוי?",
+    "why": "ככה נדע מה אפשר לבטל.",
+    "remaining_one": "נשארה עוד אחת.",
+    "remaining_two": "נשארו עוד 2.",
+    "remaining_other": "נשארו עוד {{count}}.",
+    "yesSubscription": "כן, מנוי",
+    "bill": "חשבון",
+    "skip": "דלג"
+  }
+}
