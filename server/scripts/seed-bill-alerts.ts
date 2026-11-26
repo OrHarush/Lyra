@@ -10,7 +10,7 @@ if (process.env.ENV_FILE) {
 dotenv.config({ path: '.env' });
 
 const PROD_DB_NAME = 'lyra';
-const DEFAULT_EMAIL = 'lyra-il@gmail.com';
+const DEFAULT_EMAIL = 'lyra.il.app@gmail.com';
 const HIGHEST_DAY_IN_EVERY_MONTH = 28;
 
 interface SeedBill {
