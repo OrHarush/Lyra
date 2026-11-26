@@ -1,25 +1,31 @@
-import { Box, Button } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { FixedExpenseKind } from '@lyra/shared';
+import { Button, Card, Divider } from '@mui/material';
+import { Fragment, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CreateTransactionDialog from '@/components/features/transactions/CreateTransactionDialog';
 import Column from '@/components/shared/layout/containers/Column';
 import PageLayout from '@/components/shared/layout/page/PageLayout';
 import { usePrimaryAction } from '@/components/shared/layout/PageHeaderContext';
-import { useFixedExpenses } from '@/hooks/entities/useFixedExpenses';
-import BillCard from '@/pages/FixedExpenses/BillCard';
+import { useIsSmallScreen } from '@/hooks/common/useIsSmallScreen';
+import { useFixedExpenses, useUpdateFixedExpenseDetails } from '@/hooks/entities/useFixedExpenses';
 import CancelFixedExpenseDialog from '@/pages/FixedExpenses/CancelFixedExpenseDialog';
+import ClassifyBanner from '@/pages/FixedExpenses/ClassifyBanner';
 import EditFixedExpenseDialog from '@/pages/FixedExpenses/EditFixedExpenseDialog';
-import FixedExpenseListRow from '@/pages/FixedExpenses/FixedExpenseListRow';
+import FixedExpenseRow from '@/pages/FixedExpenses/FixedExpenseRow';
 import FixedExpensesEmptyState from '@/pages/FixedExpenses/FixedExpensesEmptyState';
 import FixedExpensesErrorState from '@/pages/FixedExpenses/FixedExpensesErrorState';
 import FixedExpensesIntro from '@/pages/FixedExpenses/FixedExpensesIntro';
-import FixedExpensesSection from '@/pages/FixedExpenses/FixedExpensesSection';
 import FixedExpensesSkeleton from '@/pages/FixedExpenses/FixedExpensesSkeleton';
 import FixedExpensesSummary from '@/pages/FixedExpenses/FixedExpensesSummary';
-import { getAddButtonStyle, getBillGridStyle } from '@/pages/FixedExpenses/styles';
+import { getAddButtonStyle, getContentStyle, getListCardStyle } from '@/pages/FixedExpenses/styles';
+import { useSnackbar } from '@/providers/SnackbarProvider';
 import { FixedExpenseDto } from '@/types/FixedExpense';
-import { openCancellationPage } from '@/utils/entities/fixedExpense';
+import {
+  isMostlyUnclassified,
+  openCancellationPage,
+  sortByNextCharge,
+} from '@/utils/entities/fixedExpense';
 
 type DialogState =
   | { mode: 'closed' }
@@ -29,8 +35,13 @@ type DialogState =
 
 const FixedExpensesPage = () => {
   const { t } = useTranslation('fixedExpenses');
+  const { t: tTransactions } = useTranslation('transactions');
+  const { alertSuccess, alertError } = useSnackbar();
+  const isSmallScreen = useIsSmallScreen();
   const { fixedExpenses, isLoading, isError, refetch } = useFixedExpenses();
+  const updateDetails = useUpdateFixedExpenseDetails();
   const [dialog, setDialog] = useState<DialogState>({ mode: 'closed' });
+  const [classifyingId, setClassifyingId] = useState<string | null>(null);
 
   const openCreateDialog = useCallback(() => setDialog({ mode: 'create' }), []);
   const openEditDialog = (item: FixedExpenseDto) => setDialog({ mode: 'edit', item });
@@ -43,6 +54,21 @@ const FixedExpensesPage = () => {
     }
 
     setDialog({ mode: 'cancel', item });
+  };
+
+  const classifyExpense = async (item: FixedExpenseDto, kind: FixedExpenseKind) => {
+    setClassifyingId(item._id);
+
+    try {
+      await updateDetails.mutateAsync({ id: item._id, kind });
+      alertSuccess(
+        t('toast.classified', { name: item.name, kind: tTransactions(`fixedExpense.kinds.${kind}`) })
+      );
+    } catch {
+      alertError(t('errors.updateFailed'));
+    } finally {
+      setClassifyingId(null);
+    }
   };
 
   usePrimaryAction(openCreateDialog);
@@ -60,56 +86,41 @@ const FixedExpensesPage = () => {
       return <FixedExpensesEmptyState onAdd={openCreateDialog} />;
     }
 
-    const bills = fixedExpenses.items.filter(item => item.kind === 'bill');
-    const subscriptions = fixedExpenses.items.filter(item => item.kind === 'subscription');
-    const others = fixedExpenses.items.filter(item => item.kind === 'regular');
+    const items = sortByNextCharge(fixedExpenses.items);
 
     return (
       <>
-        <FixedExpensesSummary totals={fixedExpenses.totals} items={fixedExpenses.items} />
-        {bills.length > 0 && (
-          <FixedExpensesSection kind="bill">
-            <Box sx={getBillGridStyle()}>
-              {bills.map(item => (
-                <BillCard key={item._id} item={item} onEdit={openEditDialog} />
-              ))}
-            </Box>
-          </FixedExpensesSection>
+        <FixedExpensesSummary totals={fixedExpenses.totals} items={items} />
+        {isMostlyUnclassified(items) && <ClassifyBanner />}
+        <Card sx={getListCardStyle()}>
+          {items.map((item, index) => (
+            <Fragment key={item._id}>
+              {index > 0 && <Divider />}
+              <FixedExpenseRow
+                item={item}
+                isClassifying={classifyingId === item._id}
+                onClassify={classifyExpense}
+                onCancel={startCancellation}
+                onEdit={openEditDialog}
+              />
+            </Fragment>
+          ))}
+        </Card>
+        {!isSmallScreen && (
+          <Button variant="outlined" onClick={openCreateDialog} sx={getAddButtonStyle()}>
+            {t('add')}
+          </Button>
         )}
-        {subscriptions.length > 0 && (
-          <FixedExpensesSection kind="subscription">
-            <Column spacing={1.25}>
-              {subscriptions.map(item => (
-                <FixedExpenseListRow
-                  key={item._id}
-                  item={item}
-                  onEdit={openEditDialog}
-                  onCancel={startCancellation}
-                />
-              ))}
-            </Column>
-          </FixedExpensesSection>
-        )}
-        {others.length > 0 && (
-          <FixedExpensesSection kind="regular">
-            <Column spacing={1.25}>
-              {others.map(item => (
-                <FixedExpenseListRow key={item._id} item={item} onEdit={openEditDialog} />
-              ))}
-            </Column>
-          </FixedExpensesSection>
-        )}
-        <Button variant="contained" fullWidth onClick={openCreateDialog} sx={getAddButtonStyle()}>
-          {t('add')}
-        </Button>
       </>
     );
   };
 
   return (
-    <PageLayout hasNaturalHeight spacing={3}>
-      <FixedExpensesIntro />
-      {renderContent()}
+    <PageLayout hasNaturalHeight>
+      <Column spacing={2.5} sx={getContentStyle()}>
+        <FixedExpensesIntro />
+        {renderContent()}
+      </Column>
       {dialog.mode === 'create' && (
         <CreateTransactionDialog
           isOpen

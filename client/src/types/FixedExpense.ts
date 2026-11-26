@@ -10,7 +10,8 @@ import { CategoryDto } from '@/types/Category';
 export interface FixedExpenseDto {
   _id: string;
   name: string;
-  kind: FixedExpenseKind;
+  // Null until the user marks it as a subscription, a bill or a regular expense.
+  kind: FixedExpenseKind | null;
   frequency: RecurringFrequency;
   amount: number;
   nextDate: string;

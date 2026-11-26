@@ -1,9 +1,4 @@
-import {
-  BillType,
-  DefaultCategoryKey,
-  SUBSCRIPTION_PROVIDERS,
-  SubscriptionProviderCategory,
-} from '@lyra/shared';
+import { BillType, SUBSCRIPTION_PROVIDERS, SubscriptionProviderCategory } from '@lyra/shared';
 
 import arnonaIcon from '@/assets/fixedExpenses/arnona.webp';
 import cloudIcon from '@/assets/fixedExpenses/cloud.webp';
@@ -45,7 +40,8 @@ export const BILL_TYPE_ICONS: Record<BillType, FixedExpenseIconName> = {
   other: 'other',
 };
 
-const PROVIDER_CATEGORY_ICONS: Record<SubscriptionProviderCategory, FixedExpenseIconName> = {
+// News and dating have no fitting illustration, so they keep their category icon.
+const PROVIDER_CATEGORY_ICONS: Partial<Record<SubscriptionProviderCategory, FixedExpenseIconName>> = {
   streaming: 'tv',
   music: 'music',
   tv: 'tv',
@@ -53,33 +49,18 @@ const PROVIDER_CATEGORY_ICONS: Record<SubscriptionProviderCategory, FixedExpense
   internet: 'internet',
   cloud: 'cloud',
   ai: 'cloud',
-  news: 'other',
-  dating: 'other',
   gym: 'gym',
 };
 
-const CATEGORY_KEY_ICONS: Partial<Record<DefaultCategoryKey, FixedExpenseIconName>> = {
-  housing: 'arnona',
-  utilities: 'electricity',
-  insurance: 'insurance',
-  subscriptions: 'tv',
-};
-
-// Null means the expense has no matching illustration; callers fall back to its category icon.
+// Null means nothing more specific is known; callers show the expense's own category icon.
 export const getFixedExpenseIcon = (item: FixedExpenseDto): FixedExpenseIconName | null => {
-  if (item.kind === 'bill') {
-    return BILL_TYPE_ICONS[item.billType ?? 'other'];
+  if (item.kind === 'bill' && item.billType && item.billType !== 'other') {
+    return BILL_TYPE_ICONS[item.billType];
   }
 
-  if (item.providerId) {
-    return PROVIDER_CATEGORY_ICONS[SUBSCRIPTION_PROVIDERS[item.providerId].category];
+  if (item.kind === 'subscription' && item.providerId) {
+    return PROVIDER_CATEGORY_ICONS[SUBSCRIPTION_PROVIDERS[item.providerId].category] ?? null;
   }
 
-  const categoryIcon = item.category?.key ? CATEGORY_KEY_ICONS[item.category.key] : undefined;
-
-  if (categoryIcon) {
-    return categoryIcon;
-  }
-
-  return item.kind === 'subscription' ? 'other' : null;
+  return null;
 };

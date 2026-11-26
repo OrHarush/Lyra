@@ -6,33 +6,23 @@
   "summary": {
     "monthlyLabel": "Costs you every month",
     "perYear": "a year",
-    "split": "Monthly split by type"
+    "split": "Monthly split by type",
+    "nextCharge": "Next charge",
+    "nextChargeOn": "{{name}} on {{date}}"
   },
   "kinds": {
     "bill": "Bills",
     "subscription": "Subscriptions",
     "regular": "Other"
   },
-  "sections": {
-    "bill": {
-      "title": "Fixed bills",
-      "hint": "Tracked here. They can't be cancelled."
-    },
-    "subscription": {
-      "title": "Subscriptions",
-      "hint": "You can cancel these; we'll open the company's cancellation page."
-    },
-    "regular": {
-      "title": "Other fixed expenses",
-      "hint": "Rent, loans and anything else that repeats"
-    }
+  "banner": {
+    "title": "Mark what each expense is",
+    "body": "Tap Subscription or Bill on an expense. Subscriptions get a cancel button, so you'll see what you can cancel."
   },
   "row": {
-    "dueBy": "Due by {{date}}",
-    "renewsOn": "Renews on {{date}}",
-    "nextOn": "Next on {{date}}",
     "cancel": "Cancel",
-    "edit": "Edit {{name}}"
+    "edit": "Edit {{name}}",
+    "markAs": "Mark {{name}} as"
   },
   "add": "Add a fixed expense",
   "cancel": {
@@ -52,7 +42,8 @@
   },
   "toast": {
     "cancelled": "{{name}} stopped",
-    "updated": "Fixed expense updated"
+    "updated": "Fixed expense updated",
+    "classified": "{{name}} marked as {{kind}}"
   },
   "errors": {
     "loadFailed": "Couldn't load your fixed expenses",

@@ -114,7 +114,7 @@ describe('buildFixedExpenses', () => {
     expect(items.map(item => [item.kind, item.monthlyAmount, item.yearlyAmount])).toEqual([
       ['subscription', 5490, 65880],
       ['bill', 16000, 192000],
-      ['regular', 10000, 120000],
+      [null, 10000, 120000],
     ]);
     expect(totals).toEqual({ monthly: 31490, yearly: 377880 });
   });

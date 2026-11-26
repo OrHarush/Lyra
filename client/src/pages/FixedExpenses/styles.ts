@@ -1,6 +1,8 @@
 import { FixedExpenseKind } from '@lyra/shared';
 import { alpha, SxProps, Theme } from '@mui/material';
 
+export const FIXED_EXPENSES_MAX_WIDTH = 900;
+
 export const getKindColor = (kind: FixedExpenseKind) => (theme: Theme) => {
   const colors: Record<FixedExpenseKind, string> = {
     bill: theme.palette.primary.main,
@@ -10,6 +12,12 @@ export const getKindColor = (kind: FixedExpenseKind) => (theme: Theme) => {
 
   return colors[kind];
 };
+
+export const getContentStyle = (): SxProps<Theme> => ({
+  width: '100%',
+  maxWidth: FIXED_EXPENSES_MAX_WIDTH,
+  alignSelf: 'center',
+});
 
 export const getSummaryCardStyle = (): SxProps<Theme> => ({
   p: { xs: 2.5, sm: 3 },
@@ -38,42 +46,52 @@ export const getLegendDotStyle = (kind: FixedExpenseKind): SxProps<Theme> => ({
   bgcolor: getKindColor(kind),
 });
 
-export const getBillGridStyle = (): SxProps<Theme> => ({
+export const getBannerStyle = (): SxProps<Theme> => ({
+  borderRadius: 2,
+  py: 1.5,
+  px: { xs: 2, sm: 2.5 },
+  gap: 1.5,
+  alignItems: 'flex-start',
+  bgcolor: theme => alpha(theme.palette.primary.main, 0.06),
+  border: '1px solid',
+  borderColor: theme => alpha(theme.palette.primary.main, 0.15),
+});
+
+export const getListCardStyle = (): SxProps<Theme> => ({
+  px: { xs: 1.5, sm: 2 },
+  borderRadius: 3,
+});
+
+// Fixed columns keep name, category, date and amount aligned from row to row.
+export const getDesktopRowStyle = (): SxProps<Theme> => ({
   display: 'grid',
-  gridTemplateColumns: { xs: 'repeat(3, minmax(0, 1fr))', sm: 'repeat(auto-fill, minmax(170px, 1fr))' },
-  gap: { xs: 1.25, sm: 2 },
+  gridTemplateColumns: '40px minmax(0, 2fr) minmax(0, 1.3fr) 104px 96px 196px',
+  alignItems: 'center',
+  columnGap: 2,
+  minHeight: 64,
+  py: 1,
 });
 
-export const getBillCardStyle = (): SxProps<Theme> => ({
-  width: '100%',
-  height: '100%',
-  p: { xs: 1.5, sm: 2 },
-  borderRadius: 4,
-  border: '1px solid',
-  borderColor: 'divider',
-  bgcolor: 'background.paper',
-  textAlign: 'center',
-});
-
-export const getRowCardStyle = (): SxProps<Theme> => ({
-  p: { xs: 1.5, sm: 2 },
-  borderRadius: 4,
-  border: '1px solid',
-  borderColor: 'divider',
-  bgcolor: 'background.paper',
+export const getMobileRowStyle = (): SxProps<Theme> => ({
+  py: 1.25,
+  gap: 1.5,
+  alignItems: 'center',
 });
 
 export const getCancelButtonStyle = (): SxProps<Theme> => ({
   flexShrink: 0,
-  minWidth: 88,
-  borderRadius: 3,
+  borderRadius: 2,
   fontWeight: 700,
-  py: 1,
+  whiteSpace: 'nowrap',
+});
+
+export const getQuickChipStyle = (): SxProps<Theme> => ({
+  fontWeight: 600,
+  height: 28,
 });
 
 export const getAddButtonStyle = (): SxProps<Theme> => ({
-  py: 1.75,
+  py: 1.5,
   borderRadius: 3,
   fontWeight: 700,
-  fontSize: '1rem',
 });

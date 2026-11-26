@@ -15,12 +15,19 @@ export const openCancellationPage = (url: string) => {
   window.open(url, '_blank', 'noopener,noreferrer');
 };
 
-export const FIXED_EXPENSE_SECTION_ORDER: FixedExpenseKind[] = ['bill', 'subscription', 'regular'];
+const SPLIT_ORDER: FixedExpenseKind[] = ['bill', 'subscription', 'regular'];
 
+// Unclassified expenses count as "other" in the monthly split.
 export const sumMonthlyByKind = (items: FixedExpenseDto[]) =>
-  FIXED_EXPENSE_SECTION_ORDER.map(kind => ({
+  SPLIT_ORDER.map(kind => ({
     kind,
     monthly: items
-      .filter(item => item.kind === kind)
+      .filter(item => (item.kind ?? 'regular') === kind)
       .reduce((total, item) => total + item.monthlyAmount, 0),
   })).filter(({ monthly }) => monthly > 0);
+
+export const isMostlyUnclassified = (items: FixedExpenseDto[]) =>
+  items.filter(item => item.kind === null).length * 2 > items.length;
+
+export const sortByNextCharge = (items: FixedExpenseDto[]) =>
+  [...items].sort((a, b) => a.nextDate.localeCompare(b.nextDate));

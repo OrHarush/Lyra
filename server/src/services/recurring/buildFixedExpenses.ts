@@ -13,7 +13,8 @@ const MAX_MONTHS_TO_NEXT_OCCURRENCE = 13;
 
 export interface FixedExpense {
   template: IRecurringTemplatePopulated;
-  kind: FixedExpenseKind;
+  // Null when the user never chose a kind, so the page can offer to classify it.
+  kind: FixedExpenseKind | null;
   nextDate: Date;
   monthlyAmount: number;
   yearlyAmount: number;
@@ -80,7 +81,7 @@ const toFixedExpense = (template: IRecurringTemplatePopulated, today: Date): Fix
 
   return {
     template,
-    kind: template.kind ?? 'regular',
+    kind: template.kind ?? null,
     nextDate,
     monthlyAmount: Math.round(yearlyAmount / 12),
     yearlyAmount,

@@ -22,7 +22,7 @@ const EditFixedExpenseDialog = ({ isOpen, closeDialog, item }: EditFixedExpenseD
   const methods = useForm<UpdateFixedExpenseDetailsDTO>({
     resolver: zodResolver(UpdateFixedExpenseDetailsSchema),
     defaultValues: {
-      kind: item.kind,
+      kind: item.kind ?? 'regular',
       providerId: item.providerId ?? undefined,
       cancelUrl: item.cancelUrl ?? '',
       billType: item.billType ?? undefined,
