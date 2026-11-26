@@ -2,6 +2,7 @@ import {
   CreateRecurringTemplateDTO,
   CreateTransactionDTO,
   MaterializeRecurringOccurrenceDTO,
+  RecurringFrequency,
   SplitRecurringTemplateDTO,
   TransactionFormValues,
   UpdateTransactionDTO,
@@ -84,7 +85,7 @@ export const mapToRecurringTemplatePayload = (
   data: TransactionFormValues
 ): CreateRecurringTemplateDTO => {
   const base = {
-    frequency: data.recurrence as 'Monthly' | 'Yearly',
+    frequency: data.recurrence as RecurringFrequency,
     dayOfMonth: new Date(data.startDate!).getDate(),
     startDate: data.startDate!,
     endDate: data.endDate,
@@ -95,12 +96,29 @@ export const mapToRecurringTemplatePayload = (
     note: data.note || undefined,
   };
 
-  if (data.type === 'Expense' || data.type === 'Income') {
+  if (data.type === 'Expense') {
+    return {
+      ...base,
+      name: data.name,
+      categoryId: data.category,
+      accountId: data.account,
+      ...mapFixedExpenseDetails(data),
+    };
+  }
+
+  if (data.type === 'Income') {
     return { ...base, name: data.name, categoryId: data.category, accountId: data.account };
   }
 
   return { ...base, fromAccountId: data.fromAccount, toAccountId: data.toAccount };
 };
+
+const mapFixedExpenseDetails = ({ kind, providerId, cancelUrl, billType }: TransactionFormValues) => ({
+  kind: kind ?? 'regular',
+  providerId: kind === 'subscription' ? providerId : undefined,
+  cancelUrl: kind === 'subscription' ? cancelUrl || undefined : undefined,
+  billType: kind === 'bill' ? billType : undefined,
+});
 
 export const getTransactionDisplayDate = (tx: ExpandedTransactionDto) => tx.date ?? '';
 

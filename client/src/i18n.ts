@@ -20,6 +20,7 @@ import enCategories from '@/locales/en/categories.json';
 import enCategoryTrends from '@/locales/en/categoryTrends.json';
 import enChat from '@/locales/en/chat.json';
 import enCommon from '@/locales/en/common.json';
+import enFixedExpenses from '@/locales/en/fixedExpenses.json';
 import enGoals from '@/locales/en/goals.json';
 import enHome from '@/locales/en/home.json';
 import enInvestments from '@/locales/en/investments.json';
@@ -48,6 +49,7 @@ import heCategories from '@/locales/he/categories.json';
 import heCategoryTrends from '@/locales/he/categoryTrends.json';
 import heChat from '@/locales/he/chat.json';
 import heCommon from '@/locales/he/common.json';
+import heFixedExpenses from '@/locales/he/fixedExpenses.json';
 import heGoals from '@/locales/he/goals.json';
 import heHome from '@/locales/he/home.json';
 import heInvestments from '@/locales/he/investments.json';
@@ -93,6 +95,7 @@ i18n
         budgets: enBudgets,
         chat: enChat,
         goals: enGoals,
+        fixedExpenses: enFixedExpenses,
         calculators: enCalculators,
         publicCalculators: enPublicCalculators,
         investments: enInvestments,
@@ -123,6 +126,7 @@ i18n
         budgets: heBudgets,
         chat: heChat,
         goals: heGoals,
+        fixedExpenses: heFixedExpenses,
         calculators: heCalculators,
         publicCalculators: hePublicCalculators,
         investments: heInvestments,

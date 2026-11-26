@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { nameSchema, objectIdSchema, positiveAmountSchema } from './common';
+import { FixedExpenseDetailsSchema, RECURRING_FREQUENCIES } from './fixedExpense';
 
 const optionalObjectIdField = z.union([objectIdSchema, z.literal('')]).optional();
 
@@ -9,7 +10,7 @@ const BaseTransactionSchema = z.object({
   note: z.string().max(200, 'validation.noteTooLong').trim().optional(),
   type: z.enum(['Income', 'Expense', 'Transfer']),
   amount: positiveAmountSchema,
-  frequency: z.enum(['Monthly', 'Yearly']).optional(),
+  frequency: z.enum(RECURRING_FREQUENCIES).optional(),
   belongToPreviousMonth: z.boolean().optional(),
   date: z.string().optional(),
   categoryId: objectIdSchema.optional(),
@@ -88,13 +89,13 @@ export const UpdateTransactionSchema = BaseTransactionSchema.partial().superRefi
 
 export type UpdateTransactionDTO = z.infer<typeof UpdateTransactionSchema>;
 
-const BaseTransactionFormSchema = z.object({
+const BaseTransactionFormSchema = FixedExpenseDetailsSchema.extend({
   name: nameSchema(50).optional(),
   amount: positiveAmountSchema,
   date: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
-  recurrence: z.enum(['None', 'Monthly', 'Yearly']),
+  recurrence: z.enum(['None', ...RECURRING_FREQUENCIES]),
   belongToPreviousMonth: z.boolean().optional(),
   type: z.enum(['Income', 'Expense', 'Transfer']),
   category: optionalObjectIdField,

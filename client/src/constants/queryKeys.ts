@@ -53,6 +53,8 @@ export const queryKeys = {
   transactionsReviewCount: () => ['transactions', 'reviewCount'],
   transactionsReview: () => ['transactions', 'review'],
   quickChips: () => ['transactions', 'quickChips'],
+  // Nested under 'transactions' so creating or editing a recurring transaction refreshes the list.
+  fixedExpenses: () => ['transactions', 'fixedExpenses'],
   recurringTemplates: () => ['recurringTemplates'],
 
   accounts: () => ['accounts'],

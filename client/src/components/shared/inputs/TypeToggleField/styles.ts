@@ -1,10 +1,11 @@
 import { SxProps, Theme } from '@mui/material/styles';
+import { SystemStyleObject } from '@mui/system';
 
 export const getToggleButtonGroupStyles = (
   selectedColor: string,
   selectedTypeIndex: number,
   optionCount: number
-): SxProps<Theme> => ({
+): SystemStyleObject<Theme> => ({
   position: 'relative',
   display: 'inline-flex',
   alignSelf: 'center',
@@ -32,7 +33,7 @@ export const getToggleButtonGroupStyles = (
   },
 });
 
-export const getToggleButtonStyles = (isSelected: boolean, color: string): SxProps<Theme> => ({
+export const getToggleButtonStyles = (isSelected: boolean, color: string): SystemStyleObject<Theme> => ({
   position: 'relative',
   zIndex: 1,
   minWidth: { xs: 80, sm: 118 },

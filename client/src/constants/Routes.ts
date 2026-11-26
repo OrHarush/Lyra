@@ -16,6 +16,7 @@ export const ROUTES = {
   CATEGORIES_URL: '/categories',
   PAYMENT_METHODS_URL: '/payment-methods',
   BUDGETS_URL: '/budget',
+  FIXED_EXPENSES_URL: '/fixed-expenses',
   GOALS_URL: '/goals',
   GOAL_DETAIL_URL: '/goals/:id',
   CALCULATORS_URL: '/calculators',
@@ -65,6 +66,9 @@ export const API_ROUTES = {
   RECURRING_TEMPLATES_SPLIT: (id: string) => `/api/recurring-templates/${id}/split`,
   RECURRING_TEMPLATES_DEACTIVATE_FROM: (id: string) => `/api/recurring-templates/${id}/deactivate-from`,
   RECURRING_TEMPLATES_MATERIALIZE: (id: string) => `/api/recurring-templates/${id}/materialize`,
+  FIXED_EXPENSES: '/api/recurring-templates/fixed-expenses',
+  FIXED_EXPENSE_CANCEL: (id: string) => `/api/recurring-templates/${id}/cancel`,
+  FIXED_EXPENSE_DETAILS: (id: string) => `/api/recurring-templates/${id}/details`,
   TRANSACTION_CALENDAR: (from: string, to: string, accountId?: string) => {
     const params = new URLSearchParams({ from, to });
 

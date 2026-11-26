@@ -22,6 +22,7 @@ import Calculators from '@/pages/Calculators';
 import Categories from '@/pages/Categories';
 import CategoryTrends from '@/pages/CategoryTrends';
 import Chat from '@/pages/Chat';
+import FixedExpenses from '@/pages/FixedExpenses';
 import Goals from '@/pages/Goals';
 import GoalDetail from '@/pages/Goals/GoalDetail';
 import HomePage from '@/pages/Home';
@@ -161,6 +162,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.GOALS_URL} element={<Goals />} />
             <Route path={ROUTES.GOAL_DETAIL_URL} element={<GoalDetail />} />
             <Route path={ROUTES.INVESTMENTS_URL} element={<Investments />} />
+            <Route path={ROUTES.FIXED_EXPENSES_URL} element={<FixedExpenses />} />
             <Route path={ROUTES.TOOLS_URL} element={<Navigate to={ROUTES.TOOLS_NET_SALARY_URL} replace />} />
             <Route path={ROUTES.TOOLS_NET_SALARY_URL} element={<Calculators />} />
             <Route path={ROUTES.TOOLS_COMPOUND_INTEREST_URL} element={<Calculators />} />

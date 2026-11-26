@@ -5,6 +5,7 @@ import {
   MaterializeRecurringOccurrenceDTO,
   SplitRecurringTemplateDTO,
   toCents,
+  UpdateFixedExpenseDetailsDTO,
   UpdateRecurringTemplateDTO,
 } from '@lyra/shared';
 import dayjs from 'dayjs';
@@ -22,6 +23,10 @@ import * as transactionRepository from '../repositories/transactionRepository';
 import { isCategoryCompatibleWithTransactionType } from '../utils/categoryCompatibility';
 import { fingerprintForTransaction } from '../utils/importFingerprint';
 import * as analyticsService from './analyticsService';
+import { syncAllAccountsForUser } from './balanceService';
+import { buildFixedExpenses } from './recurring/buildFixedExpenses';
+import { normalizeFixedExpenseDetails } from './recurring/fixedExpenseDetails';
+import { isOccurrenceMonth } from './recurring/occurrence';
 import { clampedDate } from './transactions/buildVirtualTransactions';
 import { invalidateQuickChipsCache } from './transactions/quickChipsService';
 
@@ -150,6 +155,7 @@ export const create = async (
     toAccount: dto.toAccountId ? new Types.ObjectId(dto.toAccountId) : undefined,
     isActive: true,
     lastGeneratedDate: null,
+    ...normalizeFixedExpenseDetails(dto.type, dto),
   };
 
   const created = await recurringTemplateRepository.insert(mapped);
@@ -200,7 +206,16 @@ export const update = async (
   if (dto.fromAccountId !== undefined) mapped.fromAccount = new Types.ObjectId(dto.fromAccountId);
   if (dto.toAccountId !== undefined) mapped.toAccount = new Types.ObjectId(dto.toAccountId);
 
-  const updated = await recurringTemplateRepository.updateById(id, mapped, workspaceId);
+  await recurringTemplateRepository.updateById(id, mapped, workspaceId);
+
+  const updated =
+    dto.kind !== undefined
+      ? await recurringTemplateRepository.replaceFixedExpenseDetails(
+          id,
+          normalizeFixedExpenseDetails(effectiveType, dto),
+          workspaceId
+        )
+      : await recurringTemplateRepository.findById(id, workspaceId);
 
   if (!updated) {
     throw ApiError.internal('Unexpected error updating recurring template');
@@ -330,6 +345,12 @@ export const splitTemplate = async (
     toAccount: changes.toAccountId ? new Types.ObjectId(changes.toAccountId) : existing.toAccount,
     isActive: true,
     lastGeneratedDate: null,
+    ...normalizeFixedExpenseDetails(effectiveType, {
+      kind: changes.kind ?? existing.kind,
+      providerId: changes.providerId ?? existing.providerId,
+      cancelUrl: changes.cancelUrl ?? existing.cancelUrl,
+      billType: changes.billType ?? existing.billType,
+    }),
   };
 
   const newTemplate = await recurringTemplateRepository.insert(newTemplateData);
@@ -350,6 +371,100 @@ export const splitTemplate = async (
     oldTemplate: existing,
     newTemplate: { ...newTemplate.toObject(), amount: fromCents(newTemplate.amount) },
   };
+};
+
+export const getFixedExpenses = async (workspaceId: string) => {
+  const templates = await recurringTemplateRepository.findActiveExpensesPopulated(workspaceId);
+  const { items, totals } = buildFixedExpenses(templates, dayjs.utc().add(3, 'hours').toDate());
+
+  return {
+    items: items.map(({ template, kind, nextDate, monthlyAmount, yearlyAmount }) => ({
+      _id: template._id.toString(),
+      name: template.name ?? '',
+      kind,
+      frequency: template.frequency,
+      amount: fromCents(template.amount),
+      nextDate,
+      monthlyAmount: fromCents(monthlyAmount),
+      yearlyAmount: fromCents(yearlyAmount),
+      providerId: template.providerId ?? null,
+      cancelUrl: template.cancelUrl ?? null,
+      billType: template.billType ?? null,
+      category: template.category ?? null,
+      paymentMethod: template.paymentMethod ?? null,
+    })),
+    totals: { monthly: fromCents(totals.monthly), yearly: fromCents(totals.yearly) },
+  };
+};
+
+export const updateFixedExpenseDetails = async (
+  id: string,
+  dto: UpdateFixedExpenseDetailsDTO,
+  workspaceId: string
+) => {
+  const existing = await findExistingTemplate(id, workspaceId);
+
+  if (existing.type !== 'Expense') {
+    throw ApiError.badRequest('Only expenses can be fixed expenses');
+  }
+
+  const updated = await recurringTemplateRepository.replaceFixedExpenseDetails(
+    id,
+    normalizeFixedExpenseDetails(existing.type, dto),
+    workspaceId
+  );
+
+  if (!updated) {
+    throw ApiError.internal('Unexpected error updating recurring template');
+  }
+
+  return { ...updated, amount: fromCents(updated.amount) };
+};
+
+// Stops a recurring expense from today: occurrences already due are recorded first, so the
+// history stays complete, and nothing is generated or forecast after it.
+export const cancelTemplate = async (id: string, workspaceId: string, userId: string) => {
+  const existing = await findExistingTemplate(id, workspaceId);
+
+  if (!existing.isActive) {
+    return { ...existing, amount: fromCents(existing.amount) };
+  }
+
+  const generated = await generatePendingTransactions(userId);
+
+  if (generated.length > 0) {
+    await syncAllAccountsForUser(userId);
+  }
+
+  const now = new Date();
+  const updated = await recurringTemplateRepository.updateById(
+    id,
+    { isActive: false, cancelledAt: now, endDate: earlierOf(existing.endDate, now) },
+    workspaceId
+  );
+
+  if (!updated) {
+    throw ApiError.internal('Unexpected error cancelling recurring template');
+  }
+
+  return { ...updated, amount: fromCents(updated.amount) };
+};
+
+const earlierOf = (endDate: Date | undefined, now: Date) =>
+  endDate && endDate < now ? endDate : now;
+
+const findExistingTemplate = async (id: string, workspaceId: string) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw ApiError.badRequest('Invalid recurring template ID');
+  }
+
+  const existing = await recurringTemplateRepository.findById(id, workspaceId);
+
+  if (!existing) {
+    throw ApiError.notFound('Recurring template not found');
+  }
+
+  return existing;
 };
 
 export const materializeOccurrence = async (
@@ -468,7 +583,6 @@ export const generatePendingTransactions = async (userId: string, upToDate: Date
       continue;
     }
 
-    const yearlyMonth = dayjs.utc(template.startDate).month();
     let lastMonth: dayjs.Dayjs | null = null;
     let current = fromMonth;
 
@@ -477,7 +591,7 @@ export const generatePendingTransactions = async (userId: string, upToDate: Date
         break;
       }
 
-      if (template.frequency === 'Yearly' && current.month() !== yearlyMonth) {
+      if (!isOccurrenceMonth(template.frequency, template.startDate, current)) {
         current = current.add(1, 'month');
         continue;
       }

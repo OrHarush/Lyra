@@ -34,5 +34,6 @@
     "ariaWhatsApp": "Share on WhatsApp",
     "ariaTelegram": "Share on Telegram",
     "ariaCopyLink": "Copy link"
-  }
+  },
+  "fixedExpenses": "Fixed expenses"
 }

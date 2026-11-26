@@ -6,6 +6,7 @@ import AdminNavigation from '@/components/shared/layout/sidebar/SidebarButtons/A
 import {
   buildAdminNavigationButtons,
   calculatorsButton,
+  fixedExpensesButton,
   investmentsButton,
   isSidebarButtonActive,
   manageNavigation,
@@ -20,6 +21,7 @@ const MobileSidebarButtons = () => {
   const location = useLocation();
   const { user } = useAuth();
   const mobileNavigation = [
+    fixedExpensesButton,
     ...manageNavigation,
     investmentsButton,
     calculatorsButton,

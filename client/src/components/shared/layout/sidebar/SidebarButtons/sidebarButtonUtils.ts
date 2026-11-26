@@ -5,6 +5,7 @@ import CalculateIcon from '@mui/icons-material/Calculate';
 import CategoryIcon from '@mui/icons-material/Category';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import SavingsIcon from '@mui/icons-material/Savings';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
@@ -23,6 +24,12 @@ export const primaryNavigation: SidebarButtonConfig[] = [
   { titleKey: 'overview', icon: DashboardIcon, route: ROUTES.OVERVIEW_URL },
   { titleKey: 'transactions', icon: RequestQuoteIcon, route: ROUTES.TRANSACTIONS_URL },
 ];
+
+export const fixedExpensesButton: SidebarButtonConfig = {
+  titleKey: 'fixedExpenses',
+  icon: EventRepeatIcon,
+  route: ROUTES.FIXED_EXPENSES_URL,
+};
 
 export const budgetButton: SidebarButtonConfig = {
   titleKey: 'budgets',

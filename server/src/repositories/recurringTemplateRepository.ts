@@ -62,6 +62,38 @@ export const findActiveForDateRangePopulated = async (
     .lean<IRecurringTemplatePopulated[]>()
     .exec();
 
+export const findActiveExpensesPopulated = async (workspaceId: string) =>
+  RecurringTemplate.find({
+    workspaceId: new Types.ObjectId(workspaceId),
+    isActive: true,
+    type: 'Expense',
+  })
+    .populate('category')
+    .populate('paymentMethod')
+    .lean<IRecurringTemplatePopulated[]>()
+    .exec();
+
+// Mongoose drops undefined values from updates, so cleared details need an explicit $unset.
+export const replaceFixedExpenseDetails = async (
+  id: string,
+  details: Pick<IRecurringTemplate, 'kind' | 'providerId' | 'cancelUrl' | 'billType'>,
+  workspaceId: string
+) => {
+  const entries = Object.entries(details);
+  const set = Object.fromEntries(entries.filter(([, value]) => value !== undefined));
+  const unset = Object.fromEntries(
+    entries.filter(([, value]) => value === undefined).map(([key]) => [key, 1])
+  );
+
+  return RecurringTemplate.findOneAndUpdate(
+    { _id: id, workspaceId: new Types.ObjectId(workspaceId) },
+    { $set: set, $unset: unset },
+    { new: true, runValidators: true }
+  )
+    .lean<IRecurringTemplate>()
+    .exec();
+};
+
 export const insert = async (data: Omit<IRecurringTemplate, '_id'>) => {
   const template = new RecurringTemplate(data);
 

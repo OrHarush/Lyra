@@ -1,0 +1,59 @@
+{
+  "page": {
+    "title": "Fixed expenses"
+  },
+  "summary": {
+    "perMonth": "Per month",
+    "perYear": "Per year",
+    "count_one": "{{count}} fixed expense",
+    "count_other": "{{count}} fixed expenses"
+  },
+  "sections": {
+    "subscription": {
+      "title": "Subscriptions",
+      "hint": "You can cancel these"
+    },
+    "bill": {
+      "title": "Bills",
+      "hint": "Tracked only. Amounts are estimates."
+    },
+    "regular": {
+      "title": "Other fixed expenses",
+      "hint": "Rent, loans and anything else that repeats"
+    }
+  },
+  "row": {
+    "next": "Next: {{date}}",
+    "perMonth": "a month",
+    "estimate": "Estimate",
+    "cancel": "Cancel",
+    "edit": "Edit details",
+    "moreActions": "More actions"
+  },
+  "cancel": {
+    "title": "Did you cancel {{name}}?",
+    "bodyWithLink": "We opened the provider's cancellation page. Once you've cancelled there, confirm here and we'll stop this expense from today. Past payments stay.",
+    "bodyWithoutLink": "There's no cancellation link saved. Cancel with the provider, then confirm here and we'll stop this expense from today. Past payments stay.",
+    "addLink": "Add a cancellation link",
+    "notYet": "Not yet",
+    "confirm": "Yes, I cancelled"
+  },
+  "edit": {
+    "title": "Edit fixed expense"
+  },
+  "empty": {
+    "title": "No fixed expenses yet",
+    "body": "Add a recurring expense, like a subscription or a bill, to see what you pay every month.",
+    "cta": "Add a fixed expense"
+  },
+  "toast": {
+    "cancelled": "{{name}} stopped",
+    "updated": "Fixed expense updated"
+  },
+  "errors": {
+    "loadFailed": "Couldn't load your fixed expenses",
+    "retry": "Try again",
+    "cancelFailed": "Couldn't stop this expense. Try again.",
+    "updateFailed": "Couldn't save the changes. Try again."
+  }
+}

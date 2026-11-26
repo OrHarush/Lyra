@@ -4,6 +4,7 @@ import { Types } from 'mongoose';
 
 import { IRecurringTemplatePopulated } from '../../types/RecurringTemplate';
 import { ITransactionPopulated } from '../../types/Transaction';
+import { isOccurrenceMonth } from '../recurring/occurrence';
 
 dayjs.extend(utc);
 
@@ -24,7 +25,6 @@ export const buildVirtualTransactions = (
       ? dayjs.utc(template.lastGeneratedDate).startOf('month')
       : null;
 
-    const yearlyMonth = dayjs.utc(template.startDate).month();
     let current = fromMonth.isBefore(templateStartMonth) ? templateStartMonth : fromMonth;
 
     while (!current.isAfter(toMonth)) {
@@ -37,7 +37,7 @@ export const buildVirtualTransactions = (
         continue;
       }
 
-      if (template.frequency === 'Yearly' && current.month() !== yearlyMonth) {
+      if (!isOccurrenceMonth(template.frequency, template.startDate, current)) {
         current = current.add(1, 'month');
         continue;
       }

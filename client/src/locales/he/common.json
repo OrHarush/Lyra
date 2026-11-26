@@ -1,6 +1,5 @@
 {
   "loading": "טוען את Lyra...",
-
   "buttons": {
     "create": "צור",
     "update": "עדכן",
@@ -41,7 +40,9 @@
     "accountRequired": "חשבון נדרש",
     "accountNumberInvalid": "מספר חשבון חייב להכיל ספרות בלבד",
     "accountNumberTooLong": "מספר חשבון לא יכול לעלות על 20 ספרות",
-    "startMonthBeforeEnd": "חודש התחלה חייב להיות לפני חודש הסיום"
+    "startMonthBeforeEnd": "חודש התחלה חייב להיות לפני חודש הסיום",
+    "invalidUrl": "יש להזין קישור שמתחיל ב-https://",
+    "urlTooLong": "הקישור ארוך מדי"
   },
   "entities": {
     "empty": {
