@@ -48,7 +48,7 @@ const NotificationBell = () => {
       <IconButton
         onClick={openPanel}
         aria-label={t('bellLabel', { count: actions.length })}
-        sx={{ width: 40, height: 40, color: 'text.secondary' }}
+        sx={{ width: { xs: 36, md: 40 }, height: { xs: 36, md: 40 }, color: 'text.secondary' }}
       >
         <Badge
           badgeContent={actions.length}

@@ -1,7 +1,5 @@
 import Column from '@/components/shared/layout/containers/Column';
-import Row from '@/components/shared/layout/containers/Row';
 import ScrollableColumn from '@/components/shared/layout/containers/ScrollableColumn';
-import AppearanceSettings from '@/components/shared/layout/NavBar/AppearanceSettings';
 import DesktopSidebar from '@/components/shared/layout/sidebar/DesktopSidebar';
 import MobileSidebar from '@/components/shared/layout/sidebar/MobileSidebar';
 import Settings from '@/components/shared/layout/sidebar/settings';
@@ -36,12 +34,6 @@ const Sidebar = ({
         <SidebarButtons />
       </ScrollableColumn>
       <SidebarShareCard />
-      {/* The mobile header has no room for these next to the notification bell. */}
-      {isSmallScreen && (
-        <Row justifyContent="center" sx={{ py: 0.5 }}>
-          <AppearanceSettings menuDirection="up" />
-        </Row>
-      )}
       <Settings />
     </Column>
   );
