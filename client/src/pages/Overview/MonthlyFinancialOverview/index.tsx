@@ -28,6 +28,7 @@ import { API_ROUTES } from '@/constants/Routes';
 import { useFetch } from '@/hooks/common/useFetch';
 import { useIsMobile } from '@/hooks/common/useIsMobile';
 import { useAccounts } from '@/hooks/entities/useAccounts';
+import { useBalanceForecast } from '@/hooks/entities/useBalanceForecast';
 import MonthlyFinancialOverviewSkeleton from '@/pages/Overview/MonthlyFinancialOverview/MonthlyFinancialOverviewSkeleton';
 import RetrospectiveOverview from '@/pages/Overview/MonthlyFinancialOverview/RetrospectiveOverview';
 import { useOverviewFilters } from '@/pages/Overview/OverviewFiltersProvider';
@@ -47,17 +48,14 @@ const MonthlyFinancialOverview = () => {
     enabled: !!year && month >= 0 && !!account?._id,
   });
 
-  const checkpointFrom = account?.checkpointDate
-    ? new Date(account.checkpointDate).toISOString()
-    : undefined;
-
   const isPastMonth = date.isBefore(dayjs().startOf('month'));
 
-  const { data: futureData, isLoading: isFutureLoading } = useFetch<TransactionSummaryDto>({
-    url: API_ROUTES.TRANSACTION_SUMMARY(year, month + 1, account?._id, checkpointFrom),
-    queryKey: queryKeys.transactionSummary(year, month + 1, account?._id || '', checkpointFrom),
-    enabled: !isPastMonth && !!year && month >= 0 && !!account?._id && !!checkpointFrom,
-  });
+  const { data: forecast, isLoading: isForecastLoading } = useBalanceForecast(
+    year,
+    month + 1,
+    account,
+    !isPastMonth && !!year && month >= 0
+  );
 
   const { accounts } = useAccounts();
 
@@ -72,7 +70,7 @@ const MonthlyFinancialOverview = () => {
     }
   };
 
-  if (isLoading || isFutureLoading) {
+  if (isLoading || isForecastLoading) {
     return <MonthlyFinancialOverviewSkeleton />;
   }
 
@@ -84,24 +82,10 @@ const MonthlyFinancialOverview = () => {
   const expenses = data?.monthlyExpenses ?? 0;
   const net = income - expenses;
 
-  const futureIncome = futureData?.monthlyIncome ?? 0;
-  const futureExpenses = futureData?.monthlyExpenses ?? 0;
-  const pendingPriorIncome = futureData?.pendingPriorIncome ?? 0;
-  const pendingPriorExpenses = futureData?.pendingPriorExpenses ?? 0;
-  const projected =
-    account.balance +
-    (futureIncome - futureExpenses) +
-    (pendingPriorIncome - pendingPriorExpenses);
+  const currentBalance = forecast?.currentBalance ?? account.balance;
+  const projected = forecast?.projectedBalance ?? account.balance;
 
-  const projectedTooltip = (
-    <ProjectedBalanceBreakdown
-      balance={account.balance}
-      futureIncome={futureIncome}
-      futureExpenses={futureExpenses}
-      pendingPriorExpenses={pendingPriorExpenses}
-      projected={projected}
-    />
-  );
+  const projectedTooltip = forecast && <ProjectedBalanceBreakdown {...forecast} />;
 
   return (
     <Grid size={{ xs: 12, md: 6, lg: 5, xl: 4 }}>
@@ -149,7 +133,7 @@ const MonthlyFinancialOverview = () => {
           ) : (
             <>
               <Row spacing={1} alignItems="center" justifyContent="space-evenly">
-                <BalanceHeadline balance={account.balance} label={t('general.balance')} />
+                <BalanceHeadline balance={currentBalance} label={t('general.balance')} />
                 <Divider orientation="vertical" flexItem sx={{ mx: 2, borderColor: 'divider' }} />
                 <BalanceHeadline
                   balance={projected}

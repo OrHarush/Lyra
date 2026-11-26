@@ -74,7 +74,7 @@ export const API_ROUTES = {
 
     return `/api/transactions/calendar?${params.toString()}`;
   },
-  TRANSACTION_SUMMARY: (year: number, month?: number, accountId?: string, from?: string) => {
+  TRANSACTION_SUMMARY: (year: number, month?: number, accountId?: string) => {
     const params = new URLSearchParams({ year: String(year) });
 
     if (month !== undefined) {
@@ -85,16 +85,13 @@ export const API_ROUTES = {
       params.append('accountId', accountId);
     }
 
-    if (from) {
-      params.append('from', from);
-    }
-
     return `/api/transactions/summary?${params.toString()}`;
   },
 
   ACCOUNTS: '/api/accounts',
   ACCOUNT_BY_ID: (id: string) => `/api/accounts/${id}`,
-  ACCOUNT_BALANCE_CURVE: (accountId: string) => `/api/accounts/${accountId}/balance-curve`,
+  ACCOUNT_FORECAST: (accountId: string, year: number, month: number) =>
+    `/api/accounts/${accountId}/forecast?${new URLSearchParams({ year: String(year), month: String(month) })}`,
 
   CATEGORIES: '/api/categories',
 

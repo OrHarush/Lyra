@@ -327,56 +327,28 @@ const accountSignedDelta = (tx: ITransactionPopulated, accountId?: string): Sign
   return { income, expense };
 };
 
-const isBeforeMonth = (year: number, month: number, targetYear: number, targetMonth: number) =>
-  year < targetYear || (year === targetYear && month < targetMonth);
-
 export const summarizeSingleMonth = (
   txs: ITransactionPopulated[],
   targetYear: number,
   targetMonth: number,
-  accountId?: string,
-  from?: Date,
-  now?: Date
+  accountId?: string
 ) => {
-  const endOfTargetMonth = dayjs
-    .utc(new Date(Date.UTC(targetYear, targetMonth, 1)))
-    .endOf('month')
-    .toDate();
-
   let monthlyIncome = 0;
   let monthlyExpenses = 0;
-  let pendingPriorIncome = 0;
-  let pendingPriorExpenses = 0;
 
   for (const tx of txs) {
     const { year, month } = getEffectiveMonth(tx);
-    const effectiveDate = tx.date ? getEffectiveBalanceDate(tx) : undefined;
 
-    if (year === targetYear && month === targetMonth) {
-      if (from && now && effectiveDate && effectiveDate <= now) {
-        continue;
-      }
-
-      const { income, expense } = accountSignedDelta(tx, accountId);
-      monthlyIncome += income;
-      monthlyExpenses += expense;
+    if (year !== targetYear || month !== targetMonth) {
       continue;
     }
 
-    if (
-      now &&
-      effectiveDate &&
-      isBeforeMonth(year, month, targetYear, targetMonth) &&
-      effectiveDate > now &&
-      effectiveDate <= endOfTargetMonth
-    ) {
-      const { income, expense } = accountSignedDelta(tx, accountId);
-      pendingPriorIncome += income;
-      pendingPriorExpenses += expense;
-    }
+    const { income, expense } = accountSignedDelta(tx, accountId);
+    monthlyIncome += income;
+    monthlyExpenses += expense;
   }
 
-  return { monthlyIncome, monthlyExpenses, pendingPriorIncome, pendingPriorExpenses };
+  return { monthlyIncome, monthlyExpenses };
 };
 
 export const summarizeWholeYear = (

@@ -2,6 +2,7 @@ import {
   BalanceBreakdownEntry,
   BalanceBreakdownResult,
   BalanceBreakdownTransactionType,
+  fromCents,
   toCents,
 } from '@lyra/shared';
 import dayjs from 'dayjs';
@@ -12,8 +13,16 @@ import { ApiError } from '../errors/ApiError';
 import Account from '../models/Account';
 import * as accountRepository from '../repositories/accountRepository';
 import * as transactionRepository from '../repositories/transactionRepository';
+import { GetBalanceForecastQuery } from '../schemas/accountSchemas';
 import { ITransactionPopulated } from '../types/Transaction';
-import { expandTransactions, getEffectiveBalanceDate, signedDeltaForAccount } from '../utils/transaction';
+import { getEffectiveBalanceDate, signedDeltaForAccount } from '../utils/transaction';
+import { findScheduledTransactions } from './balance/findScheduledTransactions';
+import {
+  balanceSinceCheckpoint,
+  forecastBalance,
+  isWithinWindow,
+  toBalanceDeltas,
+} from './balance/ledger';
 import { getActiveWorkspaceIdOrThrow } from './workspaceService';
 
 dayjs.extend(utc);
@@ -39,7 +48,9 @@ const buildBreakdownEntry = (
     effectiveBalanceDate: effectiveDate.toISOString(),
   };
 
-  if (effectiveDate <= checkpointDate) {
+  const isCounted = isWithinWindow(effectiveDate, { after: checkpointDate, upTo: now });
+
+  if (!isCounted && effectiveDate <= checkpointDate) {
     return {
       ...base,
       included: false,
@@ -48,7 +59,7 @@ const buildBreakdownEntry = (
     };
   }
 
-  if (effectiveDate > now) {
+  if (!isCounted) {
     return {
       ...base,
       included: false,
@@ -123,7 +134,6 @@ export const computeAccountBalance = async (
     from: queryFrom,
   });
 
-  let totalIncluded = 0;
   let totalSkippedPreCheckpoint = 0;
   let totalSkippedFuture = 0;
   const breakdown: BalanceBreakdownEntry[] = [];
@@ -132,11 +142,6 @@ export const computeAccountBalance = async (
     const entry = buildBreakdownEntry(tx, accountId, checkpointDate, now);
     breakdown.push(entry);
 
-    if (entry.included) {
-      totalIncluded += entry.contributesToSum;
-      continue;
-    }
-
     if (entry.reason.startsWith('effectiveBalanceDate <= checkpointDate')) {
       totalSkippedPreCheckpoint++;
     } else if (entry.reason.startsWith('effectiveBalanceDate > now')) {
@@ -144,17 +149,55 @@ export const computeAccountBalance = async (
     }
   }
 
+  const finalBalance = balanceSinceCheckpoint(
+    account.checkpointBalance,
+    toBalanceDeltas(rawTransactions, accountId),
+    { after: checkpointDate, upTo: now }
+  );
+
   return {
     accountId,
     accountName: account.name,
     checkpointBalance: account.checkpointBalance,
     checkpointDate: checkpointDate.toISOString(),
     now: now.toISOString(),
-    totalIncluded,
+    totalIncluded: finalBalance - account.checkpointBalance,
     totalSkippedPreCheckpoint,
     totalSkippedFuture,
-    finalBalance: account.checkpointBalance + totalIncluded,
+    finalBalance,
     breakdown,
+  };
+};
+
+export const getBalanceForecast = async (
+  workspaceId: string,
+  accountId: string,
+  { year, month }: GetBalanceForecastQuery
+) => {
+  if (!mongoose.Types.ObjectId.isValid(accountId)) {
+    throw ApiError.badRequest('Invalid account ID');
+  }
+
+  const { finalBalance, now } = await computeAccountBalance(workspaceId, accountId);
+  // Starts a month early because card purchases are charged on the next billing day.
+  const from = dayjs.utc(now).subtract(1, 'month').startOf('month').toDate();
+  const endOfTargetMonth = dayjs.utc(new Date(Date.UTC(year, month, 1))).endOf('month').toDate();
+  const transactions = await findScheduledTransactions(workspaceId, {
+    accountId,
+    from,
+    to: endOfTargetMonth,
+  });
+  const forecast = forecastBalance(
+    toBalanceDeltas(transactions, accountId),
+    { currentBalance: finalBalance, now: new Date(now) },
+    endOfTargetMonth
+  );
+
+  return {
+    currentBalance: fromCents(forecast.currentBalance),
+    expectedIncome: fromCents(forecast.expectedIncome),
+    expectedExpenses: fromCents(forecast.expectedExpenses),
+    projectedBalance: fromCents(forecast.projectedBalance),
   };
 };
 
@@ -213,72 +256,4 @@ export const syncAllAccountsForUser = async (userId: string) => {
       console.error(`Balance sync failed for account ${accountId}:`, result.reason);
     }
   });
-};
-
-export const calculateAccountBalanceCurve = async (
-  workspaceId: string,
-  accountId: string,
-  from?: string,
-  to?: string
-) => {
-  if (!mongoose.Types.ObjectId.isValid(accountId)) {
-    throw ApiError.badRequest('Invalid account ID');
-  }
-
-  const start = from ? dayjs.utc(from) : dayjs.utc().startOf('month');
-  const end = to ? dayjs.utc(to) : dayjs.utc().endOf('month');
-
-  if (!start.isValid() || !end.isValid()) {
-    throw ApiError.badRequest('Invalid date range');
-  }
-
-  const account = await Account.findOne({
-    _id: accountId,
-    workspaceId: new mongoose.Types.ObjectId(workspaceId),
-  });
-
-  if (!account) {
-    throw ApiError.notFound('Account not found');
-  }
-
-  const rawTransactions = await transactionRepository.findMany(workspaceId, {
-    from: start.toDate(),
-    to: end.toDate(),
-    sort: 'asc',
-    accountId,
-  });
-
-  const transactions = expandTransactions(rawTransactions);
-
-  const sortedTx = transactions.sort(
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
-
-  const days: { date: string; balance: number }[] = [];
-  let runningBalance = account.balance;
-  let txIndex = 0;
-
-  for (let current = start.clone(); !current.isAfter(end, 'day'); current = current.add(1, 'day')) {
-    while (txIndex < sortedTx.length && dayjs(sortedTx[txIndex].date).isSame(current, 'day')) {
-      const tx = sortedTx[txIndex];
-
-      if (tx.account?._id.toString() !== accountId) {
-        txIndex++;
-        continue;
-      }
-
-      runningBalance += signedDeltaForAccount(tx, accountId);
-
-      txIndex++;
-    }
-
-    days.push({
-      date: current.toISOString(),
-      balance: runningBalance,
-    });
-  }
-
-  return days;
 };

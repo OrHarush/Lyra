@@ -30,7 +30,8 @@ import {
 } from '../../utils/transaction';
 import * as accountService from '../accountService';
 import * as analyticsService from '../analyticsService';
-import { computeAccountBalance, syncAccountBalance } from '../balanceService';
+import { findScheduledTransactions } from '../balance/findScheduledTransactions';
+import { computeAccountBalance, getBalanceForecast, syncAccountBalance } from '../balanceService';
 import { buildCalendarDays, flattenEvents } from './buildCalendarDays';
 import { buildVirtualTransactions } from './buildVirtualTransactions';
 import { invalidateQuickChipsCache } from './quickChipsService';
@@ -160,6 +161,12 @@ export const getTransactionSummary = async (
 ) => {
   const { year, month, accountId, from } = query;
 
+  // Cached PWA clients still add this response to the balance to build their projection.
+  // Remove together with `from` once they have refreshed.
+  if (month !== undefined && accountId && from) {
+    return toLegacyProjection(await getBalanceForecast(workspaceId, accountId, { year, month }));
+  }
+
   const targetMonthStart =
     month !== undefined ? new Date(Date.UTC(year, month, 1)) : new Date(Date.UTC(year, 0, 1));
   const fromDate = dayjs.utc(targetMonthStart).subtract(1, 'month').startOf('month').toDate();
@@ -168,37 +175,18 @@ export const getTransactionSummary = async (
       ? new Date(Date.UTC(year, month + 2, 1))
       : new Date(Date.UTC(year + 1, 0, 1));
 
-  const transactions = await transactionRepository.findMany(workspaceId, {
+  const transactions = await findScheduledTransactions(workspaceId, {
     accountId,
     from: fromDate,
     to: endDate,
   });
 
-  const templates = await recurringTemplateRepository.findActiveForDateRangePopulated(
-    workspaceId,
-    fromDate,
-    endDate
-  );
-
-  const virtualTransactions = buildVirtualTransactions(templates, transactions, fromDate, endDate);
-
-  transactions.push(...virtualTransactions);
-
   if (month !== undefined) {
-    const result = summarizeSingleMonth(
-      transactions,
-      year,
-      month,
-      accountId,
-      from,
-      dayjs.utc().add(3, 'hours').toDate()
-    );
+    const result = summarizeSingleMonth(transactions, year, month, accountId);
 
     return {
       monthlyIncome: fromCents(result.monthlyIncome),
       monthlyExpenses: fromCents(result.monthlyExpenses),
-      pendingPriorIncome: fromCents(result.pendingPriorIncome),
-      pendingPriorExpenses: fromCents(result.pendingPriorExpenses),
     };
   }
 
@@ -208,6 +196,16 @@ export const getTransactionSummary = async (
     monthlyExpenses: fromCents(bucket.monthlyExpenses),
   }));
 };
+
+const toLegacyProjection = ({
+  expectedIncome,
+  expectedExpenses,
+}: Awaited<ReturnType<typeof getBalanceForecast>>) => ({
+  monthlyIncome: expectedIncome,
+  monthlyExpenses: expectedExpenses,
+  pendingPriorIncome: 0,
+  pendingPriorExpenses: 0,
+});
 
 const UPCOMING_WINDOW_DAYS = 30;
 
@@ -225,19 +223,11 @@ export const getTransactionCalendar = async (
   const fetchFrom = (now.isBefore(rangeStart) ? now : rangeStart).subtract(1, 'month').toDate();
   const fetchTo = (upcomingEnd.isAfter(rangeEnd) ? upcomingEnd : rangeEnd).toDate();
 
-  const transactions = await transactionRepository.findMany(workspaceId, {
+  const transactions = await findScheduledTransactions(workspaceId, {
     accountId,
     from: fetchFrom,
     to: fetchTo,
   });
-
-  const templates = await recurringTemplateRepository.findActiveForDateRangePopulated(
-    workspaceId,
-    fetchFrom,
-    fetchTo
-  );
-
-  transactions.push(...buildVirtualTransactions(templates, transactions, fetchFrom, fetchTo));
 
   const balanceContext = accountId
     ? {

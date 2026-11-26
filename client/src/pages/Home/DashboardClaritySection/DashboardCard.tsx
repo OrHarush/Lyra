@@ -23,11 +23,10 @@ const DashboardCard = () => {
 
   const projectedTooltip = (
     <ProjectedBalanceBreakdown
-      balance={CLARITY_FIGURES.balance}
-      futureIncome={CLARITY_FIGURES.breakdown.futureIncome}
-      futureExpenses={CLARITY_FIGURES.breakdown.futureExpenses}
-      pendingPriorExpenses={CLARITY_FIGURES.breakdown.pendingPriorExpenses}
-      projected={CLARITY_FIGURES.projected}
+      currentBalance={CLARITY_FIGURES.balance}
+      expectedIncome={CLARITY_FIGURES.breakdown.expectedIncome}
+      expectedExpenses={CLARITY_FIGURES.breakdown.expectedExpenses}
+      projectedBalance={CLARITY_FIGURES.projected}
     />
   );
 

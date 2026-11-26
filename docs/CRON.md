@@ -53,8 +53,6 @@ Login does call `syncAllAccountsForUser`, so an active user gets fresh balances 
 Read paths that consume the stored balance without re-syncing:
 
 - HTTP `GET /api/accounts` and `GET /api/accounts/:id` (controller returns stored value).
-- `balanceService.calculateAccountBalanceCurve` (uses `account.balance` as the starting point for the historical curve).
-- Client `MonthlyFinancialOverview` projection (`account.balance + future deltas`).
 - `setPrimary` (returns stored value, no sync).
 - Debug snapshot capture.
 

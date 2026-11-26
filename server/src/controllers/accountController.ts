@@ -3,8 +3,9 @@ import { Request, Response } from 'express';
 
 import { ApiResponse } from '../http/ApiResponse';
 import { asyncHandler } from '../middlewares/asyncHandler';
+import { GetBalanceForecastQuery } from '../schemas/accountSchemas';
 import * as accountService from '../services/accountService';
-import { calculateAccountBalanceCurve } from '../services/balanceService';
+import { getBalanceForecast } from '../services/balanceService';
 
 export const getAccounts = asyncHandler(async (req: Request, res: Response) => {
   const accounts = await accountService.findAll(req.workspaceId);
@@ -18,18 +19,14 @@ export const getAccountById = asyncHandler(async (req: Request, res: Response) =
   return ApiResponse.ok(res, account);
 });
 
-export const getAccountBalanceCurve = asyncHandler(async (req: Request, res: Response) => {
-  const { id: accountId } = req.params;
-  const { from, to } = req.query;
-
-  const data = await calculateAccountBalanceCurve(
+export const getAccountForecast = asyncHandler(async (req: Request, res: Response) => {
+  const forecast = await getBalanceForecast(
     req.workspaceId,
-    accountId as string,
-    from as string | undefined,
-    to as string | undefined
+    req.params.id as string,
+    req.validatedQuery as GetBalanceForecastQuery
   );
 
-  return ApiResponse.ok(res, data);
+  return ApiResponse.ok(res, forecast);
 });
 
 export const createAccount = asyncHandler(async (req: Request, res: Response) => {

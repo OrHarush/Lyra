@@ -1,3 +1,5 @@
+import { AccountDto } from '@/types/Account';
+
 export const queryKeys = {
   allTransactions: () => ['transactions'],
   transactions: (filters?: {
@@ -12,12 +14,21 @@ export const queryKeys = {
     type?: string;
   }) => ['transactions', filters ?? {}],
   transaction: (id: string) => ['transactions', id],
-  transactionSummary: (year: number, month: number, accountId: string, from?: string) => [
+  transactionSummary: (year: number, month: number, accountId: string) => [
     'transactionSummary',
     year,
     month,
     accountId,
-    from,
+  ],
+  // Nested under 'transactionSummary' so every existing summary invalidation refreshes forecasts.
+  balanceForecast: (year: number, month: number, account: AccountDto) => [
+    'transactionSummary',
+    'forecast',
+    year,
+    month,
+    account._id,
+    account.balance,
+    account.checkpointDate,
   ],
   transactionCalendar: (from: string, to: string, accountId: string) => [
     'transactions',
@@ -58,12 +69,6 @@ export const queryKeys = {
   accounts: () => ['accounts'],
   account: (id: string) => ['accounts', id],
   accountBalance: (accountId: string, asOf: string) => ['accountBalance', accountId, asOf],
-  accountBalanceCurve: (accountId: string, from?: string, to?: string) => [
-    'accountBalanceCurve',
-    accountId,
-    from ?? 'defaultFrom',
-    to ?? 'defaultTo',
-  ],
 
   categories: () => ['categories'],
   category: (id: string) => ['categories', id],

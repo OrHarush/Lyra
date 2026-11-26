@@ -9,9 +9,8 @@ export const CLARITY_FIGURES = {
   income: 12000,
   expenses: 9150,
   breakdown: {
-    futureIncome: 2000,
-    futureExpenses: 5200,
-    pendingPriorExpenses: 0,
+    expectedIncome: 2000,
+    expectedExpenses: 5200,
   },
 } as const;
 
