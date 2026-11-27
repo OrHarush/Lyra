@@ -14,7 +14,7 @@ import ClassifyPromptCard from '@/pages/FixedExpenses/ClassifyPromptCard';
 import EditFixedExpenseDialog from '@/pages/FixedExpenses/EditFixedExpenseDialog';
 import FixedExpensesEmptyState from '@/pages/FixedExpenses/FixedExpensesEmptyState';
 import FixedExpensesErrorState from '@/pages/FixedExpenses/FixedExpensesErrorState';
-import FixedExpensesIntro from '@/pages/FixedExpenses/FixedExpensesIntro';
+import FixedExpensesMobileTitle from '@/pages/FixedExpenses/FixedExpensesMobileTitle';
 import FixedExpensesSkeleton from '@/pages/FixedExpenses/FixedExpensesSkeleton';
 import FixedExpensesSummary from '@/pages/FixedExpenses/FixedExpensesSummary';
 import GroupDialog from '@/pages/FixedExpenses/GroupDialog';
@@ -120,7 +120,7 @@ const FixedExpensesPage = () => {
   return (
     <PageLayout hasNaturalHeight>
       <Column spacing={2.5} sx={getContentStyle()}>
-        <FixedExpensesIntro />
+        <FixedExpensesMobileTitle />
         {renderContent()}
       </Column>
       {!isSmallScreen && <ActionFab onClick={openCreateDialog} />}

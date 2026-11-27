@@ -1,7 +1,6 @@
 {
   "page": {
-    "title": "Your fixed expenses",
-    "subtitle": "Everything that leaves your account every month, in one place"
+    "title": "Your fixed expenses"
   },
   "summary": {
     "monthlyLabel": "Costs you every month",
