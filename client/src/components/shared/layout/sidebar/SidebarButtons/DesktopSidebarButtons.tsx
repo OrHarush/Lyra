@@ -1,23 +1,24 @@
-import { Box, List } from '@mui/material';
-import { useState } from 'react';
+import { Box, Divider, List } from '@mui/material';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import AdminNavigation from '@/components/shared/layout/sidebar/SidebarButtons/AdminNavigation';
-import ManagementButtonsNavigation from '@/components/shared/layout/sidebar/SidebarButtons/ManagementButtonsNavigation';
+import CollapsibleNavGroup from '@/components/shared/layout/sidebar/SidebarButtons/CollapsibleNavGroup';
 import {
-  budgetButton,
-  buildAdminNavigationButtons,
-  calculatorsButton,
-  fixedExpensesButton,
-  goalsButton,
-  investmentsButton,
-  isSidebarButtonActive,
-  manageNavigation,
-  primaryNavigation,
-} from '@/components/shared/layout/sidebar/SidebarButtons/sidebarButtonUtils';
-import SidebarNavigationButton from '@/components/shared/layout/sidebar/SidebarButtons/SidebarNavigationButton';
-import { SidebarButtonsStyles } from '@/components/shared/layout/sidebar/SidebarButtons/styles';
+  buildDesktopNavSections,
+  DesktopNavSection,
+} from '@/components/shared/layout/sidebar/SidebarButtons/desktopNavSections';
+import { getActiveRowTop } from '@/components/shared/layout/sidebar/SidebarButtons/getActiveRowTop';
+import NavGroupHeader from '@/components/shared/layout/sidebar/SidebarButtons/NavGroupHeader';
+import { isSidebarButtonActive } from '@/components/shared/layout/sidebar/SidebarButtons/sidebarButtonUtils';
+import SidebarNavigationButton, {
+  SidebarButtonConfig,
+} from '@/components/shared/layout/sidebar/SidebarButtons/SidebarNavigationButton';
+import {
+  getDesktopDividerStyle,
+  getDesktopHighlightStyle,
+} from '@/components/shared/layout/sidebar/SidebarButtons/styles';
+import { useDesktopNavToggles } from '@/components/shared/layout/sidebar/SidebarButtons/useDesktopNavToggles';
 import { useSidebar } from '@/components/shared/layout/sidebar/SidebarContext';
 import { ROUTES } from '@/constants/Routes';
 import { useReviewCount } from '@/hooks/entities/useTransactionReview';
@@ -26,71 +27,75 @@ import { isAdmin } from '@/utils/env';
 
 const DesktopSidebarButtons = () => {
   const { t } = useTranslation('sidebar');
-  const location = useLocation();
+  const { pathname } = useLocation();
   const { user } = useAuth();
   const { expanded } = useSidebar();
-  const standaloneNavigation = [
-    fixedExpensesButton,
-    budgetButton,
-    goalsButton,
-    investmentsButton,
-    calculatorsButton,
-  ];
-  const [isManageExpanded, setIsManageExpanded] = useState(false);
   const { data: reviewCountData } = useReviewCount(!!user);
+  const sections = buildDesktopNavSections(isAdmin(user));
+  const { isToggledOpen, toggleSection } = useDesktopNavToggles(sections, pathname);
 
   const reviewCount = reviewCountData?.count ?? 0;
 
-  const primaryNavWithBadge = primaryNavigation.map(button =>
+  // The mini sidebar has no toggle rows, so every section shows its items there.
+  const isSectionOpen = (section: DesktopNavSection) =>
+    !expanded || !section.toggleIcon || isToggledOpen(section.id);
+
+  const withReviewBadge = (button: SidebarButtonConfig) =>
     button.route === ROUTES.TRANSACTIONS_URL && reviewCount > 0
       ? { ...button, badge: String(reviewCount) }
-      : button
+      : button;
+
+  const renderButton = (button: SidebarButtonConfig, nested: boolean) => (
+    <SidebarNavigationButton
+      key={button.titleKey}
+      button={withReviewBadge(button)}
+      isActive={isSidebarButtonActive(button, pathname)}
+      title={t(button.titleKey)}
+      nested={nested}
+      compact
+    />
   );
 
-  const adminNavigation = buildAdminNavigationButtons(isAdmin(user));
+  const renderSection = (section: DesktopNavSection) => {
+    if (section.toggleIcon && section.titleKey) {
+      return (
+        <CollapsibleNavGroup
+          title={t(section.titleKey)}
+          icon={section.toggleIcon}
+          hasActiveItem={section.items.some(button => isSidebarButtonActive(button, pathname))}
+          isOpen={isToggledOpen(section.id)}
+          onToggle={() => toggleSection(section.id)}
+        >
+          {section.items.map(button => renderButton(button, true))}
+        </CollapsibleNavGroup>
+      );
+    }
 
-  const showManageItems = isManageExpanded || !expanded;
+    return (
+      <>
+        {expanded && section.titleKey && <NavGroupHeader title={t(section.titleKey)} />}
+        {section.items.map(button => renderButton(button, false))}
+      </>
+    );
+  };
 
-  const routeRows = [
-    ...primaryNavWithBadge,
-    ...standaloneNavigation,
-    ...(showManageItems ? manageNavigation : []),
-    ...adminNavigation,
-  ];
-
-  // When expanded, the "Manage" toggle row sits between the standalone buttons and the manage
-  // items, so the highlight pill must skip one extra slot for everything rendered after it.
-  const manageToggleIndex = primaryNavWithBadge.length + standaloneNavigation.length;
-  const activeRouteIndex = routeRows.findIndex(button => isSidebarButtonActive(button, location.pathname));
-  const activeIndex =
-    expanded && activeRouteIndex >= manageToggleIndex ? activeRouteIndex + 1 : activeRouteIndex;
+  const activeRowTop = getActiveRowTop({
+    sections,
+    isSidebarExpanded: expanded,
+    isSectionOpen,
+    pathname,
+  });
 
   return (
     <Box sx={{ position: 'relative' }}>
-      <Box sx={SidebarButtonsStyles(activeIndex)} />
+      <Box sx={getDesktopHighlightStyle(activeRowTop)} />
       <List sx={{ position: 'relative', zIndex: 1 }}>
-        {primaryNavWithBadge.map(button => (
-          <SidebarNavigationButton
-            key={button.titleKey}
-            button={button}
-            isActive={isSidebarButtonActive(button, location.pathname)}
-            title={t(button.titleKey)}
-          />
+        {sections.map((section, index) => (
+          <Fragment key={section.id}>
+            {!expanded && index > 0 && <Divider component="li" sx={getDesktopDividerStyle()} />}
+            {renderSection(section)}
+          </Fragment>
         ))}
-        {standaloneNavigation.map(button => (
-          <SidebarNavigationButton
-            key={button.titleKey}
-            button={button}
-            isActive={isSidebarButtonActive(button, location.pathname)}
-            title={t(button.titleKey)}
-          />
-        ))}
-        <ManagementButtonsNavigation
-          manageNavigation={manageNavigation}
-          isManageExpanded={isManageExpanded}
-          onToggle={() => setIsManageExpanded(prev => !prev)}
-        />
-        <AdminNavigation adminNavigation={adminNavigation} />
       </List>
     </Box>
   );

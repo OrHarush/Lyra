@@ -62,27 +62,22 @@ export const manageNavigation: SidebarButtonConfig[] = [
   { titleKey: 'paymentMethods', icon: CreditCardIcon, route: ROUTES.PAYMENT_METHODS_URL },
 ];
 
+export const chatButton: SidebarButtonConfig = {
+  titleKey: 'chat',
+  icon: SmartToyIcon,
+  route: ROUTES.CHAT_URL,
+  badge: 'NEW',
+};
+
+export const adminToolButtons: SidebarButtonConfig[] = [
+  { titleKey: 'admin', icon: AdminPanelSettingsIcon, route: ROUTES.ADMIN_KPIS_URL },
+  { titleKey: 'adminDebug', icon: BugReportIcon, route: ROUTES.ADMIN_DEBUG_URL },
+];
+
 export const buildAdminNavigationButtons = (isAdminUser: boolean): SidebarButtonConfig[] => {
   if (!isAdminUser) {
     return [];
   }
 
-  return [
-    {
-      titleKey: 'chat',
-      icon: SmartToyIcon,
-      route: ROUTES.CHAT_URL,
-      badge: 'NEW',
-    },
-    {
-      titleKey: 'admin',
-      icon: AdminPanelSettingsIcon,
-      route: ROUTES.ADMIN_KPIS_URL,
-    },
-    {
-      titleKey: 'adminDebug',
-      icon: BugReportIcon,
-      route: ROUTES.ADMIN_DEBUG_URL,
-    },
-  ];
+  return [chatButton, ...adminToolButtons];
 };

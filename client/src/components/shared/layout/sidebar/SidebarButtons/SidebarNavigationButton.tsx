@@ -1,7 +1,16 @@
 import { SvgIconComponent } from '@mui/icons-material';
-import { Box, Chip, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip } from '@mui/material';
+import {
+  Box,
+  Chip,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
+import { getDesktopRowStyle } from '@/components/shared/layout/sidebar/SidebarButtons/styles';
 import { useSidebar } from '@/components/shared/layout/sidebar/SidebarContext';
 
 export interface SidebarButtonConfig {
@@ -17,6 +26,7 @@ interface SidebarNavigationButtonProps {
   isActive: boolean;
   title: string;
   nested?: boolean;
+  compact?: boolean;
 }
 
 const SidebarNavigationButton = ({
@@ -24,6 +34,7 @@ const SidebarNavigationButton = ({
   isActive,
   title,
   nested = false,
+  compact = false,
 }: SidebarNavigationButtonProps) => {
   const navigate = useNavigate();
   const { expanded } = useSidebar();
@@ -31,12 +42,12 @@ const SidebarNavigationButton = ({
 
   return (
     <Tooltip title={!expanded ? title : ''} placement="right">
-      <ListItem sx={{ padding: '4px 8px' }}>
+      <ListItem sx={compact ? getDesktopRowStyle() : { padding: '4px 8px' }}>
         <ListItemButton
           onClick={() => navigate(button.route)}
           sx={{
             borderRadius: '12px',
-            height: '44px',
+            height: compact ? '100%' : '44px',
             backgroundColor: 'transparent',
             transition: 'color 0.2s ease-in-out',
             '&:hover': {
@@ -49,7 +60,14 @@ const SidebarNavigationButton = ({
             pl: expanded && nested ? 4 : undefined,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0, flex: expanded ? 1 : 'unset' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              minWidth: 0,
+              flex: expanded ? 1 : 'unset',
+            }}
+          >
             <ListItemIcon sx={{ minWidth: 24, mr: expanded ? 1 : 0 }}>
               <Icon color={isActive ? 'primary' : 'inherit'} />
             </ListItemIcon>
