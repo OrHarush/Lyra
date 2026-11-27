@@ -4,6 +4,7 @@ import { ElementType } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import MultiSelectChip from '@/components/shared/inputs/MultiSelectChip';
+import { buildGroupedItems } from '@/components/shared/inputs/MultiSelectChip/buildGroupedItems';
 import { MultiSelectChipItem } from '@/components/shared/inputs/MultiSelectChip/MultiSelectChipList';
 import Row from '@/components/shared/layout/containers/Row';
 import { categoryIconMap } from '@/constants/categoryIconMap';
@@ -24,7 +25,7 @@ const CategoryFilter = ({ selectedIds, onChange }: CategoryFilterProps) => {
   const { categories } = useCategories();
   const getCategoryName = useCategoryName();
 
-  const categoryOptions: MultiSelectChipItem[] = categories.map(cat => {
+  const toCategoryOption = (cat: CategoryDto): MultiSelectChipItem => {
     const IconComponent = resolveCategoryIcon(cat);
 
     return {
@@ -36,7 +37,18 @@ const CategoryFilter = ({ selectedIds, onChange }: CategoryFilterProps) => {
         </Row>
       ),
     };
-  });
+  };
+
+  const categoryOptions = buildGroupedItems([
+    {
+      label: t('typeToggle.expenses'),
+      items: categories.filter(cat => cat.type !== 'Income').map(toCategoryOption),
+    },
+    {
+      label: t('typeToggle.income'),
+      items: categories.filter(cat => cat.type === 'Income').map(toCategoryOption),
+    },
+  ]);
 
   const soleSelectedCategory =
     selectedIds.length === 1 ? categories.find(c => c._id === selectedIds[0]) : undefined;

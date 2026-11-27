@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import MultiSelectChip from '@/components/shared/inputs/MultiSelectChip';
-import { MultiSelectChipItem } from '@/components/shared/inputs/MultiSelectChip/MultiSelectChipList';
+import { buildGroupedItems } from '@/components/shared/inputs/MultiSelectChip/buildGroupedItems';
 import { usePaymentMethods } from '@/hooks/entities/usePaymentMethods';
 import { getPaymentMethodDisplayName, PAYMENT_TYPE_GROUPS } from '@/utils/entities/paymentMethod';
 
@@ -17,33 +17,19 @@ const PaymentMethodFilter = ({ selectedIds, onChange }: PaymentMethodFilterProps
   const { t: tPm } = useTranslation('paymentMethods');
   const { paymentMethods } = usePaymentMethods();
 
-  const items: MultiSelectChipItem[] = [];
-
-  PAYMENT_TYPE_GROUPS.forEach((group, groupIndex) => {
-    const groupMethods = paymentMethods.filter(pm => group.types.includes(pm.type));
-
-    if (groupMethods.length === 0) {
-      return;
-    }
-
-    if (groupIndex > 0 && items.length > 0) {
-      items.push({ id: `divider-${groupIndex}`, isDivider: true });
-    }
-
-    items.push({
-      id: `header-${groupIndex}`,
-      subheaderLabel: tPm(group.labelKey.replace('paymentMethods:', '')),
-    });
-
-    groupMethods.forEach(pm => {
-      const label = getPaymentMethodDisplayName(pm, tPm);
-
-      items.push({
-        id: pm._id,
-        renderRow: () => <Typography variant="body2">{label}</Typography>,
-      });
-    });
-  });
+  const items = buildGroupedItems(
+    PAYMENT_TYPE_GROUPS.map(group => ({
+      label: tPm(group.labelKey.replace('paymentMethods:', '')),
+      items: paymentMethods
+        .filter(pm => group.types.includes(pm.type))
+        .map(pm => ({
+          id: pm._id,
+          renderRow: () => (
+            <Typography variant="body2">{getPaymentMethodDisplayName(pm, tPm)}</Typography>
+          ),
+        })),
+    }))
+  );
 
   return (
     <MultiSelectChip

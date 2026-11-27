@@ -19,6 +19,7 @@ const TransactionSearchInput = () => {
       placeholder={t('actions.search')}
       value={searchValue}
       size="small"
+      fullWidth={false}
       sx={{
         width: { xs: '100%', md: 240 },
         '& .MuiOutlinedInput-root': { borderRadius: { md: '999px' } },

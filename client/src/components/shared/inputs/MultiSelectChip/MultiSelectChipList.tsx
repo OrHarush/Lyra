@@ -1,8 +1,9 @@
-import { Checkbox, Divider, List, ListItemButton, ListSubheader, Typography } from '@mui/material';
+import { Divider, List, ListItemButton, ListSubheader, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 import Column from '@/components/shared/layout/containers/Column';
-import Row from '@/components/shared/layout/containers/Row';
+
+import { getOptionStyle } from './styles';
 
 export interface MultiSelectChipItem {
   id: string;
@@ -50,18 +51,12 @@ const MultiSelectChipList = ({ items, selectedIds, onToggle }: MultiSelectChipLi
         return (
           <ListItemButton
             key={item.id}
+            selected={selectedIds.includes(item.id)}
+            aria-pressed={selectedIds.includes(item.id)}
             onClick={() => onToggle(item.id)}
-            sx={{ px: 1, py: 0.5, borderRadius: 1 }}
+            sx={getOptionStyle}
           >
-            <Row spacing={1} alignItems="center">
-              <Checkbox
-                checked={selectedIds.includes(item.id)}
-                size="small"
-                disableRipple
-                sx={{ p: 0.5 }}
-              />
-              {item.renderRow?.()}
-            </Row>
+            {item.renderRow?.()}
           </ListItemButton>
         );
       })}

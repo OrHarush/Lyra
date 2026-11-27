@@ -23,6 +23,8 @@ const MultiSelectChip = ({ label, selectedIds, onChange, items, icon }: MultiSel
   const isActive = selectedIds.length > 0;
 
   const chipLabel = label;
+  // Popover positions are computed in script, so the RTL style plugin can't mirror them.
+  const startSide = theme.direction === 'rtl' ? 'right' : 'left';
 
   const openChipMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -53,8 +55,8 @@ const MultiSelectChip = ({ label, selectedIds, onChange, items, icon }: MultiSel
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={closeChipMenu}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: startSide }}
+        transformOrigin={{ vertical: 'top', horizontal: startSide }}
         slotProps={{ paper: { sx: getPopoverPaperStyle(theme) } }}
       >
         <MultiSelectChipList items={items} selectedIds={selectedIds} onToggle={handleToggle} />

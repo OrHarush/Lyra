@@ -34,3 +34,20 @@ export const getPopoverPaperStyle = (theme: Theme) => ({
     borderRadius: '4px',
   },
 });
+
+export const getOptionStyle = (theme: Theme) => ({
+  flexGrow: 0,
+  minHeight: 36,
+  mx: 0.5,
+  my: 0.25,
+  px: 1.5,
+  py: 0.75,
+  borderRadius: 2,
+  '&.Mui-selected': {
+    bgcolor: alpha(theme.palette.primary.main, 0.16),
+    color: theme.palette.primary.main,
+  },
+  '&.Mui-selected:hover, &.Mui-selected.Mui-focusVisible': {
+    bgcolor: alpha(theme.palette.primary.main, 0.24),
+  },
+});
