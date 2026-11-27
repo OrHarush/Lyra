@@ -93,7 +93,7 @@ const TransactionCard = ({ transaction }: TransactionCardViewProps) => {
                   textOverflow: 'ellipsis',
                 }}
               >
-                {isTransfer ? 'Transfer' : transaction.name}
+                {isTransfer ? tTx('types.transfer') : transaction.name}
               </Typography>
               <RecurrenceBadge transaction={transaction} />
               {transaction.note && <TransactionNoteIcon note={transaction.note} />}

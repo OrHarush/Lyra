@@ -11,6 +11,7 @@ interface DeleteDialogContentProps {
   extraCount: number;
   hasTransactions: boolean;
   showAutoMove: boolean;
+  showTransferRemovalHint: boolean;
   showDropdown: boolean;
   replacementOptions: { id: string; label: string }[];
   selectedReplacementId: string;
@@ -23,6 +24,7 @@ const DeleteDialogContent = ({
   extraCount,
   hasTransactions,
   showAutoMove,
+  showTransferRemovalHint,
   showDropdown,
   replacementOptions,
   selectedReplacementId,
@@ -57,6 +59,11 @@ const DeleteDialogContent = ({
       {showAutoMove && (
         <Typography variant="body2" color="text.secondary">
           {t('deleteDialog.transactionsWillBeMovedTo', { name: replacementOptions[0].label })}
+        </Typography>
+      )}
+      {showTransferRemovalHint && (
+        <Typography variant="caption" color="text.secondary">
+          {t('deleteDialog.transfersBetweenRemoved')}
         </Typography>
       )}
       {showDropdown && (

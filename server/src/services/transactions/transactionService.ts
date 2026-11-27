@@ -76,6 +76,7 @@ export const findAll = async (workspaceId: string, options: GetTransactionsOptio
     accountIds,
     accountId,
     type,
+    expandTransfers = true,
   } = options;
   const resolvedAccountIds = accountIds ?? (accountId ? [accountId] : undefined);
 
@@ -103,7 +104,9 @@ export const findAll = async (workspaceId: string, options: GetTransactionsOptio
     transactions.push(...virtualTransactions);
   }
 
-  const expandedTransactions = expandTransactions(transactions);
+  const expandedTransactions = expandTransfers
+    ? expandTransactions(transactions)
+    : transactions;
 
   const txWithEffectiveMonth = expandedTransactions.map(tx => {
     const { year, month } = getEffectiveMonth(tx);

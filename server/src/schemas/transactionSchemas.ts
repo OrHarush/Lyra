@@ -29,6 +29,7 @@ export const GetTransactionsSchema = z
       .optional(),
     search: z.string().optional(),
     type: z.enum(['Income', 'Expense']).optional(),
+    expandTransfers: z.enum(['true', 'false']).optional(),
   })
   .transform((data) => {
     const year = data.year ? parseInt(data.year, 10) : undefined;
@@ -59,6 +60,7 @@ export const GetTransactionsSchema = z
       targetMonth: month,
       search: data.search,
       type: data.type,
+      expandTransfers: data.expandTransfers !== 'false',
     };
   });
 

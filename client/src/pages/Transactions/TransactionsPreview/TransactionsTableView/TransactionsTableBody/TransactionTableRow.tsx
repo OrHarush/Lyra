@@ -99,7 +99,7 @@ const TransactionTableRow = ({ transaction }: TransactionTableRowProps) => {
       <TableCell>
         <Row alignItems="center" spacing={1}>
           <Typography variant="body2" noWrap>
-            {transaction.type === 'Transfer' ? 'Transfer' : transaction.name}
+            {transaction.type === 'Transfer' ? tTx('types.transfer') : transaction.name}
           </Typography>
           <RecurrenceBadge transaction={transaction} />
           {transaction.isAwaitingApproval && <AwaitingApprovalChip transaction={transaction} />}
@@ -122,7 +122,11 @@ const TransactionTableRow = ({ transaction }: TransactionTableRowProps) => {
       </TableCell>
       <TableCell align="left">
         <CategoryChip
-          name={getCategoryName(transaction?.category)}
+          name={
+            transaction.type === 'Transfer'
+              ? tTx('types.transfer')
+              : getCategoryName(transaction.category)
+          }
           color={transaction.category?.color || '#c8c8c8'}
           icon={transaction.category?.icon}
         />

@@ -6,7 +6,7 @@ import { IAccount } from '../models/Account';
 import * as accountRepository from '../repositories/accountRepository';
 import * as transactionRepository from '../repositories/transactionRepository';
 import * as analyticsService from './analyticsService';
-import { setBalanceCheckpoint } from './balanceService';
+import { setBalanceCheckpoint, syncAccountBalance } from './balanceService';
 
 export const findAll = async (workspaceId: string) => {
   const accounts = await accountRepository.findMany(workspaceId);
@@ -113,6 +113,13 @@ export const setPrimary = async (id: string, workspaceId: string) => {
   return { ...updated, balance: fromCents(updated.balance) };
 };
 
+// Transfers between the two accounts would become transfers from an account to itself.
+const moveTransactions = async (workspaceId: string, fromId: string, toId: string) => {
+  await transactionRepository.removeTransfersBetween(workspaceId, fromId, toId);
+  await transactionRepository.reassignAccount(workspaceId, fromId, toId);
+  await syncAccountBalance(workspaceId, toId);
+};
+
 export const deleteAccount = async (id: string, workspaceId: string, replacementId?: string) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw ApiError.badRequest('Invalid account ID');
@@ -138,12 +145,12 @@ export const deleteAccount = async (id: string, workspaceId: string, replacement
         throw ApiError.badRequest('Invalid replacement account ID');
       }
 
-      await transactionRepository.reassignAccount(workspaceId, id, replacementId);
+      await moveTransactions(workspaceId, id, replacementId);
     } else if (totalCount === 2) {
       const other = await accountRepository.findAnother(workspaceId, id);
 
       if (other) {
-        await transactionRepository.reassignAccount(workspaceId, id, other._id.toString());
+        await moveTransactions(workspaceId, id, other._id.toString());
       }
     } else {
       throw ApiError.badRequest('Replacement account is required when transactions exist');

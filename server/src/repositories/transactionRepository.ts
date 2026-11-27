@@ -224,10 +224,9 @@ export const findOneByTemplateAndMonth = (
 };
 
 export const countByAccountId = async (workspaceId: string, accountId: string) =>
-  Transaction.countDocuments({
-    workspaceId: new Types.ObjectId(workspaceId),
-    account: new Types.ObjectId(accountId),
-  });
+  Transaction.countDocuments(
+    buildTransactionQuery(workspaceId, undefined, undefined, undefined, undefined, [accountId])
+  );
 
 export const countByPaymentMethodId = async (
   workspaceId: string,
@@ -248,11 +247,34 @@ export const reassignPaymentMethod = async (
     { $set: { paymentMethod: new Types.ObjectId(newId) } }
   );
 
-export const reassignAccount = async (workspaceId: string, oldId: string, newId: string) =>
-  Transaction.updateMany(
-    { workspaceId: new Types.ObjectId(workspaceId), account: new Types.ObjectId(oldId) },
-    { $set: { account: new Types.ObjectId(newId) } }
-  );
+export const reassignAccount = async (workspaceId: string, oldId: string, newId: string) => {
+  const workspaceObjId = new Types.ObjectId(workspaceId);
+
+  for (const field of ['account', 'fromAccount', 'toAccount'] as const) {
+    await Transaction.updateMany(
+      { workspaceId: workspaceObjId, [field]: new Types.ObjectId(oldId) },
+      { $set: { [field]: new Types.ObjectId(newId) } }
+    );
+  }
+};
+
+export const removeTransfersBetween = async (
+  workspaceId: string,
+  firstAccountId: string,
+  secondAccountId: string
+) => {
+  const first = new Types.ObjectId(firstAccountId);
+  const second = new Types.ObjectId(secondAccountId);
+
+  return Transaction.deleteMany({
+    workspaceId: new Types.ObjectId(workspaceId),
+    type: 'Transfer',
+    $or: [
+      { fromAccount: first, toAccount: second },
+      { fromAccount: second, toAccount: first },
+    ],
+  });
+};
 
 export interface QuickChipAggregation {
   name: string;

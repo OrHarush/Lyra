@@ -84,7 +84,8 @@
     "andMore": "and {{count}} more transactions",
     "moveTransactionsTo": "Move transactions to:",
     "transactionsWillBeMovedTo": "Transactions will be moved to {{name}}.",
-    "confirm": "Delete"
+    "confirm": "Delete",
+    "transfersBetweenRemoved": "Transfers between this account and the target account will be deleted."
   },
   "comingSoon": {
     "title": "Coming Soon",

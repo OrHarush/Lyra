@@ -84,7 +84,8 @@
     "andMore": "ועוד {{count}} עסקאות נוספות",
     "moveTransactionsTo": "העבר עסקאות אל:",
     "transactionsWillBeMovedTo": "העסקאות יועברו אל {{name}}.",
-    "confirm": "מחק"
+    "confirm": "מחק",
+    "transfersBetweenRemoved": "העברות בין חשבון זה לחשבון היעד יימחקו."
   },
   "comingSoon": {
     "title": "בקרוב",

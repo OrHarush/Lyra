@@ -39,10 +39,8 @@ const DeleteWithReassignDialog = ({
   const { t } = useTranslation(['common']);
   const [selectedReplacementId, setSelectedReplacementId] = useState('');
 
-  const previewUrl =
-    itemType === 'paymentMethod'
-      ? `${API_ROUTES.TRANSACTIONS}?paymentMethodId=${itemId}&limit=${PREVIEW_LIMIT}`
-      : `${API_ROUTES.TRANSACTIONS}?accountId=${itemId}&limit=${PREVIEW_LIMIT}`;
+  const previewFilter = itemType === 'paymentMethod' ? 'paymentMethodIds' : 'accountIds';
+  const previewUrl = `${API_ROUTES.TRANSACTIONS}?${previewFilter}=${itemId}&limit=${PREVIEW_LIMIT}&expandTransfers=false`;
 
   const { data: previewData, isLoading: isLoadingPreview } = useFetch<TransactionPreviewResponse>({
     url: previewUrl,
@@ -98,6 +96,7 @@ const DeleteWithReassignDialog = ({
             extraCount={extraCount > 0 ? extraCount : 0}
             hasTransactions={hasTransactions}
             showAutoMove={showAutoMove}
+            showTransferRemovalHint={itemType === 'account'}
             showDropdown={showDropdown}
             replacementOptions={replacementOptions}
             selectedReplacementId={selectedReplacementId}
