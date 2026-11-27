@@ -1,5 +1,4 @@
 import { FIXED_EXPENSE_KINDS, FixedExpenseDetailsDTO } from '@lyra/shared';
-import { Typography } from '@mui/material';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -9,10 +8,10 @@ import RHFToggleGroup from '@/components/shared/inputs/RHFToggleGroup';
 import Column from '@/components/shared/layout/containers/Column';
 
 interface FixedExpenseKindFieldsProps {
-  canFillName?: boolean;
+  isNewExpense?: boolean;
 }
 
-const FixedExpenseKindFields = ({ canFillName = false }: FixedExpenseKindFieldsProps) => {
+const FixedExpenseKindFields = ({ isNewExpense = false }: FixedExpenseKindFieldsProps) => {
   const { t } = useTranslation('transactions');
   const { control } = useFormContext<FixedExpenseDetailsDTO>();
   const kind = useWatch({ control, name: 'kind' }) ?? 'regular';
@@ -25,10 +24,7 @@ const FixedExpenseKindFields = ({ canFillName = false }: FixedExpenseKindFieldsP
         defaultValue="regular"
         options={FIXED_EXPENSE_KINDS.map(value => ({ value, label: t(`fixedExpense.kinds.${value}`) }))}
       />
-      <Typography variant="body2" color="text.secondary">
-        {t(`fixedExpense.kindHints.${kind}`)}
-      </Typography>
-      {kind === 'subscription' && <SubscriptionProviderPicker canFillName={canFillName} />}
+      {kind === 'subscription' && <SubscriptionProviderPicker isNewExpense={isNewExpense} />}
       {kind === 'bill' && <BillTypePicker />}
     </Column>
   );

@@ -14,13 +14,15 @@ import { getProviderCancelUrl, getProviderName } from '@/utils/entities/fixedExp
 
 type ProviderFormValues = FixedExpenseDetailsDTO & { name?: string };
 
+// A new expense takes the provider's name and saves its known cancellation link silently;
+// the link is edited later from the fixed expenses page.
 interface SubscriptionProviderPickerProps {
-  canFillName?: boolean;
+  isNewExpense?: boolean;
 }
 
 const PROVIDERS = listSubscriptionProviders();
 
-const SubscriptionProviderPicker = ({ canFillName = false }: SubscriptionProviderPickerProps) => {
+const SubscriptionProviderPicker = ({ isNewExpense = false }: SubscriptionProviderPickerProps) => {
   const { t, i18n } = useTranslation('transactions');
   const { control, getValues, setValue } = useFormContext<ProviderFormValues>();
   const providerId = useWatch({ control, name: 'providerId' });
@@ -35,7 +37,7 @@ const SubscriptionProviderPicker = ({ canFillName = false }: SubscriptionProvide
 
     setValue('providerId', nextId, { shouldDirty: true });
 
-    if (canFillName && nextId && [undefined, '', previousName].includes(getValues('name'))) {
+    if (isNewExpense && nextId && [undefined, '', previousName].includes(getValues('name'))) {
       setValue('name', getProviderName(nextId, i18n.language), { shouldDirty: true, shouldValidate: true });
     }
 
@@ -72,22 +74,24 @@ const SubscriptionProviderPicker = ({ canFillName = false }: SubscriptionProvide
           />
         </Row>
       </Column>
-      <TextInput
-        name="cancelUrl"
-        label={t('fixedExpense.cancelUrl')}
-        placeholder="https://"
-        maxLength={500}
-        slotProps={{
-          htmlInput: { dir: 'ltr', inputMode: 'url' },
-          input: {
-            endAdornment: isAutoFilled && (
-              <InputAdornment position="end">
-                <Chip size="small" color="success" variant="outlined" label={t('fixedExpense.autoFilled')} />
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
+      {!isNewExpense && (
+        <TextInput
+          name="cancelUrl"
+          label={t('fixedExpense.cancelUrl')}
+          placeholder="https://"
+          maxLength={500}
+          slotProps={{
+            htmlInput: { dir: 'ltr', inputMode: 'url' },
+            input: {
+              endAdornment: isAutoFilled && (
+                <InputAdornment position="end">
+                  <Chip size="small" color="success" variant="outlined" label={t('fixedExpense.autoFilled')} />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      )}
     </Column>
   );
 };

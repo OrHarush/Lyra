@@ -9,7 +9,7 @@ import GroupCardSkeleton from '@/pages/FixedExpenses/GroupCardSkeleton';
 import { getChargeListStyle, getGroupGridStyle } from '@/pages/FixedExpenses/styles';
 import WideSummarySkeleton from '@/pages/FixedExpenses/WideSummarySkeleton';
 
-const GROUP_CARDS = 4;
+const GROUP_CARDS = 3;
 const CHARGE_ROWS = { small: 3, large: 6 };
 
 // Mirrors the loaded page section by section. The classify prompt is left out: it's only

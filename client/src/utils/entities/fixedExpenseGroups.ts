@@ -5,8 +5,7 @@ export type FixedExpenseGroupId =
   | 'loans'
   | 'subscriptions'
   | 'bills'
-  | 'insurance'
-  | 'other';
+  | 'insurance';
 
 export interface FixedExpenseGroup {
   id: FixedExpenseGroupId;
@@ -15,8 +14,8 @@ export interface FixedExpenseGroup {
   share: number;
 }
 
-// What the user chose wins; otherwise the category decides. A payment with an end date is an
-// installment plan, so it sits with the loans.
+// What the user chose wins; otherwise the category decides. Everything else that is paid
+// regularly, installments included, sits with the loans and payments.
 export const getFixedExpenseGroupId = (item: FixedExpenseDto): FixedExpenseGroupId => {
   if (item.kind === 'bill') {
     return 'bills';
@@ -31,14 +30,12 @@ export const getFixedExpenseGroupId = (item: FixedExpenseDto): FixedExpenseGroup
       return 'housing';
     case 'insurance':
       return 'insurance';
-    case 'loan':
-      return 'loans';
     case 'subscriptions':
-      return 'subscriptions';
+      return item.kind === null ? 'subscriptions' : 'loans';
     case 'utilities':
-      return 'bills';
+      return item.kind === null ? 'bills' : 'loans';
     default:
-      return item.endDate ? 'loans' : 'other';
+      return 'loans';
   }
 };
 

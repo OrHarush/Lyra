@@ -56,7 +56,6 @@
     "subscriptions": "Subscriptions",
     "bills": "Bills",
     "insurance": "Insurance",
-    "other": "Other",
     "activeCount_one": "{{count}} active",
     "activeCount_other": "{{count}} active",
     "andMore": "{{names}} and more",
@@ -73,6 +72,7 @@
     "remaining_other": "{{count}} more left.",
     "yesSubscription": "Yes, subscription",
     "bill": "Bill",
-    "skip": "Skip"
+    "skip": "Skip",
+    "regular": "Regular"
   }
 }

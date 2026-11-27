@@ -299,11 +299,6 @@
       "subscription": "Subscription",
       "bill": "Bill"
     },
-    "kindHints": {
-      "regular": "Repeats as is. It appears on the fixed expenses page.",
-      "subscription": "Subscriptions can be cancelled. It appears on the fixed expenses page with a cancel button.",
-      "bill": "A bill can't be cancelled and its amount changes. Enter an estimate; it counts in your forecast."
-    },
     "provider": "Provider",
     "otherProvider": "Other",
     "cancelUrl": "Cancellation link",

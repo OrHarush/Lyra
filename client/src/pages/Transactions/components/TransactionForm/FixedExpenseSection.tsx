@@ -16,7 +16,7 @@ const FixedExpenseSection = () => {
   return (
     <Collapse in={isShown} unmountOnExit>
       <Column sx={getKindSectionStyle()}>
-        <FixedExpenseKindFields canFillName />
+        <FixedExpenseKindFields isNewExpense />
       </Column>
     </Collapse>
   );

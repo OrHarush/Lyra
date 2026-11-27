@@ -3,7 +3,7 @@ import { alpha, SxProps, Theme } from '@mui/material';
 import { FixedExpenseGroupId } from '@/utils/entities/fixedExpenseGroups';
 
 export const FIXED_EXPENSES_MAX_WIDTH = 1040;
-export const GROUP_ICON_SIZE = 64;
+export const GROUP_ICON_SIZE = 56;
 export const CHARGE_ICON_SIZE = 48;
 export const DONUT_SIZE = { compact: 132, wide: 160 };
 
@@ -14,7 +14,6 @@ export const getGroupColor = (id: FixedExpenseGroupId) => (theme: Theme) => {
     subscriptions: theme.palette.success.main,
     insurance: theme.palette.warning.main,
     bills: theme.palette.info.main,
-    other: alpha(theme.palette.text.secondary, 0.6),
   };
 
   return colors[id];
@@ -68,7 +67,11 @@ export const getPillButtonStyle = (): SxProps<Theme> => ({
 
 export const getGroupGridStyle = (): SxProps<Theme> => ({
   display: 'grid',
-  gridTemplateColumns: { xs: 'minmax(0, 1fr)', sm: 'repeat(2, minmax(0, 1fr))' },
+  gridTemplateColumns: {
+    xs: 'minmax(0, 1fr)',
+    sm: 'repeat(2, minmax(0, 1fr))',
+    lg: 'repeat(3, minmax(0, 1fr))',
+  },
   gap: { xs: 1.5, md: 2 },
 });
 
