@@ -1,10 +1,10 @@
 import CategoryIcon from '@mui/icons-material/Category';
 import { Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
-import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import AwaitingApprovalChip from '@/components/features/bills/AwaitingApprovalChip';
+import TransactionSubtitle from '@/components/features/transactions/TransactionSubtitle';
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import CurrencyText from '@/components/shared/ui/CurrencyText';
@@ -98,9 +98,7 @@ const TransactionCard = ({ transaction }: TransactionCardViewProps) => {
               <RecurrenceBadge transaction={transaction} />
               {transaction.note && <TransactionNoteIcon note={transaction.note} />}
             </Row>
-            <Typography variant="caption" color="text.secondary">
-              {dayjs(getTransactionDisplayDate(transaction)).format('DD/MM/YYYY')}
-            </Typography>
+            <TransactionSubtitle transaction={transaction} />
             {transaction.isAwaitingApproval && <AwaitingApprovalChip transaction={transaction} />}
           </Column>
           <CurrencyText

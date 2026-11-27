@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 
+import TransactionSubtitle from '@/components/features/transactions/TransactionSubtitle';
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import { TransactionDto } from '@/types/Transaction';
@@ -19,10 +20,7 @@ const TransactionPreviewItem = ({ tx }: { tx: TransactionDto }) => (
         <Typography variant="body2" fontWeight={500}>
           {tx.name || '—'}
         </Typography>
-        <Typography variant="caption" color="text.secondary">
-          {tx.date ? new Date(tx.date).toLocaleDateString() : '—'}
-          {tx.account && ` • ${tx.account.name}`}
-        </Typography>
+        <TransactionSubtitle transaction={tx} />
       </Column>
       <Typography
         variant="body2"

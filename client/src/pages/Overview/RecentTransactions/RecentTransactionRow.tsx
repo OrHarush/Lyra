@@ -1,19 +1,15 @@
 import CategoryIcon from '@mui/icons-material/Category';
 import { ButtonBase, Typography } from '@mui/material';
-import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
+import TransactionSubtitle from '@/components/features/transactions/TransactionSubtitle';
 import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import CurrencyText from '@/components/shared/ui/CurrencyText';
 import { categoryIconMap } from '@/constants/categoryIconMap';
 import { FIT_ROW_ATTRIBUTE } from '@/hooks/common/useFittingRowCount';
 import { ExpandedTransactionDto } from '@/types/Transaction';
-import { getAccountDisplayName } from '@/utils/entities/account';
-import {
-  getTransactionAmountColor,
-  getTransactionDisplayDate,
-} from '@/utils/entities/transaction';
+import { getTransactionAmountColor } from '@/utils/entities/transaction';
 
 interface RecentTransactionRowProps {
   transaction: ExpandedTransactionDto;
@@ -22,13 +18,10 @@ interface RecentTransactionRowProps {
 
 const RecentTransactionRow = ({ transaction, onSelect }: RecentTransactionRowProps) => {
   const { t } = useTranslation('overview');
-  const { t: tAccounts } = useTranslation('accounts');
   const IconComponent =
     (transaction.category?.icon && categoryIconMap[transaction.category.icon]) || CategoryIcon;
   const title =
     transaction.type === 'Transfer' ? t('recentTransactions.transfer') : transaction.name;
-  const accountName = getAccountDisplayName(transaction.account, tAccounts);
-  const date = dayjs(getTransactionDisplayDate(transaction)).format('DD/MM/YYYY');
 
   return (
     <ButtonBase
@@ -62,9 +55,7 @@ const RecentTransactionRow = ({ transaction, onSelect }: RecentTransactionRowPro
         <Typography variant="body2" fontWeight={500} noWrap>
           {title}
         </Typography>
-        <Typography variant="caption" color="text.secondary" noWrap>
-          {[accountName, date].filter(Boolean).join(' · ')}
-        </Typography>
+        <TransactionSubtitle transaction={transaction} />
       </Column>
       <Row sx={{ flexShrink: 0 }}>
         <CurrencyText
