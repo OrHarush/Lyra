@@ -5,6 +5,7 @@ import ReactCountryFlag from 'react-country-flag';
 import { useTranslation } from 'react-i18next';
 
 import Row from '@/components/shared/layout/containers/Row';
+import { LANGUAGES } from '@/constants/languages';
 
 interface LanguageSelectProps {
   sx?: SxProps<Theme>;
@@ -30,11 +31,6 @@ const LanguageSelect = ({ sx, menuDirection = 'down' }: LanguageSelectProps) => 
     i18n.changeLanguage(langCode);
     handleClose();
   };
-
-  const LANGUAGES = [
-    { code: 'en', label: 'English', flag: 'GB' },
-    { code: 'he', label: 'עברית', flag: 'IL' },
-  ];
 
   const currentLang = i18n.language;
   const currentFlag = LANGUAGES.find(({ code }) => code === currentLang)?.flag ?? 'GB';

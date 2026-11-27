@@ -38,6 +38,7 @@
   "settingsModal": {
     "title": "הגדרות",
     "general": "כללי",
+    "language": "שפה",
     "currency": "מטבע תצוגה",
     "currencyHelper": "מטבע ברירת מחדל בעת יצירת חשבונות חדשים",
     "privacy": "פרטיות ונתונים",

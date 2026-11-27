@@ -1,7 +1,7 @@
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import MenuIcon from '@mui/icons-material/Menu';
-import { IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 import NotificationBell from '@/components/features/notifications/NotificationBell';
 import Row from '@/components/shared/layout/containers/Row';
@@ -9,7 +9,6 @@ import Controls from '@/components/shared/layout/NavBar/Controls';
 import NavBarContainer from '@/components/shared/layout/NavBar/NavBarContainer';
 import ThemeToggleButton from '@/components/shared/layout/NavBar/ThemeToggleButton';
 import { usePageHeaderContext } from '@/components/shared/layout/PageHeaderContext';
-import LanguageSelect from '@/components/shared/ui/LanguageSelect';
 import MonthDateSelector from '@/components/shared/ui/MonthDateSelector';
 
 interface NavBarProps {
@@ -30,8 +29,8 @@ const NavBar = ({ onMobileOpen, sidebarExpanded, onToggleSidebar }: NavBarProps)
 
   if (isHandDevice) {
     return (
-      <NavBarContainer sx={{ flexWrap: 'nowrap', px: 1 }}>
-        <Row alignItems="center">
+      <NavBarContainer sx={{ position: 'relative', flexWrap: 'nowrap' }}>
+        <Row spacing={1} alignItems="center">
           <IconButton
             onClick={onMobileOpen}
             size="medium"
@@ -41,16 +40,21 @@ const NavBar = ({ onMobileOpen, sidebarExpanded, onToggleSidebar }: NavBarProps)
           </IconButton>
           {navBarActions}
         </Row>
-        {/* Takes the space left between the buttons, so the selector can never cover them. */}
-        <Row flex={1} minWidth={0} justifyContent="center">
-          {showDateSelector && dateConfig && (
+        {showDateSelector && dateConfig && (
+          <Box
+            sx={{
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 0,
+            }}
+          >
             <MonthDateSelector value={dateConfig.value} onChange={dateConfig.onChange} />
-          )}
-        </Row>
-        <Row alignItems="center">
-          <ThemeToggleButton />
-          <LanguageSelect sx={{ width: 36, height: 36, backgroundColor: 'transparent' }} />
+          </Box>
+        )}
+        <Row spacing={1} alignItems="center" sx={{ marginInlineStart: 'auto' }}>
           <NotificationBell />
+          <ThemeToggleButton />
         </Row>
       </NavBarContainer>
     );

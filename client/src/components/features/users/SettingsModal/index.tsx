@@ -3,22 +3,24 @@ import HomeWorkOutlinedIcon from '@mui/icons-material/HomeWorkOutlined';
 import HubOutlinedIcon from '@mui/icons-material/HubOutlined';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
-import { Box, DialogContent, List, Tab, Tabs } from '@mui/material';
+import { Box, DialogContent, Divider, Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import LyraDialog, { BaseDialogProps } from '@/components/dialogs/LyraDialog';
-import ApplePayShortcutSection from '@/components/features/users/SettingsModal/ApplePayShortcutSection';
-import ConnectedAppsSection from '@/components/features/users/SettingsModal/ConnectedAppsSection';
-import GeneralSettingsTab from '@/components/features/users/SettingsModal/GeneralSettingsTab';
-import GooglePayShortcutSection from '@/components/features/users/SettingsModal/GooglePayShortcutSection';
 import SettingsTabButton from '@/components/features/users/SettingsModal/SettingsTabButton';
-import SharedHouseholdTab from '@/components/features/users/SettingsModal/SharedHouseholdTab';
+import SettingsTabContent from '@/components/features/users/SettingsModal/SettingsTabContent';
+import {
+  getSettingsPanelStyle,
+  getSettingsPaperStyle,
+  getSettingsSidebarStyle,
+} from '@/components/features/users/SettingsModal/styles';
+import { SettingsTabKey } from '@/components/features/users/SettingsModal/types';
 import UserDeletionDialog, {
   DeletionFeedbackPayload,
 } from '@/components/features/users/UserDeletionDialog';
+import Column from '@/components/shared/layout/containers/Column';
 import Row from '@/components/shared/layout/containers/Row';
 import { API_ROUTES } from '@/constants/Routes';
 import { useIsSmallScreen } from '@/hooks/common/useIsSmallScreen';
@@ -27,8 +29,6 @@ import { useApiMutation } from '@/hooks/useApiMutation';
 import { useAuth } from '@/providers/AuthProvider';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { isAndroidDevice, isIosDevice } from '@/utils/device';
-
-type SettingsTabKey = 'general' | 'sharedHousehold' | 'applePay' | 'googlePay' | 'connectedApps';
 
 // UA gating is convenience-only (show the relevant tab per device), not a security
 // boundary — the shortcut token auth is the real gate on the ingest endpoints.
@@ -101,54 +101,35 @@ const SettingsModal = ({ isOpen, closeDialog }: BaseDialogProps) => {
         isOpen={isOpen}
         closeDialog={closeDialog}
         title={t('settingsModal.title')}
-        titleIcon={SettingsIcon}
         maxWidth="md"
         fullWidth
+        sx={getSettingsPaperStyle()}
       >
-        <DialogContent sx={{ py: 1 }}>
+        {!isSmallScreen && <Divider />}
+        <DialogContent sx={{ p: 0, display: 'flex', minHeight: 0 }}>
           {isSmallScreen ? (
-            <Box>
+            <Column sx={{ width: '100%', height: '78dvh' }}>
               <Tabs
                 value={activeTab}
                 onChange={(_, value: SettingsTabKey) => setActiveTab(value)}
                 variant={tabs.length > 3 ? 'scrollable' : 'fullWidth'}
                 scrollButtons={false}
-                sx={{
-                  borderBottom: 1,
-                  borderColor: 'divider',
-                  position: 'sticky',
-                  top: -8,
-                  zIndex: 10,
-                  bgcolor: 'background.paper',
-                }}
+                sx={{ borderBottom: 1, borderColor: 'divider', flexShrink: 0 }}
               >
                 {tabs.map(tab => (
                   <Tab key={tab.key} value={tab.key} label={t(tab.labelKey)} />
                 ))}
               </Tabs>
-              <Box sx={{ pt: 2 }}>
-                {activeTab === 'general' && (
-                  <GeneralSettingsTab openDeletionDialog={openDeletionDialog} />
-                )}
-                {activeTab === 'sharedHousehold' && <SharedHouseholdTab />}
-                {activeTab === 'applePay' && <ApplePayShortcutSection />}
-                {activeTab === 'googlePay' && <GooglePayShortcutSection />}
-                {activeTab === 'connectedApps' && <ConnectedAppsSection />}
+              <Box sx={getSettingsPanelStyle(isSmallScreen)}>
+                <SettingsTabContent
+                  activeTab={activeTab}
+                  openDeletionDialog={openDeletionDialog}
+                />
               </Box>
-            </Box>
+            </Column>
           ) : (
-            <Row
-              spacing={2}
-              sx={{ pt: 1, alignItems: 'stretch', minHeight: 540 }}
-            >
-              <List
-                sx={{
-                  borderInlineEnd: 1,
-                  borderColor: 'divider',
-                  minWidth: 200,
-                  py: 0,
-                }}
-              >
+            <Row alignItems="stretch" sx={{ width: '100%', minHeight: 0 }}>
+              <Column spacing={0.5} sx={getSettingsSidebarStyle()}>
                 {tabs.map(tab => (
                   <SettingsTabButton
                     key={tab.key}
@@ -158,15 +139,12 @@ const SettingsModal = ({ isOpen, closeDialog }: BaseDialogProps) => {
                     onClick={() => setActiveTab(tab.key)}
                   />
                 ))}
-              </List>
-              <Box sx={{ flex: 1, minWidth: 0, px: 1 }}>
-                {activeTab === 'general' && (
-                  <GeneralSettingsTab openDeletionDialog={openDeletionDialog} />
-                )}
-                {activeTab === 'sharedHousehold' && <SharedHouseholdTab />}
-                {activeTab === 'applePay' && <ApplePayShortcutSection />}
-                {activeTab === 'googlePay' && <GooglePayShortcutSection />}
-                {activeTab === 'connectedApps' && <ConnectedAppsSection />}
+              </Column>
+              <Box sx={getSettingsPanelStyle(isSmallScreen)}>
+                <SettingsTabContent
+                  activeTab={activeTab}
+                  openDeletionDialog={openDeletionDialog}
+                />
               </Box>
             </Row>
           )}

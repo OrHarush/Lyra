@@ -38,6 +38,7 @@
   "settingsModal": {
     "title": "Settings",
     "general": "General",
+    "language": "Language",
     "currency": "Display Currency",
     "currencyHelper": "Default currency when creating new accounts",
     "privacy": "Privacy & Data",

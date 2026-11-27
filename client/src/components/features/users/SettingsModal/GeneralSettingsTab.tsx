@@ -1,22 +1,14 @@
 import DownloadIcon from '@mui/icons-material/Download';
-import {
-  Button,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  IconButton,
-  MenuItem,
-  Select,
-  Switch,
-  Typography,
-} from '@mui/material';
+import { Button, IconButton, MenuItem, Select, Switch } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { downloadMyData, downloadWorkspaceData } from '@/api/users';
 import DangerZone from '@/components/features/users/SettingsModal/DangerZone';
 import ExportPickerDialog from '@/components/features/users/SettingsModal/ExportPickerDialog';
+import LanguageSetting from '@/components/features/users/SettingsModal/LanguageSetting';
+import SettingsGroup from '@/components/features/users/SettingsModal/SettingsGroup';
+import SettingsRow from '@/components/features/users/SettingsModal/SettingsRow';
 import Column from '@/components/shared/layout/containers/Column';
 import { CURRENCIES } from '@/constants/currencies';
 import { queryKeys } from '@/constants/queryKeys';
@@ -149,136 +141,81 @@ const GeneralSettingsTab = ({ openDeletionDialog }: GeneralSettingsTabProps) => 
 
   return (
     <Column spacing={3}>
-      <Column spacing={1.5}>
-        <Typography
-          variant="subtitle2"
-          fontWeight={600}
-          color="text.secondary"
-          textTransform="uppercase"
-          fontSize="0.7rem"
-          letterSpacing={0.8}
+      <SettingsGroup title={t('settingsModal.general')}>
+        <LanguageSetting />
+        <SettingsRow
+          label={t('settingsModal.currency')}
+          helper={t('settingsModal.currencyHelper')}
         >
-          {t('settingsModal.general')}
-        </Typography>
-        <FormControl fullWidth size="small">
-          <Typography variant="body2" mb={0.5}>
-            {t('settingsModal.currency')}
-          </Typography>
-          <Select value={selectedCurrency} onChange={e => changeCurrency(e.target.value)}>
+          <Select
+            size="small"
+            value={selectedCurrency}
+            onChange={e => changeCurrency(e.target.value)}
+            inputProps={{ 'aria-label': t('settingsModal.currency') }}
+            sx={{ width: 160, flexShrink: 0 }}
+          >
             {CURRENCIES.map(c => (
               <MenuItem key={c.value} value={c.value}>
                 {c.label}
               </MenuItem>
             ))}
           </Select>
-          <FormHelperText>{t('settingsModal.currencyHelper')}</FormHelperText>
-        </FormControl>
-      </Column>
+        </SettingsRow>
+      </SettingsGroup>
 
-      <Divider />
-
-      <Column spacing={1.5}>
-        <Typography
-          variant="subtitle2"
-          fontWeight={600}
-          color="text.secondary"
-          textTransform="uppercase"
-          fontSize="0.7rem"
-          letterSpacing={0.8}
+      <SettingsGroup title={t('settingsModal.privacy')}>
+        <SettingsRow
+          label={t('settingsModal.analyticsLabel')}
+          helper={t('settingsModal.analyticsHelper')}
         >
-          {t('settingsModal.privacy')}
-        </Typography>
-        <FormControlLabel
-          labelPlacement="start"
-          control={
-            <Switch
-              checked={user?.analyticsConsent === 'accepted'}
-              onChange={(_, checked) => toggleAnalyticsConsent(checked)}
-              disabled={updateConsent.isPending}
+          <Switch
+            checked={user?.analyticsConsent === 'accepted'}
+            onChange={(_, checked) => toggleAnalyticsConsent(checked)}
+            disabled={updateConsent.isPending}
+            inputProps={{ 'aria-label': t('settingsModal.analyticsLabel') }}
+            sx={{ flexShrink: 0 }}
+          />
+        </SettingsRow>
+        <SettingsRow
+          label={t('settingsModal.essentialLabel')}
+          helper={t('settingsModal.essentialHelper')}
+        >
+          <Switch
+            checked
+            disabled
+            inputProps={{ 'aria-label': t('settingsModal.essentialLabel') }}
+            sx={{ flexShrink: 0 }}
+          />
+        </SettingsRow>
+        <SettingsRow
+          label={t('settingsModal.yourDataLabel')}
+          helper={t('settingsModal.yourDataHelper')}
+        >
+          {isSmallScreen ? (
+            <IconButton
+              color="primary"
+              onClick={startDownloadFlow}
+              disabled={isDownloadingData}
+              aria-label={t('settingsModal.downloadDataButton')}
               sx={{ flexShrink: 0 }}
-            />
-          }
-          label={
-            <Column sx={{ flex: 1, minWidth: 0 }}>
-              <Typography variant="body2">{t('settingsModal.analyticsLabel')}</Typography>
-              <Typography variant="caption" color="text.secondary">
-                {t('settingsModal.analyticsHelper')}
-              </Typography>
-            </Column>
-          }
-          sx={{
-            alignItems: 'center',
-            m: 0,
-            gap: 2,
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        />
-        <FormControlLabel
-          labelPlacement="start"
-          control={<Switch checked disabled sx={{ flexShrink: 0 }} />}
-          label={
-            <Column sx={{ flex: 1, minWidth: 0 }}>
-              <Typography variant="body2">{t('settingsModal.essentialLabel')}</Typography>
-              <Typography variant="caption" color="text.secondary">
-                {t('settingsModal.essentialHelper')}
-              </Typography>
-            </Column>
-          }
-          sx={{
-            alignItems: 'center',
-            m: 0,
-            gap: 2,
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        />
-        <FormControlLabel
-          labelPlacement="start"
-          control={
-            isSmallScreen ? (
-              <IconButton
-                color="primary"
-                onClick={startDownloadFlow}
-                disabled={isDownloadingData}
-                aria-label={t('settingsModal.downloadDataButton')}
-                sx={{ flexShrink: 0 }}
-              >
-                <DownloadIcon />
-              </IconButton>
-            ) : (
-              <Button
-                variant="outlined"
-                color="primary"
-                size="small"
-                onClick={startDownloadFlow}
-                disabled={isDownloadingData}
-                startIcon={<DownloadIcon />}
-                sx={{ flexShrink: 0, whiteSpace: 'nowrap' }}
-              >
-                {t('settingsModal.downloadDataButton')}
-              </Button>
-            )
-          }
-          label={
-            <Column sx={{ flex: 1, minWidth: 0 }}>
-              <Typography variant="body2">{t('settingsModal.yourDataLabel')}</Typography>
-              <Typography variant="caption" color="text.secondary">
-                {t('settingsModal.yourDataHelper')}
-              </Typography>
-            </Column>
-          }
-          sx={{
-            alignItems: 'center',
-            m: 0,
-            gap: 2,
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        />
-      </Column>
-
-      <Divider />
+            >
+              <DownloadIcon />
+            </IconButton>
+          ) : (
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={startDownloadFlow}
+              disabled={isDownloadingData}
+              startIcon={<DownloadIcon />}
+              sx={{ flexShrink: 0, whiteSpace: 'nowrap' }}
+            >
+              {t('settingsModal.downloadDataButton')}
+            </Button>
+          )}
+        </SettingsRow>
+      </SettingsGroup>
 
       <DangerZone openDeletionDialog={openDeletionDialog} />
 

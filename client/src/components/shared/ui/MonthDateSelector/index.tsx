@@ -47,7 +47,7 @@ const MonthDateSelector = ({ value, onChange }: DateSelectorProps) => {
 
   return (
     <>
-      <Row width="160px" maxWidth="100%" alignItems="center" justifyContent="space-between">
+      <Row width="160px" alignItems="center" justifyContent="space-between">
         <IconButton
           onClick={goToPrevMonth}
           size="small"

@@ -1,6 +1,6 @@
 import NotificationBell from '@/components/features/notifications/NotificationBell';
 import Row from '@/components/shared/layout/containers/Row';
-import AppearanceSettings from '@/components/shared/layout/NavBar/AppearanceSettings';
+import ThemeToggleButton from '@/components/shared/layout/NavBar/ThemeToggleButton';
 import { usePageHeaderContext } from '@/components/shared/layout/PageHeaderContext';
 import MonthDateSelector from '@/components/shared/ui/MonthDateSelector';
 
@@ -14,7 +14,7 @@ const Controls = () => {
       )}
       <Row spacing={1}>
         <NotificationBell />
-        <AppearanceSettings />
+        <ThemeToggleButton />
       </Row>
     </Row>
   );
