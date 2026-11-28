@@ -9,10 +9,6 @@
   "waitingForApproval": "ממתין לאישור: {{bill}}",
   "estimated": "הערכה",
   "awaitingChip": "ממתין לאישור",
-  "card": {
-    "title": "חשבונות שממתינים לאישור",
-    "approve": "אישור"
-  },
   "approval": {
     "body": "מועד החיוב: {{date}}. אשרו את ההערכה או הזינו את הסכום בפועל.",
     "amount": "סכום",

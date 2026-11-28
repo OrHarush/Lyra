@@ -9,10 +9,6 @@
   "waitingForApproval": "{{bill}} is waiting for approval",
   "estimated": "Estimated",
   "awaitingChip": "Waiting for approval",
-  "card": {
-    "title": "Bills waiting for approval",
-    "approve": "Approve"
-  },
   "approval": {
     "body": "Due on {{date}}. Keep the estimate, or enter the real amount.",
     "amount": "Amount",
