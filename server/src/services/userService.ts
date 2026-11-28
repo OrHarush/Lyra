@@ -11,6 +11,7 @@ import { ICategory } from '../models/Category';
 import { DeletionReason, IDeletionFeedback } from '../models/DeletionFeedback';
 import { IPaymentMethod } from '../models/PaymentMethod';
 import { IUser } from '../models/User';
+import { deleteNotificationIngestionsForUser } from '../notificationIngestion';
 import * as accountRepository from '../repositories/accountRepository';
 import * as analyticsEventRepository from '../repositories/analyticsEventRepository';
 import { insertMany as createCategories } from '../repositories/categoryRepository';
@@ -219,6 +220,7 @@ export const deleteUserCompletely = async (userId: string, feedback?: DeletionFe
     }
 
     await investmentPurchaseRepository.deleteAllByUser(userId, session);
+    await deleteNotificationIngestionsForUser(userId, session);
     await deleteDebugSnapshots({ userId }, session);
     await userActivityRepository.anonymizeByUser(userId, session);
     await analyticsEventRepository.anonymizeByUserName(user.name, session);
