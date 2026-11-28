@@ -1,4 +1,9 @@
-import { IngestNotificationDTO, IngestNotificationResult } from '@lyra/shared';
+import {
+  IngestNotificationDTO,
+  IngestNotificationResult,
+  SetPendingCategoryDTO,
+  SetPendingCategoryResult,
+} from '@lyra/shared';
 
 import { IngestionPlan, planIngestion, WALLET_PACKAGE_NAME } from './ingestionPlan';
 import { lyraTransactions } from './lyraAdapters';
@@ -27,6 +32,18 @@ export const ingestNotification = async (
     processClaimed(userId, notification)
   );
 };
+
+export const setPendingCategory = (
+  userId: string,
+  transactionId: string,
+  { categoryId, applyToFuture }: SetPendingCategoryDTO
+): Promise<SetPendingCategoryResult> =>
+  lyraTransactions.categorizePendingTransaction({
+    userId,
+    transactionId,
+    categoryId,
+    applyToFuture,
+  });
 
 const processClaimed = async (
   userId: string,

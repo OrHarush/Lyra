@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { objectIdSchema } from './common';
+
 export const IngestNotificationSchema = z.object({
   eventKey: z.string().trim().min(16).max(128),
   packageName: z.string().trim().min(1).max(200),
@@ -25,4 +27,15 @@ export interface IngestNotificationResult {
   outcome: NotificationIngestionOutcome;
   transactionId: string | null;
   needsCategory: boolean;
+}
+
+export const SetPendingCategorySchema = z.object({
+  categoryId: objectIdSchema,
+  applyToFuture: z.boolean().default(true),
+});
+
+export type SetPendingCategoryDTO = z.infer<typeof SetPendingCategorySchema>;
+
+export interface SetPendingCategoryResult {
+  changed: boolean;
 }

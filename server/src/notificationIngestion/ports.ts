@@ -14,8 +14,18 @@ export interface CreatedAutomationTransaction {
   categoryId: string | null;
 }
 
+export interface CategorizePendingRequest {
+  userId: string;
+  transactionId: string;
+  categoryId: string;
+  applyToFuture: boolean;
+}
+
 export interface LyraTransactionsPort {
   createAutomationTransaction: (
     request: AutomationTransactionRequest
   ) => Promise<CreatedAutomationTransaction>;
+  categorizePendingTransaction: (
+    request: CategorizePendingRequest
+  ) => Promise<{ changed: boolean }>;
 }

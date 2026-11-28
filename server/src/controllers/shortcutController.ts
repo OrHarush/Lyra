@@ -50,6 +50,12 @@ export const getShortcutAndroidConnection = asyncHandler(
   }
 );
 
+export const createShortcutAndroidToken = asyncHandler(async (req: Request, res: Response) => {
+  const token = await shortcutService.issueAndroidToken(req.userId);
+
+  return ApiResponse.created(res, { token });
+});
+
 export const downloadShortcutMacro = asyncHandler(async (req: Request, res: Response) => {
   const macro = await shortcutService.generateAndroidMacro(req.userId);
 

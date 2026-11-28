@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { shortcutPollLimiter } from '../config/rateLimiters';
 import {
   approveShortcut,
+  createShortcutAndroidToken,
   createShortcutAndroidTransaction,
   createShortcutTransaction,
   downloadShortcutMacro,
@@ -28,6 +29,7 @@ const router = Router();
 router.post('/init', authMiddleware, initShortcut);
 router.post('/approve', authMiddleware, validateBody(ApproveSchema), approveShortcut);
 router.get('/macro', authMiddleware, downloadShortcutMacro);
+router.post('/android/token', authMiddleware, createShortcutAndroidToken);
 router.get('/connection', authMiddleware, getShortcutAndroidConnection);
 router.get('/token', shortcutPollLimiter, getShortcutToken);
 router.get('/status', shortcutAuthMiddleware, getShortcutStatus);

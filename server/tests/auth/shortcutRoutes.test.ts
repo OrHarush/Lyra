@@ -9,6 +9,7 @@ type Method = 'get' | 'post' | 'delete';
 const userJwtRoutes: Array<[Method, string]> = [
   ['post', '/api/shortcut/init'],
   ['post', '/api/shortcut/approve'],
+  ['post', '/api/shortcut/android/token'],
   ['get', '/api/shortcut/macro'],
   ['get', '/api/shortcut/connection'],
   ['delete', '/api/shortcut/revoke'],

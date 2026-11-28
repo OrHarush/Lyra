@@ -1,4 +1,5 @@
 import * as automationTransactionService from '../services/transactions/automationTransactionService';
+import * as transactionReviewService from '../services/transactions/transactionReviewService';
 import { LyraTransactionsPort } from './ports';
 
 // The only file in this module that reaches into the rest of Lyra. Replace it with an HTTP
@@ -15,4 +16,11 @@ export const lyraTransactions: LyraTransactionsPort = {
       categoryId: transaction.category?.toString() ?? null,
     };
   },
+  categorizePendingTransaction: ({ userId, transactionId, categoryId, applyToFuture }) =>
+    transactionReviewService.categorizePendingAutomationTransaction(
+      userId,
+      transactionId,
+      categoryId,
+      applyToFuture
+    ),
 };
