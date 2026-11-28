@@ -9,12 +9,18 @@ import * as merchantRulesService from '../merchantRulesService';
 import { findPersonalWorkspaceIdForUser } from '../workspaceService';
 import * as transactionService from './transactionService';
 
+const TRANSACTION_NAME_MAX_LENGTH = 50;
+
 interface AutomationTransactionInput {
   userId: string;
   source: TransactionSource;
   rawTitle: string;
   amount: number;
   date?: string;
+  type?: 'Expense' | 'Income';
+  note?: string;
+  paymentLast4?: string;
+  merchantKeys?: string[];
 }
 
 const findExistingCategoryId = async (
@@ -33,12 +39,36 @@ const findExistingCategoryId = async (
   return category ? category._id.toString() : undefined;
 };
 
+const findFirstRule = async (userId: string, merchantKeys: string[]) => {
+  for (const key of merchantKeys) {
+    const rule = await merchantRulesService.lookupRule(userId, key);
+
+    if (rule) {
+      return rule;
+    }
+  }
+
+  return null;
+};
+
+const findPaymentMethod = async (workspaceId: string, paymentLast4?: string) => {
+  const byCard = paymentLast4
+    ? await paymentMethodRepository.findByLastFour(workspaceId, paymentLast4)
+    : null;
+
+  return byCard ?? paymentMethodRepository.findPrimary(workspaceId);
+};
+
 export const createAutomationTransaction = async ({
   userId,
   source,
   rawTitle,
   amount,
   date,
+  type = 'Expense',
+  note,
+  paymentLast4,
+  merchantKeys = [rawTitle],
 }: AutomationTransactionInput) => {
   const personalWorkspaceId = await findPersonalWorkspaceIdForUser(userId);
 
@@ -54,20 +84,23 @@ export const createAutomationTransaction = async ({
     throw ApiError.badRequest('No primary account found for this workspace');
   }
 
-  const primaryPaymentMethod = await paymentMethodRepository.findPrimary(workspaceId);
+  const paymentMethod = await findPaymentMethod(workspaceId, paymentLast4);
 
-  const rule = await merchantRulesService.lookupRule(userId, rawTitle);
-  const name = rule?.alias ?? rawTitle;
-  const categoryId = await findExistingCategoryId(rule?.categoryId, workspaceId);
+  const rule = await findFirstRule(userId, merchantKeys);
+  const name = (rule?.alias ?? rawTitle).slice(0, TRANSACTION_NAME_MAX_LENGTH);
+  // Merchant rules hold expense categories; an Income refund would fail the category type check.
+  const ruleCategoryId = type === 'Expense' ? rule?.categoryId : undefined;
+  const categoryId = await findExistingCategoryId(ruleCategoryId, workspaceId);
 
   return transactionService.create(
     {
-      type: 'Expense',
+      type,
       amount,
       date: date ?? new Date().toISOString(),
       name,
+      note,
       accountId: primaryAccount._id.toString(),
-      paymentMethodId: primaryPaymentMethod?._id.toString(),
+      paymentMethodId: paymentMethod?._id.toString(),
       categoryId,
     },
     userId,

@@ -16,6 +16,12 @@ export const findPrimary = async (workspaceId: string) =>
     .lean<IPaymentMethod>()
     .exec();
 
+export const findByLastFour = async (workspaceId: string, lastFourDigits: string) =>
+  PaymentMethod.findOne({ workspaceId: new Types.ObjectId(workspaceId), lastFourDigits })
+    .sort({ isPrimary: -1, createdAt: 1 })
+    .lean<IPaymentMethod>()
+    .exec();
+
 export const findByIds = async (ids: string[], workspaceId: string) =>
   PaymentMethod.find({
     _id: { $in: ids.map(id => new Types.ObjectId(id)) },
