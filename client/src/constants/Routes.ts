@@ -172,6 +172,7 @@ export const API_ROUTES = {
     REVOKE: '/api/shortcut/revoke',
     MACRO: '/api/shortcut/macro',
     CONNECTION: '/api/shortcut/connection',
+    ANDROID_TOKEN: '/api/shortcut/android/token',
   },
 
   MCP: {

@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { shortcutPollLimiter } from '../config/rateLimiters';
 import {
   approveShortcut,
+  createShortcutAndroidToken,
   createShortcutAndroidTransaction,
   createShortcutTransaction,
   downloadShortcutMacro,
@@ -16,6 +17,7 @@ import {
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { shortcutAuthMiddleware } from '../middlewares/shortcutAuthMiddleware';
 import { validateBody } from '../middlewares/validate';
+import { notificationIngestionRoutes } from '../notificationIngestion';
 import {
   ApproveSchema,
   ShortcutAndroidTransactionSchema,
@@ -27,6 +29,7 @@ const router = Router();
 router.post('/init', authMiddleware, initShortcut);
 router.post('/approve', authMiddleware, validateBody(ApproveSchema), approveShortcut);
 router.get('/macro', authMiddleware, downloadShortcutMacro);
+router.post('/android/token', authMiddleware, createShortcutAndroidToken);
 router.get('/connection', authMiddleware, getShortcutAndroidConnection);
 router.get('/token', shortcutPollLimiter, getShortcutToken);
 router.get('/status', shortcutAuthMiddleware, getShortcutStatus);
@@ -44,5 +47,6 @@ router.post(
   validateBody(ShortcutAndroidTransactionSchema),
   createShortcutAndroidTransaction
 );
+router.use('/notifications', shortcutAuthMiddleware, notificationIngestionRoutes);
 
 export default router;

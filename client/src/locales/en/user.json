@@ -81,6 +81,14 @@
       "linkExpired": "Link expired. Try again.",
       "connectError": "Couldn't start the connection. Please try again."
     },
+    "androidApp": {
+      "title": "Lyra Wallet app (Android)",
+      "description": "Pair the Lyra Wallet companion app with your account.",
+      "create": "Create app token",
+      "warning": "This token is shown once. Creating a new one disconnects the previous app token, including the MacroDroid automation.",
+      "tokenLabel": "App token",
+      "createError": "Couldn't create the token. Please try again."
+    },
     "googlePayShortcut": {
       "title": "Google Wallet Shortcut",
       "description": "Automatically log every Google Wallet payment in Lyra",

@@ -39,3 +39,6 @@ export const deactivateForUserByPlatform = (userId: string, platform: ShortcutPl
     { userId: new Types.ObjectId(userId), platform, active: true },
     { $set: { active: false, revokedAt: new Date() } }
   );
+
+export const touchLastSeen = (tokenId: string) =>
+  ShortcutCredential.updateOne({ tokenId, active: true }, { $set: { lastSeenAt: new Date() } });

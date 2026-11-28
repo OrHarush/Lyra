@@ -9,6 +9,7 @@ type Method = 'get' | 'post' | 'delete';
 const userJwtRoutes: Array<[Method, string]> = [
   ['post', '/api/shortcut/init'],
   ['post', '/api/shortcut/approve'],
+  ['post', '/api/shortcut/android/token'],
   ['get', '/api/shortcut/macro'],
   ['get', '/api/shortcut/connection'],
   ['delete', '/api/shortcut/revoke'],
@@ -19,6 +20,7 @@ const shortcutTokenRoutes: Array<[Method, string]> = [
   ['get', '/api/shortcut/categories'],
   ['post', '/api/shortcut/transaction'],
   ['post', '/api/shortcut/transaction/android'],
+  ['post', '/api/shortcut/notifications'],
 ];
 
 describe('shortcut routes that need a user JWT', () => {
@@ -61,5 +63,14 @@ describe('shortcut routes that need a shortcut token', () => {
     const res = await request(app)[method](path).set('Authorization', 'Shortcut valid-shortcut-token');
 
     expect(res.status).toBe(200);
+  });
+
+  it('POST /api/shortcut/notifications with a valid token rejects an invalid body with 400', async () => {
+    const res = await request(app)
+      .post('/api/shortcut/notifications')
+      .set('Authorization', 'Shortcut valid-shortcut-token')
+      .send({ eventKey: 'short' });
+
+    expect(res.status).toBe(400);
   });
 });

@@ -9,6 +9,7 @@ export interface IShortcutCredential {
   platform: ShortcutPlatform;
   active: boolean;
   revokedAt?: Date;
+  lastSeenAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -20,6 +21,7 @@ const ShortcutCredentialSchema: Schema = new Schema(
     platform: { type: String, enum: ['ios', 'android'], required: true },
     active: { type: Boolean, required: true, default: true },
     revokedAt: { type: Date },
+    lastSeenAt: { type: Date },
   },
   { timestamps: true }
 );

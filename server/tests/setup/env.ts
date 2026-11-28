@@ -8,5 +8,6 @@ process.env.MONGO_URI = 'mongodb://127.0.0.1:1/lyra-test-never-connected';
 process.env.RESEND_API_KEY = 're_test_not_a_real_key';
 process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.CORS_ORIGINS = 'http://localhost:3000';
+process.env.SHORTCUT_JWT_SECRET = 'test-shortcut-secret';
 delete process.env.DEV_AUTH_BYPASS;
 delete process.env.ENABLE_DB_BACKUP;

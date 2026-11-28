@@ -9,6 +9,8 @@ import { ShortcutPlatform } from '../models/ShortcutCredential';
 import ShortcutPairingCode from '../models/ShortcutPairingCode';
 import * as categoryRepository from '../repositories/categoryRepository';
 import * as shortcutCredentialRepository from '../repositories/shortcutCredentialRepository';
+import * as userActivityRepository from '../repositories/userActivityRepository';
+import * as userRepository from '../repositories/userRepository';
 import * as workspaceMemberRepository from '../repositories/workspaceMemberRepository';
 import * as workspaceRepository from '../repositories/workspaceRepository';
 
@@ -131,17 +133,21 @@ export const getShortcutConnection = async (token: string): Promise<ShortcutConn
     throw ApiError.unauthorized('Shortcut token has been revoked');
   }
 
+  await shortcutCredentialRepository.touchLastSeen(claims.tokenId);
+
   return { userId: claims.userId, connectedAt: credential.createdAt ?? new Date() };
 };
 
 export const revokeAllForUser = async (userId: string): Promise<void> => {
   await shortcutCredentialRepository.deactivateAllForUser(userId);
   await ShortcutPairingCode.deleteMany({ userId: new Types.ObjectId(userId) });
+  await recordTokenEvent(userId, 'SHORTCUT_TOKEN_REVOKED');
 };
 
 export interface ShortcutConnectionState {
   connected: boolean;
   connectedAt: Date | null;
+  lastSeenAt: Date | null;
 }
 
 export const getAndroidConnectionState = async (
@@ -153,10 +159,14 @@ export const getAndroidConnectionState = async (
   );
 
   if (!credential) {
-    return { connected: false, connectedAt: null };
+    return { connected: false, connectedAt: null, lastSeenAt: null };
   }
 
-  return { connected: true, connectedAt: credential.createdAt ?? null };
+  return {
+    connected: true,
+    connectedAt: credential.createdAt ?? null,
+    lastSeenAt: credential.lastSeenAt ?? null,
+  };
 };
 
 const readMacroTemplate = (): string => {
@@ -174,22 +184,44 @@ export const generateAndroidMacro = async (userId: string): Promise<string> => {
     throw ApiError.internal('Google Wallet macro template is missing the token placeholder');
   }
 
-  await shortcutCredentialRepository.deactivateForUserByPlatform(userId, 'android');
-  const token = await mintToken(userId, 'android');
+  const token = await issueAndroidToken(userId);
 
   return template.split(MACRO_TOKEN_PLACEHOLDER).join(token);
 };
 
-const ANDROID_WALLET_AMOUNT_PATTERN = /(\d+(?:[.,]\d{2}))/;
+// Audit-class event, intentionally blocking: a credential must never be issued unrecorded.
+const recordTokenEvent = async (
+  userId: string,
+  type: 'SHORTCUT_TOKEN_ISSUED' | 'SHORTCUT_TOKEN_REVOKED'
+): Promise<void> => {
+  const user = await userRepository.findById(userId);
+
+  await userActivityRepository.createEvent(userId, user?.name ?? '', type);
+};
+
+export const issueAndroidToken = async (userId: string): Promise<string> => {
+  await shortcutCredentialRepository.deactivateForUserByPlatform(userId, 'android');
+  const token = await mintToken(userId, 'android');
+  await recordTokenEvent(userId, 'SHORTCUT_TOKEN_ISSUED');
+
+  return token;
+};
+
+const ANDROID_WALLET_AMOUNT_PATTERN =
+  /(?<grouped>\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?)|(?<plain>\d+(?:[.,]\d{1,2})?)/;
 
 export const parseAndroidWalletAmount = (text: string): number => {
-  const match = text.match(ANDROID_WALLET_AMOUNT_PATTERN);
+  const groups = text.match(ANDROID_WALLET_AMOUNT_PATTERN)?.groups;
 
-  if (!match) {
+  if (!groups) {
     throw ApiError.badRequest('Could not parse amount');
   }
 
-  return Number(match[1].replace(',', '.'));
+  if (groups.grouped) {
+    return Number(groups.grouped.replace(/,/g, ''));
+  }
+
+  return Number(groups.plain.replace(',', '.'));
 };
 
 export const resolveWorkspaceForCategory = async (
