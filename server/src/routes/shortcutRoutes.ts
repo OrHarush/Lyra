@@ -16,6 +16,7 @@ import {
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { shortcutAuthMiddleware } from '../middlewares/shortcutAuthMiddleware';
 import { validateBody } from '../middlewares/validate';
+import { notificationIngestionRoutes } from '../notificationIngestion';
 import {
   ApproveSchema,
   ShortcutAndroidTransactionSchema,
@@ -44,5 +45,6 @@ router.post(
   validateBody(ShortcutAndroidTransactionSchema),
   createShortcutAndroidTransaction
 );
+router.use('/notifications', shortcutAuthMiddleware, notificationIngestionRoutes);
 
 export default router;
