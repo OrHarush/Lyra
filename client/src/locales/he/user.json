@@ -81,6 +81,14 @@
       "linkExpired": "הקישור פג. אנא נסה שוב.",
       "connectError": "התחלת החיבור נכשלה. אנא נסה שוב."
     },
+    "androidApp": {
+      "title": "אפליקציית Lyra Wallet (אנדרואיד)",
+      "description": "חבר את אפליקציית Lyra Wallet לחשבון שלך.",
+      "create": "יצירת טוקן לאפליקציה",
+      "warning": "הטוקן מוצג פעם אחת בלבד. יצירת טוקן חדש מנתקת את הטוקן הקודם של האפליקציה, כולל האוטומציה של MacroDroid.",
+      "tokenLabel": "טוקן האפליקציה",
+      "createError": "יצירת הטוקן נכשלה. אנא נסה שוב."
+    },
     "googlePayShortcut": {
       "title": "חיבור Google Wallet",
       "description": "כל תשלום שתבצע ב-Google Wallet יירשם אוטומטית ב-Lyra",

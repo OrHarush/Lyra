@@ -1,3 +1,4 @@
+import AndroidAppTokenSection from '@/components/features/users/SettingsModal/AndroidAppTokenSection';
 import ApplePayShortcutSection from '@/components/features/users/SettingsModal/ApplePayShortcutSection';
 import ConnectedAppsSection from '@/components/features/users/SettingsModal/ConnectedAppsSection';
 import GeneralSettingsTab from '@/components/features/users/SettingsModal/GeneralSettingsTab';
@@ -19,7 +20,12 @@ const SettingsTabContent = ({ activeTab, openDeletionDialog }: SettingsTabConten
     case 'applePay':
       return <ApplePayShortcutSection />;
     case 'googlePay':
-      return <GooglePayShortcutSection />;
+      return (
+        <>
+          <GooglePayShortcutSection />
+          <AndroidAppTokenSection />
+        </>
+      );
     case 'connectedApps':
       return <ConnectedAppsSection />;
   }
