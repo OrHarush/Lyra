@@ -180,16 +180,21 @@ export const generateAndroidMacro = async (userId: string): Promise<string> => {
   return template.split(MACRO_TOKEN_PLACEHOLDER).join(token);
 };
 
-const ANDROID_WALLET_AMOUNT_PATTERN = /(\d+(?:[.,]\d{2}))/;
+const ANDROID_WALLET_AMOUNT_PATTERN =
+  /(?<grouped>\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?)|(?<plain>\d+(?:[.,]\d{1,2})?)/;
 
 export const parseAndroidWalletAmount = (text: string): number => {
-  const match = text.match(ANDROID_WALLET_AMOUNT_PATTERN);
+  const groups = text.match(ANDROID_WALLET_AMOUNT_PATTERN)?.groups;
 
-  if (!match) {
+  if (!groups) {
     throw ApiError.badRequest('Could not parse amount');
   }
 
-  return Number(match[1].replace(',', '.'));
+  if (groups.grouped) {
+    return Number(groups.grouped.replace(/,/g, ''));
+  }
+
+  return Number(groups.plain.replace(',', '.'));
 };
 
 export const resolveWorkspaceForCategory = async (
